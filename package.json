@@ -1,0 +1,10 @@
+{
+  "name": "next-pwa",
+  "version": "0.0.1",
+  "description": "Next.js with PWA, powered by workbox.",
+  "main": "index.js",
+  "repository": "https://github.com/shadowwalker/next-pwa",
+  "author": "Wei Wang <weiwio@outlook.com>",
+  "license": "MIT",
+  "private": false
+}
