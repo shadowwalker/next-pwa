@@ -1,7 +1,7 @@
 import { Workbox } from 'workbox-window'
 
 if ('serviceWorker' in navigator) {
-  const wb = new Workbox('/_next/static/pwa/sw.js')
+  const wb = new Workbox('/_next/static/pwa/sw.js', { scope: '/' })
 
   wb.addEventListener('installed', event => {
     if (!event.isUpdate) {
