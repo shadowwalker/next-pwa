@@ -72,12 +72,16 @@ module.exports = (nextConfig = {}) => ({
           dir: path.join(config.context, distDir, 'static/pwa'),
           test: /precache-manifest\..*\.js$/,
           rules: [{
-            search: /static\//g,
-            replace: '/_next/static/'
-          },{
+            search: /"static\//g,
+            replace: '"/_next/static/'
+          }
+          /*
+          ,{
             search: /"revision": ".*",/g,
             replace: ''
-          }]
+          }
+          */
+          ]
         }, {
           dir: path.join(config.context, distDir, 'static/pwa'),
           files: ['sw.js'],
