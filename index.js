@@ -25,7 +25,7 @@ module.exports = (nextConfig = {}) => ({
     const {
       disable = process.env.NODE_ENV !== 'production',
       dest = distDir,
-      sw = '/sw.js',
+      sw = 'sw.js',
       scope = '/',
       ...workbox
     } = nextConfig.pwa
@@ -38,11 +38,16 @@ module.exports = (nextConfig = {}) => ({
 
       registerSW(config)
 
+      // TODO: clean sw as well
       config.plugins.push(new CleanPlugin({
         cleanOnceBeforeBuildPatterns: [
-          path.join(options.dir, dest, 'precache-manifest.*.js')
+          path.join(options.dir, dest, 'precache-manifest.*.js'),
+          path.join(options.dir, dest, sw)
         ]
       }))
+
+      
+      
 
       if (!options.isServer) {
         const workboxCommon = {
@@ -58,14 +63,18 @@ module.exports = (nextConfig = {}) => ({
           }
         }
 
+        console.log('> [PWA] generating precache manifest file at', path.join(options.dir, dest))
         if (workbox.swSrc) {
+          console.log('> [PWA] Injecting manifest for', path.join(options.dir, swSrc))
           config.plugins.push(
             new WorkboxPlugin.InjectManifest({
               ...workboxCommon,
-              ...workbox
+              ...workbox,
+              swSrc: path.join(options.dir, swSrc),
             })
           )
         } else {
+          console.log('> [PWA] generating service worker', path.join(options.dir, dest, sw))
           config.plugins.push(
             new WorkboxPlugin.GenerateSW({
               ...workboxCommon,
