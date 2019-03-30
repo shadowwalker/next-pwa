@@ -1,6 +1,5 @@
 const path = require('path')
 const webpack = require('webpack')
-const _ = require('lodash')
 const CleanPlugin = require('clean-webpack-plugin')
 const ReplacePlugin = require('replace-in-file-webpack-plugin')
 const WorkboxPlugin = require('workbox-webpack-plugin')

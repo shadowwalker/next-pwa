@@ -9,7 +9,6 @@
   "private": false,
   "dependencies": {
     "clean-webpack-plugin": "^2.0.1",
-    "lodash": "^4.17.11",
     "replace-in-file-webpack-plugin": "^1.0.6",
     "webpack": "^4.29.6",
     "workbox-webpack-plugin": "^4.1.1",
