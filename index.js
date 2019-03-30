@@ -1,4 +1,6 @@
 const path = require('path')
+const webpack = require('webpack')
+const _ = require('lodash')
 const CleanPlugin = require('clean-webpack-plugin')
 const ReplacePlugin = require('replace-in-file-webpack-plugin')
 const WorkboxPlugin = require('workbox-webpack-plugin')
@@ -18,28 +20,36 @@ module.exports = (nextConfig = {}) => ({
   ...nextConfig,
   webpack(config, options) {
     const {
-      disable,
-      ...workbox
-    } = nextConfig.pwa
-
-    const {
       distDir = '.next'
     } = options.config
 
+    const {
+      disable = process.env.NODE_ENV !== 'production',
+      dest = distDir,
+      sw = '/sw.js',
+      scope = '/',
+      ...workbox
+    } = nextConfig.pwa
+
     if (!disable) {
+      config.plugins.push(new webpack.DefinePlugin({
+        '__PWA_SCOPE__': scope,
+        '__PWA_SW__': sw
+      }))
+
       registerSW(config)
 
       config.plugins.push(new CleanPlugin({
         cleanOnceBeforeBuildPatterns: [
-          path.join(config.output.path, 'static/pwa', 'precache-manifest.*.js')
+          path.join(options.dir, dest, 'precache-manifest.*.js')
         ]
       }))
 
       if (!options.isServer) {
         const workboxCommon = {
-          swDest: path.join(config.output.path, 'static/pwa', 'sw.js'),
+          swDest: path.join(options.dir, dest, sw),
           exclude: ['react-loadable-manifest.json', 'build-manifest.json'],
-          importsDirectory: 'static/pwa',
+          importsDirectory: path.join(options.dir, dest),
           globDirectory: options.dir,
           globPatterns: [
             'static/**/*'
@@ -67,26 +77,22 @@ module.exports = (nextConfig = {}) => ({
             })
           )
         }
+
+        console.log(path.join(options.dir, dest, sw))
+        console.log(path.join(path.relative(config.output.path, path.join(options.dir, dest)), 'precache-manifest'))
   
         config.plugins.push(new ReplacePlugin([{
-          dir: path.join(config.context, distDir, 'static/pwa'),
+          dir: path.join(options.dir, dest),
           test: /precache-manifest\..*\.js$/,
           rules: [{
             search: /"static\//g,
             replace: '"/_next/static/'
-          }
-          /*
-          ,{
-            search: /"revision": ".*",/g,
-            replace: ''
-          }
-          */
-          ]
+          }]
         }, {
-          dir: path.join(config.context, distDir, 'static/pwa'),
-          files: ['sw.js'],
+          dir: path.join(options.dir, dest),
+          files: [path.basename(sw)],
           rules: [{
-            search: /static\/pwa\/precache-manifest/,
+            search: path.join(path.relative(config.output.path, path.join(options.dir, dest)), 'precache-manifest'),
             replace: 'precache-manifest'
           }]
         }]))
