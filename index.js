@@ -31,18 +31,18 @@ module.exports = (nextConfig = {}) => ({
     } = nextConfig.pwa
 
     if (!disable) {
+      const _sw = sw.startsWith('/') ? sw : `/${sw}`
+      const _dest = path.join(options.dir, dest)
+      
       config.plugins.push(new webpack.DefinePlugin({
-        '__PWA_SW__': sw,
-        '__PWA_SCOPE__': scope
+        '__PWA_SW__': `"${_sw}"`,
+        '__PWA_SCOPE__': `"${scope}"`
       }))
 
       console.log(`> [PWA] register service worker in main.js for ${options.isServer ? 'server' : 'static'}`)
       registerSW(config)
 
-      if (!options.isServer) {
-        const _sw = sw.startsWith('/') ? sw : `/${sw}`
-        const _dest = path.join(options.dir, dest)
-
+      if (!options.isServer) {  
         console.log(`> [PWA] service worker url path ${_sw}`)
         console.log(`> [PWA] service worker scope ${scope}`)
         console.log(`> [PWA] generate precache manifest at ${_dest}`)
