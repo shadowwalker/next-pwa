@@ -25,35 +25,40 @@ module.exports = (nextConfig = {}) => ({
     const {
       disable = process.env.NODE_ENV !== 'production',
       dest = distDir,
-      sw = 'sw.js',
+      sw = '/sw.js',
       scope = '/',
       ...workbox
     } = nextConfig.pwa
 
     if (!disable) {
       config.plugins.push(new webpack.DefinePlugin({
-        '__PWA_SCOPE__': scope,
-        '__PWA_SW__': sw
+        '__PWA_SW__': sw,
+        '__PWA_SCOPE__': scope
       }))
 
+      console.log(`> [PWA] register service worker in main.js for ${options.isServer ? 'server' : 'static'}`)
       registerSW(config)
 
-      // TODO: clean sw as well
-      config.plugins.push(new CleanPlugin({
-        cleanOnceBeforeBuildPatterns: [
-          path.join(options.dir, dest, 'precache-manifest.*.js'),
-          path.join(options.dir, dest, sw)
-        ]
-      }))
-
-      
-      
-
       if (!options.isServer) {
+        const _sw = sw.startsWith('/') ? sw : `/${sw}`
+        const _dest = path.join(options.dir, dest)
+
+        console.log(`> [PWA] service worker url path ${_sw}`)
+        console.log(`> [PWA] service worker scope ${scope}`)
+        console.log(`> [PWA] generate precache manifest at ${_dest}`)
+        console.log(`> [PWA] generate service worker ${path.join(_dest, sw)}`)
+
+        config.plugins.push(new CleanPlugin({
+          cleanOnceBeforeBuildPatterns: [
+            path.join(_dest, 'precache-manifest.*.js'),
+            path.join(_dest, sw)
+          ]
+        }))
+
         const workboxCommon = {
-          swDest: path.join(options.dir, dest, sw),
+          swDest: path.join(_dest, sw),
           exclude: ['react-loadable-manifest.json', 'build-manifest.json'],
-          importsDirectory: path.join(options.dir, dest),
+          importsDirectory: _dest,
           globDirectory: options.dir,
           globPatterns: [
             'static/**/*'
@@ -63,18 +68,18 @@ module.exports = (nextConfig = {}) => ({
           }
         }
 
-        console.log('> [PWA] generating precache manifest file at', path.join(options.dir, dest))
         if (workbox.swSrc) {
-          console.log('> [PWA] Injecting manifest for', path.join(options.dir, swSrc))
+          const swSrc = path.join(options.dir, workbox.swSrc)
+          console.log('> [PWA] Injecting manifest in', swSrc)
           config.plugins.push(
             new WorkboxPlugin.InjectManifest({
               ...workboxCommon,
               ...workbox,
-              swSrc: path.join(options.dir, swSrc),
+              swSrc,
             })
           )
         } else {
-          console.log('> [PWA] generating service worker', path.join(options.dir, dest, sw))
+          console.log('> [PWA] generating new service worker', path.join(_dest, sw))
           config.plugins.push(
             new WorkboxPlugin.GenerateSW({
               ...workboxCommon,
@@ -85,22 +90,19 @@ module.exports = (nextConfig = {}) => ({
             })
           )
         }
-
-        console.log(path.join(options.dir, dest, sw))
-        console.log(path.join(path.relative(config.output.path, path.join(options.dir, dest)), 'precache-manifest'))
   
         config.plugins.push(new ReplacePlugin([{
-          dir: path.join(options.dir, dest),
+          dir: _dest,
           test: /precache-manifest\..*\.js$/,
           rules: [{
             search: /"static\//g,
             replace: '"/_next/static/'
           }]
         }, {
-          dir: path.join(options.dir, dest),
+          dir: _dest,
           files: [path.basename(sw)],
           rules: [{
-            search: path.join(path.relative(config.output.path, path.join(options.dir, dest)), 'precache-manifest'),
+            search: path.join(path.relative(config.output.path, _dest), 'precache-manifest'),
             replace: 'precache-manifest'
           }]
         }]))
