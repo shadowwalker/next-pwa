@@ -172,6 +172,7 @@ module.exports = withPWA({
   - set `disable: true` to completely disable PWA
 - register: boolean - whether to let this plugin register service worker for you
   - default to `true`
+  - set to `false` when you want to handle register service worker yourself, this could be done in `componentDidMount` of your root app.
 - scope: string - url scope for pwa
   - default to `/`
   - set to `/app`, so that all sub url under `/app` will be PWA, all other url paths are still normal web app.
