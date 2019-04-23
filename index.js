@@ -99,39 +99,45 @@ module.exports = (nextConfig = {}) => ({
                 options: {
                   cacheName: 'google-fonts',
                   expiration: {
-                    maxEntries: 64,
+                    maxEntries: 16,
                     maxAgeSeconds: 365 * 24 * 60 * 60  // 365 days
                   }
                 }
-              },{
+              }, {
                 urlPattern: /^https:\/\/use\.fontawesome\.com\/releases/,
                 handler: 'CacheFirst',
                 options: {
                   cacheName: 'font-awesome',
                   expiration: {
-                    maxEntries: 64,
-                    maxAgeSeconds: 365 * 24 * 60 * 60  // 365 days
-                  }
-                }
-              },{
-                urlPattern: /\.(?:png|gif|jpg|jpeg|svg)$/,
-                handler: 'CacheFirst',
-                options: {
-                  cacheName: 'font-awesome',
-                  expiration: {
-                    maxEntries: 64,
+                    maxEntries: 16,
                     maxAgeSeconds: 365 * 24 * 60 * 60  // 365 days
                   }
                 }
               }, {
-                urlPattern: /\.(?:png|gif|jpg|jpeg|svg)$/,
-                handler: 'StaleWhileRevalidate',
+                urlPattern: /\.(?:eot|otf|ttc|ttf|woff|woff2|font.css)$/,
+                handler: 'CacheFirst',
                 options: {
-                  cacheName: 'font-awesome',
+                  cacheName: 'static-font-assets',
                   expiration: {
                     maxEntries: 64,
-                    maxAgeSeconds: 365 * 24 * 60 * 60  // 365 days
+                    maxAgeSeconds: 7 * 24 * 60 * 60  // 7 days
                   }
+                }
+              }, {
+                urlPattern: /\.(?:jpg|jpeg|gif|png|svg|ico)$/,
+                handler: 'CacheFirst',
+                options: {
+                  cacheName: 'static-image-assets',
+                  expiration: {
+                    maxEntries: 64,
+                    maxAgeSeconds: 7 * 24 * 60 * 60  // 7 days
+                  }
+                }
+              }, {
+                urlPattern: /\[a-zA-Z0-9\/\]*$/,
+                handler: 'StaleWhileRevalidate',
+                options: {
+                  cacheName: 'pages'
                 }
               }],
               ...workbox
