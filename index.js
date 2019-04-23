@@ -6,6 +6,8 @@ const WorkboxPlugin = require('workbox-webpack-plugin')
 
 const registerSW = (config) => {
   registerScript = path.join(__dirname, 'register.js')
+  console.log(`> [PWA] use the script for register: ${path.resolve(registerSW)}`)
+
   const entry = config.entry
   config.entry = async () => entry().then(entries => {
     if(entries['main.js'] && !entries['main.js'].includes(registerScript)) {
@@ -30,7 +32,8 @@ module.exports = (nextConfig = {}) => ({
     } = options
 
     const {
-      disable = process.env.NODE_ENV !== 'production',
+      disable = !options.dev,
+      register = true,
       dest = distDir,
       sw = '/sw.js',
       scope = '/',
@@ -46,8 +49,13 @@ module.exports = (nextConfig = {}) => ({
         '__PWA_SCOPE__': `"${scope}"`
       }))
 
-      console.log(`> [PWA] register service worker in main.js - ${options.isServer ? '[server]' : '[static]'}`)
-      registerSW(config)
+      if(register) {
+        console.log(`> [PWA] auto register service worker in main.js on ${options.isServer ? '[server]' : '[static (client)]'}`)
+        registerSW(config)
+      } else {
+        console.log(`> [PWA] auto register service worker DISABLED on ${options.isServer ? '[server]' : '[static (client)]'}`)
+        console.log(`> [PWA] make sure to implement code to register service worker`)
+      }
 
       if (!options.isServer) {  
         console.log(`> [PWA] service worker url path ${_sw}`)
@@ -82,7 +90,7 @@ module.exports = (nextConfig = {}) => ({
             new WorkboxPlugin.InjectManifest({
               ...workboxCommon,
               ...workbox,
-              swSrc,
+              swSrc
             })
           )
         } else {
@@ -99,7 +107,7 @@ module.exports = (nextConfig = {}) => ({
                 options: {
                   cacheName: 'google-fonts',
                   expiration: {
-                    maxEntries: 16,
+                    maxEntries: 4,
                     maxAgeSeconds: 365 * 24 * 60 * 60  // 365 days
                   }
                 }
@@ -109,37 +117,58 @@ module.exports = (nextConfig = {}) => ({
                 options: {
                   cacheName: 'font-awesome',
                   expiration: {
-                    maxEntries: 16,
+                    maxEntries: 1,
                     maxAgeSeconds: 365 * 24 * 60 * 60  // 365 days
                   }
                 }
               }, {
                 urlPattern: /\.(?:eot|otf|ttc|ttf|woff|woff2|font.css)$/i,
-                handler: 'CacheFirst',
+                handler: 'StaleWhileRevalidate',
                 options: {
                   cacheName: 'static-font-assets',
                   expiration: {
-                    maxEntries: 64,
+                    maxEntries: 4,
                     maxAgeSeconds: 7 * 24 * 60 * 60  // 7 days
                   }
                 }
               }, {
                 urlPattern: /\.(?:jpg|jpeg|gif|png|svg|ico)$/i,
-                handler: 'CacheFirst',
+                handler: 'StaleWhileRevalidate',
                 options: {
                   cacheName: 'static-image-assets',
                   expiration: {
                     maxEntries: 64,
-                    maxAgeSeconds: 7 * 24 * 60 * 60  // 7 days
+                    maxAgeSeconds: 24 * 60 * 60  // 24 hours
+                  }
+                }
+              }, {
+                urlPattern: /\.(?:js)$/i,
+                handler: 'StaleWhileRevalidate',
+                options: {
+                  cacheName: 'static-js-assets',
+                  expiration: {
+                    maxEntries: 16,
+                    maxAgeSeconds: 24 * 60 * 60  // 24 hours
+                  }
+                }
+              }, {
+                urlPattern: /\.(?:css|less)$/i,
+                handler: 'StaleWhileRevalidate',
+                options: {
+                  cacheName: 'static-style-assets',
+                  expiration: {
+                    maxEntries: 16,
+                    maxAgeSeconds: 24 * 60 * 60  // 24 hours
                   }
                 }
               }, {
                 urlPattern: /.*/i,
                 handler: 'StaleWhileRevalidate',
                 options: {
-                  cacheName: 'pages',
-                  cacheableResponse: {
-                    statuses: [0, 200]
+                  cacheName: 'others',
+                  expiration: {
+                    maxEntries: 16,
+                    maxAgeSeconds: 24 * 60 * 60  // 24 hours
                   }
                 }
               }],
@@ -154,9 +183,9 @@ module.exports = (nextConfig = {}) => ({
           rules: [{
             search: /"static\//g,
             replace: '"/_next/static/'
-          },{
-            search: /concat\(\[/g,
-            replace: 'concat([ { "url": "/" },'
+          }, {
+            search: /concat\(\[/,
+            replace: `concat([ { "url": "/", "revision": "${options.buildId}" },`
           }]
         }, {
           dir: _dest,
