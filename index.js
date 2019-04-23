@@ -15,6 +15,9 @@ const registerSW = (config) => {
   })
 }
 
+// For workbox configurations:
+// https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin
+
 module.exports = (nextConfig = {}) => ({
   ...nextConfig,
   webpack(config, options) {
@@ -23,12 +26,16 @@ module.exports = (nextConfig = {}) => ({
     } = options.config
 
     const {
+      pwa = {}
+    } = options
+
+    const {
       disable = process.env.NODE_ENV !== 'production',
       dest = distDir,
       sw = '/sw.js',
       scope = '/',
       ...workbox
-    } = nextConfig.pwa
+    } = pwa
 
     if (!disable) {
       const _sw = sw.startsWith('/') ? sw : `/${sw}`
@@ -39,13 +46,13 @@ module.exports = (nextConfig = {}) => ({
         '__PWA_SCOPE__': `"${scope}"`
       }))
 
-      console.log(`> [PWA] register service worker in main.js for ${options.isServer ? 'server' : 'static'}`)
+      console.log(`> [PWA] register service worker in main.js - ${options.isServer ? '[server]' : '[static]'}`)
       registerSW(config)
 
       if (!options.isServer) {  
         console.log(`> [PWA] service worker url path ${_sw}`)
         console.log(`> [PWA] service worker scope ${scope}`)
-        console.log(`> [PWA] generate precache manifest at ${_dest}`)
+        console.log(`> [PWA] generate precache manifest in ${_dest}`)
         console.log(`> [PWA] generate service worker ${path.join(_dest, sw)}`)
 
         config.plugins.push(new CleanPlugin({
@@ -86,6 +93,47 @@ module.exports = (nextConfig = {}) => ({
               skipWaiting: true,
               clientsClaim: true,
               cleanupOutdatedCaches: true,
+              runtimeCaching: [{
+                urlPattern: /^https:\/\/fonts\.(?:googleapis|gstatic)\.com/,
+                handler: 'CacheFirst',
+                options: {
+                  cacheName: 'google-fonts',
+                  expiration: {
+                    maxEntries: 64,
+                    maxAgeSeconds: 365 * 24 * 60 * 60  // 365 days
+                  }
+                }
+              },{
+                urlPattern: /^https:\/\/use\.fontawesome\.com\/releases/,
+                handler: 'CacheFirst',
+                options: {
+                  cacheName: 'font-awesome',
+                  expiration: {
+                    maxEntries: 64,
+                    maxAgeSeconds: 365 * 24 * 60 * 60  // 365 days
+                  }
+                }
+              },{
+                urlPattern: /\.(?:png|gif|jpg|jpeg|svg)$/,
+                handler: 'CacheFirst',
+                options: {
+                  cacheName: 'font-awesome',
+                  expiration: {
+                    maxEntries: 64,
+                    maxAgeSeconds: 365 * 24 * 60 * 60  // 365 days
+                  }
+                }
+              }, {
+                urlPattern: /\.(?:png|gif|jpg|jpeg|svg)$/,
+                handler: 'StaleWhileRevalidate',
+                options: {
+                  cacheName: 'font-awesome',
+                  expiration: {
+                    maxEntries: 64,
+                    maxAgeSeconds: 365 * 24 * 60 * 60  // 365 days
+                  }
+                }
+              }],
               ...workbox
             })
           )
