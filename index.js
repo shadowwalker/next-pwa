@@ -94,7 +94,7 @@ module.exports = (nextConfig = {}) => ({
               clientsClaim: true,
               cleanupOutdatedCaches: true,
               runtimeCaching: [{
-                urlPattern: /^https:\/\/fonts\.(?:googleapis|gstatic)\.com/,
+                urlPattern: /^https:\/\/fonts\.(?:googleapis|gstatic)\.com\/.*/i,
                 handler: 'CacheFirst',
                 options: {
                   cacheName: 'google-fonts',
@@ -104,7 +104,7 @@ module.exports = (nextConfig = {}) => ({
                   }
                 }
               }, {
-                urlPattern: /^https:\/\/use\.fontawesome\.com\/releases/,
+                urlPattern: /^https:\/\/use\.fontawesome\.com\/releases\/.*/i,
                 handler: 'CacheFirst',
                 options: {
                   cacheName: 'font-awesome',
@@ -114,7 +114,7 @@ module.exports = (nextConfig = {}) => ({
                   }
                 }
               }, {
-                urlPattern: /\.(?:eot|otf|ttc|ttf|woff|woff2|font.css)$/,
+                urlPattern: /\.(?:eot|otf|ttc|ttf|woff|woff2|font.css)$/i,
                 handler: 'CacheFirst',
                 options: {
                   cacheName: 'static-font-assets',
@@ -124,7 +124,7 @@ module.exports = (nextConfig = {}) => ({
                   }
                 }
               }, {
-                urlPattern: /\.(?:jpg|jpeg|gif|png|svg|ico)$/,
+                urlPattern: /\.(?:jpg|jpeg|gif|png|svg|ico)$/i,
                 handler: 'CacheFirst',
                 options: {
                   cacheName: 'static-image-assets',
@@ -134,10 +134,13 @@ module.exports = (nextConfig = {}) => ({
                   }
                 }
               }, {
-                urlPattern: /\[a-zA-Z0-9\/\]*$/,
+                urlPattern: /.*/i,
                 handler: 'StaleWhileRevalidate',
                 options: {
-                  cacheName: 'pages'
+                  cacheName: 'pages',
+                  cacheableResponse: {
+                    statuses: [0, 200]
+                  }
                 }
               }],
               ...workbox
@@ -151,6 +154,9 @@ module.exports = (nextConfig = {}) => ({
           rules: [{
             search: /"static\//g,
             replace: '"/_next/static/'
+          },{
+            search: /concat\(\[/g,
+            replace: 'concat([ { "url": "/" },'
           }]
         }, {
           dir: _dest,
