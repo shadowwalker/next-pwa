@@ -53,11 +53,11 @@ module.exports = (nextConfig = {}) => ({
         console.log(`> [PWA] auto register service worker in main.js on ${options.isServer ? '[server]' : '[static (client)]'}`)
         registerSW(config)
       } else {
-        console.log(`> [PWA] auto register service worker DISABLED on ${options.isServer ? '[server]' : '[static (client)]'}`)
+        console.log(`> [PWA] auto register service worker is DISABLED on ${options.isServer ? '[server]' : '[static (client)]'}`)
         console.log(`> [PWA] make sure to implement code to register service worker`)
       }
 
-      if (!options.isServer) {  
+      if (!options.isServer) {
         console.log(`> [PWA] service worker url path ${_sw}`)
         console.log(`> [PWA] service worker scope ${scope}`)
         console.log(`> [PWA] generate precache manifest in ${_dest}`)

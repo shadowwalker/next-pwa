@@ -5,9 +5,10 @@ This plugin is powered by [workbox](https://developers.google.com/web/tools/work
 **Features**
 
 - Zero config for registering and generating service worker
+- Completely runs offline
 - Use workbox and workbox-window 4.3.0+
 - Optimized precache and runtime cache
-- Configurable by the same [workbox configuration options](<https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin>)
+- Configurable by the same [workbox configuration options](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin)
 
 ## Install
 
@@ -25,21 +26,21 @@ Update or create `next.config.js` with
 const withPWA = require('next-pwa')
 
 module.exports = withPWA({
-  ...
+  // other next config
 })
 ```
 
 After running `next build`, this will generate two files in your `distDir` (default is `.next` folder): `precache-manifest.*.js` and `sw.js`, which you need to serve statically, either through static file hosting service or using custom `server.js`.
 
-### Option 1: Static File Server
+### Option 1: Host Static Files
 
 Copy files to your static file hosting server, so that they could be access using URL: `https://yourdomain.com/sw.js` and `https://yourdomain.com/precache-manifest.*.js`.
 
 One example is using firebase hosting service to host those files statically. You can automate the copy step using scripts in your deployment workflow.
 
-### Option 2: Use Customized Server Script
+### Option 2: Use Custom Server
 
-When a http request is received, if it's requesting those files, return those static files.
+When a http request is received, test if those files are requested, then return those static files.
 
 Example `server.js`
 
@@ -159,7 +160,7 @@ module.exports = withPWA({
     register: true,
     scope: '/app',
     sw: 'service-worker.js',
-    ...
+    //...
   }
 })
 ```
@@ -167,22 +168,22 @@ module.exports = withPWA({
 ### Available Options
 
 - disable: boolean - whether to disable pwa feature as a whole
-  - default to be disabled during `dev`
+  - default to disabled during `dev`
   - set `disable: false`, so that it will generate service worker in both `dev` and `prod`
   - set `disable: true` to completely disable PWA
 - register: boolean - whether to let this plugin register service worker for you
   - default to `true`
-  - set to `false` when you want to handle register service worker yourself, this could be done in `componentDidMount` of your root app.
+  - set to `false` when you want to handle register service worker yourself, this could be done in `componentDidMount` of your root app. you can consider the [register.js](https://github.com/shadowwalker/next-pwa/blob/master/register.js) as an example.
 - scope: string - url scope for pwa
   - default to `/`
-  - set to `/app`, so that all sub url under `/app` will be PWA, all other url paths are still normal web app.
+  - set to `/app`, so that all sub url under `/app` will be PWA, other url paths are still normal web app with no PWA support.
 - sw: string - service worker script file name
   - default to `/sw.js`
   - set to other file name if you want to customize the output service worker file name
 
 ### Other Options
 
-`next-pwa` uses `workbox-webpack-plugin`, other options which also could be put in `pwa` object can be find [here](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin). If you specify `swSrc`, `InjectManifest` plugin will be used, otherwise `GenerateSW` will be used to generate service worker.
+`next-pwa` uses `workbox-webpack-plugin`, other options which could also be put in `pwa` object can be find [**ON THE DOCUMENTATION**](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin). If you specify `swSrc`, `InjectManifest` plugin will be used, otherwise `GenerateSW` will be used to generate service worker.
 
 ## How To
 
@@ -190,6 +191,7 @@ module.exports = withPWA({
 
 ## TODO
 
+- [ ] Add examples
 - [ ] Support `next export`
 
 ## License

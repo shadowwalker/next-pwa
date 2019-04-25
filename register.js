@@ -7,7 +7,7 @@ if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
     if (!event.isUpdate) {
       console.log('[PWA] service worker installed for first time!')
     } else {
-      console.log('[PWA] service worker installed with an update!')
+      console.log('[PWA] service worker installed by an update!')
     }
   })
   
@@ -15,7 +15,7 @@ if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
     if (!event.isUpdate) {
       console.log('[PWA] service worker activated for first time!')
     } else {
-      console.log('[PWA] service worker activated with an update!')
+      console.log('[PWA] service worker activated by an update!')
     }
   })
 
