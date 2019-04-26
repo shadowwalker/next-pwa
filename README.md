@@ -59,7 +59,7 @@ app.prepare()
       const parsedUrl = parse(req.url, true)
       const { pathname } = parsedUrl
       
-      if (pathname === '/sw.js' || pathname.startsWith('precache-manifest.')) {
+      if (pathname === '/sw.js' || pathname.startsWith('/precache-manifest.')) {
         const filePath = join(__dirname, '.next', pathname)
         app.serveStatic(req, res, filePath)
       } else {
