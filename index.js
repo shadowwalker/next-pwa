@@ -112,7 +112,7 @@ module.exports = (nextConfig = {}) => ({
       ...workbox
     } = pwa
 
-    console.log(`[PWA] compile for ${options.isServer ? 'server' : 'static (client)'}`)
+    console.log(`> [PWA] compile for ${options.isServer ? 'server' : 'static (client)'}`)
     if (!disable) {
       const _sw = sw.startsWith('/') ? sw : `/${sw}`
       const _dest = path.join(options.dir, dest)
