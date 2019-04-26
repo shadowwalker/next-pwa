@@ -203,7 +203,7 @@ module.exports = (nextConfig = {}) => ({
         }]))
       }
     } else {
-      console.log('[PWA] PWA support currently disabled')
+      console.log('> [PWA] PWA support currently disabled')
     }
 
     if (typeof nextConfig.webpack === 'function') {
