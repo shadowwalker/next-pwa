@@ -3500,10 +3500,10 @@ neo-async@^2.5.0:
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.1.tgz#ac27ada66167fa8849a6addd837f6b189ad2081c"
   integrity sha512-iyam8fBuCUpWeKPGpaNMetEocMt364qkCsfL9JuhjXX6dRnguRVOfk2GZaDpPjcOKiiXCPINZC1GczQ7iTq3Zw==
 
-next-pwa@^1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/next-pwa/-/next-pwa-1.0.5.tgz#944faeee7bdca8393b55c11711f38ef8f554a0bc"
-  integrity sha512-pRbS5nbobD98mbo5MmA6DfnC4qgg1DDcf7zEFBWu9rWWrmLhtnEQb0AQn2cX/1+B2bz0TwEFDtvO7NYRn+k4KA==
+next-pwa@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/next-pwa/-/next-pwa-1.0.7.tgz#4e7df3af4515970dd3b7595fc00bb06d46c1daa7"
+  integrity sha512-22HBdJFzngY1C16cBmgGBEp1VB203S+DPYbvtg2H5IZ0kZ2JhZp2xTkAoojTP4Od0pvbJYYFDlptIkyeTkXnxQ==
   dependencies:
     clean-webpack-plugin "^3.0.0"
     replace-in-file-webpack-plugin "^1.0.6"
