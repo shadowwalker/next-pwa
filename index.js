@@ -78,7 +78,7 @@ const defaultCache = [{
 
 const registerSW = (config) => {
   registerScript = path.join(__dirname, 'register.js')
-  console.log(`> [PWA] auto register service worker using: ${path.resolve(registerScript)}`)
+  console.log(`> [PWA] auto register service worker with: ${path.resolve(registerScript)}`)
 
   const entry = config.entry
   config.entry = async () => entry().then(entries => {
@@ -112,7 +112,7 @@ module.exports = (nextConfig = {}) => ({
       ...workbox
     } = pwa
 
-    console.log(`> [PWA] compile for ${options.isServer ? 'server' : 'static (client)'}`)
+    console.log(`> [PWA] ====== compile ${options.isServer ? 'server' : 'static (client)'} ======`)
     if (!disable) {
       const _sw = sw.startsWith('/') ? sw : `/${sw}`
       const _dest = path.join(options.dir, dest)
@@ -130,10 +130,10 @@ module.exports = (nextConfig = {}) => ({
       }
 
       if (!options.isServer) {
-        console.log(`> [PWA] service worker url path ${_sw}`)
-        console.log(`> [PWA] service worker scope ${scope}`)
-        console.log(`> [PWA] generate precache manifest in ${_dest}`)
         console.log(`> [PWA] generate service worker ${path.join(_dest, sw)}`)
+        console.log(`> [PWA]   service worker url path ${_sw}`)
+        console.log(`> [PWA]   service worker scope ${scope}`)
+        console.log(`> [PWA] generate precache manifest in ${_dest}`)
 
         config.plugins.push(new CleanWebpackPlugin({
           cleanOnceBeforeBuildPatterns: [
@@ -157,7 +157,7 @@ module.exports = (nextConfig = {}) => ({
 
         if (workbox.swSrc) {
           const swSrc = path.join(options.dir, workbox.swSrc)
-          console.log('> [PWA] Injecting manifest in', swSrc)
+          console.log('> [PWA] Inject manifest in', swSrc)
           config.plugins.push(
             new WorkboxPlugin.InjectManifest({
               ...workboxCommon,
@@ -170,7 +170,6 @@ module.exports = (nextConfig = {}) => ({
             runtimeCaching = runtimeCaching(defaultCache)
           }
 
-          console.log('> [PWA] generating new service worker', path.join(_dest, sw))
           config.plugins.push(
             new WorkboxPlugin.GenerateSW({
               ...workboxCommon,
