@@ -5,7 +5,7 @@ This plugin is powered by [workbox](https://developers.google.com/web/tools/work
 **Features**
 
 - Zero config for registering and generating service worker
-- Completely runs offline
+- Completely offline support
 - Use workbox and workbox-window 4.3.0+
 - Optimized precache and runtime cache
 - Configurable by the same [workbox configuration options](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin)
@@ -13,7 +13,7 @@ This plugin is powered by [workbox](https://developers.google.com/web/tools/work
 ## Install
 
 ``` bash
-yarn add -D next-pwa
+yarn add next-pwa
 ```
 
 ## Usage
@@ -185,10 +185,6 @@ module.exports = withPWA({
 
 `next-pwa` uses `workbox-webpack-plugin`, other options which could also be put in `pwa` object can be find [**ON THE DOCUMENTATION**](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin). If you specify `swSrc`, `InjectManifest` plugin will be used, otherwise `GenerateSW` will be used to generate service worker.
 
-## How To
-
-// TODO
-
 ## TODO
 
 - [ ] Add examples
@@ -197,14 +193,3 @@ module.exports = withPWA({
 ## License
 
 MIT
-
-
-
-
-
-
-
-
-
-
-
