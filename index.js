@@ -1,6 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
-const { CleanPlugin } = require('clean-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const ReplacePlugin = require('replace-in-file-webpack-plugin')
 const WorkboxPlugin = require('workbox-webpack-plugin')
 
@@ -135,7 +135,7 @@ module.exports = (nextConfig = {}) => ({
         console.log(`> [PWA] generate precache manifest in ${_dest}`)
         console.log(`> [PWA] generate service worker ${path.join(_dest, sw)}`)
 
-        config.plugins.push(new CleanPlugin({
+        config.plugins.push(new CleanWebpackPlugin({
           cleanOnceBeforeBuildPatterns: [
             path.join(_dest, 'precache-manifest.*.js'),
             path.join(_dest, sw)
