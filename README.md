@@ -2,6 +2,8 @@
 
 This plugin is powered by [workbox](https://developers.google.com/web/tools/workbox/) and other good stuff.
 
+![size](https://img.shields.io/bundlephobia/minzip/next-pwa.svg) ![dependencies](https://img.shields.io/david/shadowwalker/next-pwa.svg) ![downloads](https://img.shields.io/npm/dw/next-pwa.svg) ![license](https://img.shields.io/npm/l/next-pwa.svg)
+
 **Features**
 
 - Zero config for registering and generating service worker

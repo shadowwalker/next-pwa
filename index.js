@@ -93,12 +93,9 @@ module.exports = (nextConfig = {}) => ({
   ...nextConfig,
   webpack(config, options) {
     const {
-      distDir = '.next'
-    } = options.config
-
-    const {
+      distDir = '.next',
       pwa = {}
-    } = options
+    } = options.config
 
     // For workbox configurations:
     // https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin

@@ -1,0 +1,20 @@
+{
+  "name": "next-pwa-example",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "node ./index.js",
+    "build": "next build",
+    "start": "cross-env NODE_ENV=production node ./index.js"
+  },
+  "dependencies": {
+    "cross-env": "^5.2.0",
+    "fastify": "^2.6.0",
+    "fastify-compress": "^0.10.0",
+    "next": "^8.1.0",
+    "next-pwa": "^1.0.5",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  }
+}
