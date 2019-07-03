@@ -187,11 +187,6 @@ module.exports = withPWA({
 
 `next-pwa` uses `workbox-webpack-plugin`, other options which could also be put in `pwa` object can be find [**ON THE DOCUMENTATION**](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin). If you specify `swSrc`, `InjectManifest` plugin will be used, otherwise `GenerateSW` will be used to generate service worker.
 
-## TODO
-
-- [ ] Add examples
-- [ ] Support `next export`
-
 ## License
 
 MIT
