@@ -35,7 +35,7 @@ const defaultCache = [{
     }
   }
 }, {
-  urlPattern: /\.(?:jpg|jpeg|gif|png|svg|ico)$/i,
+  urlPattern: /\.(?:jpg|jpeg|gif|png|svg|ico|webp)$/i,
   handler: 'StaleWhileRevalidate',
   options: {
     cacheName: 'static-image-assets',
