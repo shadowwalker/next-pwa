@@ -152,24 +152,6 @@ Add following into `_document.jsx` or `_document.tsx`, in `<Head>`:
 <meta property='og:image' content='https://yourdomain.com/static/icons/apple-touch-icon.png' />
 ```
 
-## Configuration
-
-There are options you can use to customize behavior of this plugin by adding `pwa` object in the next config in `next.config.js`:
-
-```javascript
-const withPWA = require('next-pwa')
-
-module.exports = withPWA({
-  pwa: {
-    disable: false,
-    register: true,
-    scope: '/app',
-    sw: 'service-worker.js',
-    //...
-  }
-})
-```
-
 ## Usage Without Custom Server (next.js 9+, non-serverless only)
 
 Thanks to **Next.js 9+**, we can use `public` folder (currently an experimental feature) to serve static files from root url path. It cuts the need to write custom server only to serve those files. Therefore the setup is more easy and concise. We can use `next.config.js` to config `next-pwa` to generates service worker and precache files into `public`folder.
@@ -190,6 +172,24 @@ module.exports = withPWA({
 ```
 
 **[Use this example to see it in action](https://github.com/shadowwalker/next-pwa/tree/master/examples/next-9)**
+
+## Configuration
+
+There are options you can use to customize behavior of this plugin by adding `pwa` object in the next config in `next.config.js`:
+
+```javascript
+const withPWA = require('next-pwa')
+
+module.exports = withPWA({
+  pwa: {
+    disable: false,
+    register: true,
+    scope: '/app',
+    sw: 'service-worker.js',
+    //...
+  }
+})
+```
 
 ### Available Options
 
