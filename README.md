@@ -7,8 +7,9 @@ This plugin is powered by [workbox](https://developers.google.com/web/tools/work
 **Features**
 
 - Zero config for registering and generating service worker
+- No custom server needed for Next.js 9+ [example here](https://github.com/shadowwalker/next-pwa/tree/master/examples/next-9)
 - Completely offline support
-- Use workbox and workbox-window 4.3.0+
+- Use workbox and workbox-window 4.3.1+
 - Optimized precache and runtime cache
 - Configurable by the same [workbox configuration options](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin)
 
@@ -33,6 +34,8 @@ module.exports = withPWA({
 ```
 
 After running `next build`, this will generate two files in your `distDir` (default is `.next` folder): `precache-manifest.*.js` and `sw.js`, which you need to serve statically, either through static file hosting service or using custom `server.js`.
+
+> If you are using Next.js 9+, you may not need a custom server to host your service worker files. Skip to next section to see the details.
 
 ### Option 1: Host Static Files
 
@@ -167,6 +170,27 @@ module.exports = withPWA({
 })
 ```
 
+## Usage Without Custom Server (next.js 9+, non-serverless only)
+
+Thanks to **Next.js 9+**, we can use `public` folder (currently an experimental feature) to serve static files from root url path. It cuts the need to write custom server only to serve those files. Therefore the setup is more easy and concise. We can use `next.config.js` to config `next-pwa` to generates service worker and precache files into `public`folder.
+
+### withPWA
+
+``` javascript
+const withPWA = require('next-pwa')
+
+module.exports = withPWA({
+  pwa: {
+    dest: 'public'
+  },
+  experimental: {
+    publicDirectory: true
+  }
+})
+```
+
+**[Use this example to see it in action](https://github.com/shadowwalker/next-pwa/tree/master/examples/next-9)**
+
 ### Available Options
 
 - disable: boolean - whether to disable pwa feature as a whole
@@ -182,10 +206,90 @@ module.exports = withPWA({
 - sw: string - service worker script file name
   - default to `/sw.js`
   - set to other file name if you want to customize the output service worker file name
+- runtimeCaching - caching strategies (array or callback function)
+  - default: see the **Default Runtime Caching** section for the default configuration
+  - accept an array of cache configurations
+  - **OR** accept a callback function which takes default runtime caching array as parameter, so that you can modify default configurations and return your configurations
 
 ### Other Options
 
 `next-pwa` uses `workbox-webpack-plugin`, other options which could also be put in `pwa` object can be find [**ON THE DOCUMENTATION**](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin). If you specify `swSrc`, `InjectManifest` plugin will be used, otherwise `GenerateSW` will be used to generate service worker.
+
+### Default Runtime Caching
+
+``` javascript
+const defaultCache = [{
+  urlPattern: /^https:\/\/fonts\.(?:googleapis|gstatic)\.com\/.*/i,
+  handler: 'CacheFirst',
+  options: {
+    cacheName: 'google-fonts',
+    expiration: {
+      maxEntries: 4,
+      maxAgeSeconds: 365 * 24 * 60 * 60  // 365 days
+    }
+  }
+}, {
+  urlPattern: /^https:\/\/use\.fontawesome\.com\/releases\/.*/i,
+  handler: 'CacheFirst',
+  options: {
+    cacheName: 'font-awesome',
+    expiration: {
+      maxEntries: 1,
+      maxAgeSeconds: 365 * 24 * 60 * 60  // 365 days
+    }
+  }
+}, {
+  urlPattern: /\.(?:eot|otf|ttc|ttf|woff|woff2|font.css)$/i,
+  handler: 'StaleWhileRevalidate',
+  options: {
+    cacheName: 'static-font-assets',
+    expiration: {
+      maxEntries: 4,
+      maxAgeSeconds: 7 * 24 * 60 * 60  // 7 days
+    }
+  }
+}, {
+  urlPattern: /\.(?:jpg|jpeg|gif|png|svg|ico|webp)$/i,
+  handler: 'StaleWhileRevalidate',
+  options: {
+    cacheName: 'static-image-assets',
+    expiration: {
+      maxEntries: 64,
+      maxAgeSeconds: 24 * 60 * 60  // 24 hours
+    }
+  }
+}, {
+  urlPattern: /\.(?:js)$/i,
+  handler: 'StaleWhileRevalidate',
+  options: {
+    cacheName: 'static-js-assets',
+    expiration: {
+      maxEntries: 16,
+      maxAgeSeconds: 24 * 60 * 60  // 24 hours
+    }
+  }
+}, {
+  urlPattern: /\.(?:css|less)$/i,
+  handler: 'StaleWhileRevalidate',
+  options: {
+    cacheName: 'static-style-assets',
+    expiration: {
+      maxEntries: 16,
+      maxAgeSeconds: 24 * 60 * 60  // 24 hours
+    }
+  }
+}, {
+  urlPattern: /.*/i,
+  handler: 'StaleWhileRevalidate',
+  options: {
+    cacheName: 'others',
+    expiration: {
+      maxEntries: 16,
+      maxAgeSeconds: 24 * 60 * 60  // 24 hours
+    }
+  }
+}]
+```
 
 ## License
 

@@ -6,7 +6,7 @@
 
 This example demostrates how to use `next-pwa` plugin to turn a `next.js` based web application into a progressive web application easily.
 
-Thanks to **Next.js 9+**, we can use `public` folder (currently an experimental feature) to serve static files from root url path. It cuts the need to write custom server only to serve those files. Therefore the setup is more concise and easy to setup. We can use `next.config.js` to config `next-pwa` to generates service worker and precache files into `public` folder.
+Thanks to **Next.js 9+**, we can use `public` folder (currently an experimental feature) to serve static files from root url path. It cuts the need to write custom server only to serve those files. Therefore the setup is more easy and concise. We can use `next.config.js` to config `next-pwa` to generates service worker and precache files into `public` folder.
 
 > [Check out the lighthouse summary](https://github.com/shadowwalker/next-pwa/blob/master/examples/next-9/lighthouse.pdf), or run the test your self.
 
