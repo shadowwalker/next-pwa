@@ -9,10 +9,9 @@
     "start": "next start"
   },
   "dependencies": {
-    "lodash": "^4.17.14",
-    "next": "^9.0.1",
-    "next-pwa": "^1.0.7",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "next": "^9.0.5",
+    "next-pwa": "^1.0.10",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0"
   }
 }

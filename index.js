@@ -109,6 +109,8 @@ module.exports = (nextConfig = {}) => ({
       ...workbox
     } = pwa
 
+    const precacheManifestFilename = `precache.${options.buildId}.[manifestHash].js`
+
     console.log(`> [PWA] ====== compile ${options.isServer ? 'server' : 'static (client)'} ======`)
     if (!disable) {
       const _sw = sw.startsWith('/') ? sw : `/${sw}`
@@ -130,11 +132,11 @@ module.exports = (nextConfig = {}) => ({
         console.log(`> [PWA] generate service worker ${path.join(_dest, sw)}`)
         console.log(`> [PWA]   service worker url path ${_sw}`)
         console.log(`> [PWA]   service worker scope ${scope}`)
-        console.log(`> [PWA] generate precache manifest in ${_dest}`)
+        console.log(`> [PWA] generate precache manifest ${path.join(_dest, precacheManifestFilename)}`)
 
         config.plugins.push(new CleanWebpackPlugin({
           cleanOnceBeforeBuildPatterns: [
-            path.join(_dest, 'precache-manifest.*.js'),
+            path.join(_dest, `precache.*.*.js`),
             path.join(_dest, sw)
           ]
         }))
@@ -149,7 +151,8 @@ module.exports = (nextConfig = {}) => ({
           ],
           modifyURLPrefix: {
             'static': '/static'
-          }
+          },
+          precacheManifestFilename
         }
 
         if (workbox.swSrc) {

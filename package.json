@@ -10,7 +10,7 @@
   "dependencies": {
     "clean-webpack-plugin": "^3.0.0",
     "replace-in-file-webpack-plugin": "^1.0.6",
-    "webpack": "^4.35.3",
+    "webpack": "^4.39.3",
     "workbox-webpack-plugin": "^4.3.1",
     "workbox-window": "^4.3.1"
   },

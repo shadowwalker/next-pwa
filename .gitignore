@@ -2,5 +2,5 @@ node_modules/
 yarn-error.log
 .next/
 
-**/public/precache-manifest.*.js
+**/public/precache.*.*.js
 **/public/sw.js
