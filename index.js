@@ -196,8 +196,11 @@ module.exports = (nextConfig = {}) => ({
 
         config.plugins.push(new ReplacePlugin([{
           dir: _dest,
-          test: /precache-manifest\..*\.js$/,
+          test: /precache\..*\..*\.js$/,
           rules: [{
+            search: /\\\\/g,
+            replace: '/'
+          }, {
             search: /"static\//g,
             replace: '"/_next/static/'
           }, {
