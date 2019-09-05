@@ -76,6 +76,18 @@ const defaultCache = [{
   }
 }]
 
+// convert windows backward slash path to linux or url forward slash
+const slash = path => {
+	const isExtendedLengthPath = /^\\\\\?\\/.test(path)
+	const hasNonAscii = /[^\u0000-\u0080]+/.test(path)
+
+	if (isExtendedLengthPath || hasNonAscii) {
+		return path;
+	}
+
+	return path.replace(/\\/g, '/')
+}
+
 const registerSW = (config) => {
   registerScript = path.join(__dirname, 'register.js')
   console.log(`> [PWA] auto register service worker with: ${path.resolve(registerScript)}`)
@@ -111,7 +123,7 @@ module.exports = (nextConfig = {}) => ({
 
     const precacheManifestFilename = `precache.${options.buildId}.[manifestHash].js`
 
-    console.log(`> [PWA] ====== compile ${options.isServer ? 'server' : 'static (client)'} ======`)
+    console.log(`> [PWA] ====== compile ${options.isServer ? 'server' : 'static (client)'} Build ID: ${options.buildId} ======`)
     if (!disable) {
       const _sw = sw.startsWith('/') ? sw : `/${sw}`
       const _dest = path.join(options.dir, dest)
@@ -181,7 +193,7 @@ module.exports = (nextConfig = {}) => ({
             })
           )
         }
-  
+
         config.plugins.push(new ReplacePlugin([{
           dir: _dest,
           test: /precache-manifest\..*\.js$/,
@@ -196,8 +208,8 @@ module.exports = (nextConfig = {}) => ({
           dir: _dest,
           files: [path.basename(sw)],
           rules: [{
-            search: path.join(path.relative(config.output.path, _dest), 'precache-manifest'),
-            replace: 'precache-manifest'
+            search: slash(path.join(path.relative(config.output.path, _dest), 'precache')),
+            replace: 'precache'
           }]
         }]))
       }
