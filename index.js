@@ -159,6 +159,7 @@ module.exports = (nextConfig = {}) => ({
           importsDirectory: _dest,
           globDirectory: options.dir,
           globPatterns: [
+            'public/static/**/*',
             'static/**/*'
           ],
           modifyURLPrefix: {
