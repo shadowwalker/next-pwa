@@ -111,7 +111,7 @@ module.exports = (nextConfig = {}) => ({
 
     // For workbox configurations:
     // https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin
-    const {
+    let {
       disable = options.dev,
       register = true,
       dest = distDir,
