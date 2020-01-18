@@ -159,10 +159,10 @@ module.exports = (nextConfig = {}) => ({
           importsDirectory: _dest,
           globDirectory: options.dir,
           globPatterns: [
-            'static/**/*'
+            'public/**/*'
           ],
           modifyURLPrefix: {
-            'static': '/static'
+            'public': ''
           },
           precacheManifestFilename
         }
