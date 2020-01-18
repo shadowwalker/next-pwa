@@ -9,13 +9,13 @@
     "start": "cross-env NODE_ENV=production node ./index.js"
   },
   "dependencies": {
-    "cross-env": "^5.2.0",
-    "fastify": "^2.6.0",
-    "fastify-compress": "^0.10.0",
-    "lodash": "^4.17.14",
-    "next": "^9.0.1",
-    "next-pwa": "^1.0.7",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "cross-env": "^6.0.3",
+    "fastify": "^2.11.0",
+    "fastify-compress": "^2.0.0",
+    "lodash": "^4.17.15",
+    "next": "^9.2.0",
+    "next-pwa": "^1.1.1",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
   }
 }
