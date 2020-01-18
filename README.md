@@ -18,6 +18,8 @@ This plugin is powered by [workbox](https://developers.google.com/web/tools/work
 
 - [ ] Add example to leverage workbox-window API to handle lifecycle events for advanced use cases
 
+> **NOTE** - `next-pwa` version 2.0.0+ should only work with `next.js` 9.1+, and static files should only be served through `public` directory. This will make things simpler.
+
 ## Install
 
 ``` bash
