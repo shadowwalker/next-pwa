@@ -7,11 +7,16 @@ This plugin is powered by [workbox](https://developers.google.com/web/tools/work
 **Features**
 
 - Zero config for registering and generating service worker
+- Easy to understand examples
 - No custom server needed for Next.js 9+ [example here](https://github.com/shadowwalker/next-pwa/tree/master/examples/next-9)
 - Completely offline support
 - Use workbox and workbox-window 4.3.1+
 - Optimized precache and runtime cache
 - Configurable by the same [workbox configuration options](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin)
+
+**Works In Progress**
+
+- [ ] Add example to leverage workbox-window API to handle lifecycle events for advanced use cases
 
 ## Install
 
@@ -21,7 +26,7 @@ yarn add next-pwa
 
 ## Usage
 
-### withPWA
+### Step 1: withPWA
 
 Update or create `next.config.js` with
 
@@ -79,7 +84,7 @@ app.prepare()
 
 > The following setup has nothing to do with `next-pwa` plugin, and you probably have already set them up. If not, go ahead to set them up.
 
-### Add Manifest File (Example)
+### Step 2: Add Manifest File (Example)
 
 Create a `manifest.json` file in your `static` folder:
 
@@ -112,7 +117,7 @@ Create a `manifest.json` file in your `static` folder:
 }
 ```
 
-### Add Head Meta (Example)
+### Step 3: Add Head Meta (Example)
 
 Add following into `_document.jsx` or `_document.tsx`, in `<Head>`:
 
@@ -154,7 +159,7 @@ Add following into `_document.jsx` or `_document.tsx`, in `<Head>`:
 
 ## Usage Without Custom Server (next.js 9+, non-serverless only)
 
-Thanks to **Next.js 9+**, we can use `public` folder (currently an experimental feature) to serve static files from root url path. It cuts the need to write custom server only to serve those files. Therefore the setup is more easy and concise. We can use `next.config.js` to config `next-pwa` to generates service worker and precache files into `public`folder.
+Thanks to **Next.js 9+**, we can use `public` folder to serve static files from root `/` url path. It cuts the need to write custom server only to serve those files. Therefore the setup is more easy and concise. We can use `next.config.js` to config `next-pwa` to generates service worker and precache files into `public`folder.
 
 ### withPWA
 
@@ -164,9 +169,6 @@ const withPWA = require('next-pwa')
 module.exports = withPWA({
   pwa: {
     dest: 'public'
-  },
-  experimental: {
-    publicDirectory: true
   }
 })
 ```
@@ -290,6 +292,10 @@ const defaultCache = [{
   }
 }]
 ```
+
+## Tips
+
+// TODO
 
 ## License
 
