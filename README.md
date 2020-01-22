@@ -10,13 +10,11 @@ This plugin is powered by [workbox](https://developers.google.com/web/tools/work
 - Easy to understand examples
 - No custom server needed for Next.js 9+ [example here](https://github.com/shadowwalker/next-pwa/tree/master/examples/next-9)
 - Completely offline support
+- Handle PWA lifecycle events opt-in [example here](https://github.com/shadowwalker/next-pwa/tree/master/examples/lifecycle)
 - Use workbox and workbox-window 4.3.1+
 - Optimized precache and runtime cache
 - Configurable by the same [workbox configuration options](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin)
-
-**Works In Progress**
-
-- [ ] Add example to leverage workbox-window API to handle lifecycle events for advanced use cases
+- Spin up a GitPod and try out the examples in rocket speed
 
 > **NOTE** - `next-pwa` version 2.0.0+ should only work with `next.js` 9.1+, and static files should only be served through `public` directory. This will make things simpler.
 
@@ -26,7 +24,7 @@ This plugin is powered by [workbox](https://developers.google.com/web/tools/work
 yarn add next-pwa
 ```
 
-## Usage
+## Basic Usage
 
 ### Step 1: withPWA
 

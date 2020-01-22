@@ -76,34 +76,18 @@ const defaultCache = [{
   }
 }]
 
-// convert windows backward slash path to linux or url forward slash
+// convert windows os backward slash path to linux or url forward slash
 const slash = path => {
 	const isExtendedLengthPath = /^\\\\\?\\/.test(path)
 	const hasNonAscii = /[^\u0000-\u0080]+/.test(path)
-
-	if (isExtendedLengthPath || hasNonAscii) {
-		return path;
-	}
-
-	return path.replace(/\\/g, '/')
-}
-
-const registerSW = (config) => {
-  registerScript = path.join(__dirname, 'register.js')
-  console.log(`> [PWA] auto register service worker with: ${path.resolve(registerScript)}`)
-
-  const entry = config.entry
-  config.entry = async () => entry().then(entries => {
-    if(entries['main.js'] && !entries['main.js'].includes(registerScript)) {
-      entries['main.js'].unshift(registerScript)
-    }
-    return entries
-  })
+  return (isExtendedLengthPath || hasNonAscii) ? path : path.replace(/\\/g, '/')
 }
 
 module.exports = (nextConfig = {}) => ({
   ...nextConfig,
   webpack(config, options) {
+    const buildId = options.buildId
+
     const {
       distDir = '.next',
       pwa = {}
@@ -121,30 +105,44 @@ module.exports = (nextConfig = {}) => ({
       ...workbox
     } = pwa
 
-    const precacheManifestFilename = `precache.${options.buildId}.[manifestHash].js`
+    const precacheManifestJs = `precache.${buildId}.[manifestHash].js`
+    const registerJs = path.join(__dirname, 'register.js')
 
-    console.log(`> [PWA] ====== compile ${options.isServer ? 'server' : 'static (client)'} Build ID: ${options.buildId} ======`)
     if (!disable) {
+      console.log(`> [PWA] compile ${options.isServer ? 'server' : 'client (static)'}`)
+
       const _sw = sw.startsWith('/') ? sw : `/${sw}`
       const _dest = path.join(options.dir, dest)
       
+      // replace strings in register js script
       config.plugins.push(new webpack.DefinePlugin({
         '__PWA_SW__': `"${_sw}"`,
-        '__PWA_SCOPE__': `"${scope}"`
+        '__PWA_SCOPE__': `"${scope}"`,
+        '__PWA_ENABLE_REGISTER__': `${Boolean(register)}`
       }))
-
-      if(register) {
-        registerSW(config)
-      } else {
-        console.log(`> [PWA] auto register service worker is disabled`)
-        console.log(`> [PWA] make sure to handle register service worker yourself`)
-      }
+      
+      // register script is prepended to main entry in both server and client side for consistency,
+      // it won't run any actual code on server side though
+      const entry = config.entry
+      config.entry = async () => entry().then(entries => {
+        if(entries['main.js'] && !entries['main.js'].includes(registerJs)) {
+          entries['main.js'].unshift(registerJs)
+        }
+        return entries
+      })
 
       if (!options.isServer) {
-        console.log(`> [PWA] generate service worker ${path.join(_dest, sw)}`)
-        console.log(`> [PWA]   service worker url path ${_sw}`)
-        console.log(`> [PWA]   service worker scope ${scope}`)
-        console.log(`> [PWA] generate precache manifest ${path.join(_dest, precacheManifestFilename)}`)
+        if(register){
+          console.log(`> [PWA] auto register service worker with: ${path.resolve(registerJs)}`)
+        } else {
+          console.log(`> [PWA] auto register service worker is disabled, please call following code in componentDidMount callback or useEffect hook`)
+          console.log(`> [PWA]   window.workbox.register()`)
+        }
+
+        console.log(`> [PWA] service worker: ${path.join(_dest, sw)}`)
+        console.log(`> [PWA]   url: ${_sw}`)
+        console.log(`> [PWA]   scope: ${scope}`)
+        console.log(`> [PWA] precache manifest: ${path.join(_dest, precacheManifestJs)}`)
 
         config.plugins.push(new CleanWebpackPlugin({
           cleanOnceBeforeBuildPatterns: [
@@ -164,12 +162,12 @@ module.exports = (nextConfig = {}) => ({
           modifyURLPrefix: {
             'public': ''
           },
-          precacheManifestFilename
+          precacheManifestFilename: precacheManifestJs
         }
 
         if (workbox.swSrc) {
           const swSrc = path.join(options.dir, workbox.swSrc)
-          console.log('> [PWA] Inject manifest in', swSrc)
+          console.log('> [PWA] inject manifest in', swSrc)
           config.plugins.push(
             new WorkboxPlugin.InjectManifest({
               ...workboxCommon,
@@ -217,7 +215,7 @@ module.exports = (nextConfig = {}) => ({
         }]))
       }
     } else {
-      console.log('> [PWA] PWA support currently disabled')
+      console.log('> [PWA] PWA support is disabled')
     }
 
     if (typeof nextConfig.webpack === 'function') {
