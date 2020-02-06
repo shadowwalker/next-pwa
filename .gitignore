@@ -4,3 +4,5 @@ yarn-error.log
 
 **/public/precache.*.*.js
 **/public/sw.js
+examples/**/yarn.lock
+examples/**/package-lock.json
