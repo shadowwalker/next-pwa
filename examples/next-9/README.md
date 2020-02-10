@@ -24,7 +24,7 @@ yarn start
 ## Recommend `.gitignore`
 
 ```
-**/public/precache.*.js
+**/public/workbox-*.js
 **/public/sw.js
 ```
 

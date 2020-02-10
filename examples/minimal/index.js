@@ -20,7 +20,7 @@ fastify.register((fastify, options, next) => {
         })
       })
 
-      fastify.get('/precache.*.js', (request, reply) => {
+      fastify.get('/workbox-*.js', (request, reply) => {
         const { pathname } = parse(request.req.url, true)
         return app.serveStatic(request.req, reply.res, join(__dirname, '.next', pathname)).then(() => {
           reply.sent = true
