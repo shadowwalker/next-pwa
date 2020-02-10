@@ -4,5 +4,6 @@ yarn-error.log
 
 **/public/precache.*.*.js
 **/public/sw.js
+**/public/workbox-*.js
 examples/**/yarn.lock
 examples/**/package-lock.json

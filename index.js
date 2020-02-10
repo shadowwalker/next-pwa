@@ -1,7 +1,7 @@
 const path = require('path')
 const webpack = require('webpack')
+const globby = require('globby')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-const ReplacePlugin = require('replace-in-file-webpack-plugin')
 const WorkboxPlugin = require('workbox-webpack-plugin')
 
 const defaultCache = [{
@@ -76,13 +76,6 @@ const defaultCache = [{
   }
 }]
 
-// convert windows os backward slash path to linux or url forward slash
-const slash = path => {
-	const isExtendedLengthPath = /^\\\\\?\\/.test(path)
-	const hasNonAscii = /[^\u0000-\u0080]+/.test(path)
-  return (isExtendedLengthPath || hasNonAscii) ? path : path.replace(/\\/g, '/')
-}
-
 module.exports = (nextConfig = {}) => ({
   ...nextConfig,
   webpack(config, options) {
@@ -93,6 +86,14 @@ module.exports = (nextConfig = {}) => ({
       pwa = {}
     } = options.config
 
+    let publicPrecaches = globby.sync(['**/*', '!workbox-*.js'], {
+      cwd: 'public'
+    }).map(f => ({
+      url: `/${f}`,
+      revision: buildId
+    }))
+    publicPrecaches = [...publicPrecaches, {url: '/', revision: buildId}]
+
     // For workbox configurations:
     // https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin
     const {
@@ -102,10 +103,10 @@ module.exports = (nextConfig = {}) => ({
       sw = '/sw.js',
       scope = '/',
       runtimeCaching = defaultCache,
+      additionalManifestEntries = publicPrecaches,
       ...workbox
     } = pwa
 
-    const precacheManifestJs = `precache.${buildId}.[manifestHash].js`
     const registerJs = path.join(__dirname, 'register.js')
 
     if (!disable) {
@@ -142,27 +143,24 @@ module.exports = (nextConfig = {}) => ({
         console.log(`> [PWA] service worker: ${path.join(_dest, sw)}`)
         console.log(`> [PWA]   url: ${_sw}`)
         console.log(`> [PWA]   scope: ${scope}`)
-        console.log(`> [PWA] precache manifest: ${path.join(_dest, precacheManifestJs)}`)
 
         config.plugins.push(new CleanWebpackPlugin({
           cleanOnceBeforeBuildPatterns: [
-            path.join(_dest, `precache.*.*.js`),
+            path.join(_dest, 'workbox-*.js'),
             path.join(_dest, sw)
           ]
         }))
 
         const workboxCommon = {
           swDest: path.join(_dest, sw),
-          exclude: ['react-loadable-manifest.json', 'build-manifest.json'],
-          importsDirectory: _dest,
-          globDirectory: options.dir,
-          globPatterns: [
-            'public/**/*'
+          additionalManifestEntries,
+          exclude: [
+            'react-loadable-manifest.json', 
+            'build-manifest.json'
           ],
           modifyURLPrefix: {
-            'public': ''
-          },
-          precacheManifestFilename: precacheManifestJs
+            'static/': '/_next/static/'
+          }
         }
 
         if (workbox.swSrc) {
@@ -191,28 +189,6 @@ module.exports = (nextConfig = {}) => ({
             })
           )
         }
-
-        config.plugins.push(new ReplacePlugin([{
-          dir: _dest,
-          test: /precache\..*\..*\.js$/,
-          rules: [{
-            search: /\\\\/g,
-            replace: '/'
-          }, {
-            search: /"static\//g,
-            replace: '"/_next/static/'
-          }, {
-            search: /concat\(\[/,
-            replace: `concat([ { "url": "/", "revision": "${options.buildId}" },`
-          }]
-        }, {
-          dir: _dest,
-          files: [path.basename(sw)],
-          rules: [{
-            search: slash(path.join(path.relative(config.output.path, _dest), 'precache')),
-            replace: 'precache'
-          }]
-        }]))
       }
     } else {
       console.log('> [PWA] PWA support is disabled')
