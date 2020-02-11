@@ -17,11 +17,14 @@
   "dependencies": {
     "clean-webpack-plugin": "^3.0.0",
     "globby": "^11.0.0",
-    "webpack": "^4.41.5",
     "workbox-webpack-plugin": "^5.0.0",
     "workbox-window": "^5.0.0"
   },
+  "devDependencies": {
+    "webpack": "^4.41.5"
+  },
   "peerDependencies": {
-    "next": ">=7.0.0"
+    "next": ">=7.0.0",
+    "webpack": ">=4.0.0"
   }
 }
