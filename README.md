@@ -6,15 +6,16 @@ This plugin is powered by [workbox](https://developers.google.com/web/tools/work
 
 **Features**
 
-- Zero config for registering and generating service worker
-- Easy to understand examples
+- 0️⃣ Zero config for registering and generating service worker
+- 🎈 Easy to understand examples
+- 📴 Completely offline support
+- 📦 Use workbox and workbox-window v5
 - No custom server needed for Next.js 9+ [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/next-9)
-- Completely offline support
 - Handle PWA lifecycle events opt-in [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/lifecycle)
-- Use workbox and workbox-window v5
-- Optimized precache and runtime cache
-- Configurable by the same [workbox configuration options](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin)
-- Spin up a [GitPod](https://gitpod.io/#https://github.com/shadowwalker/next-pwa/) and try out examples in rocket speed
+- Custom worker to run extra code in service worker [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/custom-worker)
+- ✨ Optimized precache and runtime cache
+- 🛠 Configurable by the same [workbox configuration options](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin) for [GenerateSW](https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-webpack-plugin.GenerateSW) and [InjectManifest](https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-webpack-plugin.InjectManifest)
+- 🚀 Spin up a [GitPod](https://gitpod.io/#https://github.com/shadowwalker/next-pwa/) and try out examples in rocket speed
 
 > **NOTE** - `next-pwa` version 2.0.0+ should only work with `next.js` 9.1+, and static files should only be served through `public` directory. This will make things simpler.
 
@@ -301,7 +302,13 @@ const defaultCache = [{
 
 ## Tips
 
-// TODO
+1. [Common UX pattern to ask user to reload when new service worker is installed](https://github.com/shadowwalker/next-pwa/blob/master/examples/lifecycle/pages/index.js#L26-L38)
+2. Use a convention like `{command: 'doSomething', message: ''}` object when `postMessage` to service worker. So that on the listener, it could do multiple different tasks using `if...else...`.
+
+## Reference
+
+1. [Google Workbox](https://developers.google.com/web/tools/workbox/guides/get-started)
+2. [ServiceWorker, MessageChannel, & postMessage](https://ponyfoo.com/articles/serviceworker-messagechannel-postmessage) by [Nicolás Bevacqua](https://ponyfoo.com/contributors/ponyfoo)
 
 ## License
 
