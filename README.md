@@ -7,12 +7,13 @@ This plugin is powered by [workbox](https://developers.google.com/web/tools/work
 **Features**
 
 - 0️⃣ Zero config for registering and generating service worker
-- 🎈 Easy to understand examples
 - 📴 Completely offline support
+- 💯 Maximize lighthouse score
 - 📦 Use workbox and workbox-window v5
-- No custom server needed for Next.js 9+ [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/next-9)
-- Handle PWA lifecycle events opt-in [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/lifecycle)
-- Custom worker to run extra code in service worker [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/custom-worker)
+- 🎈 Easy to understand examples
+- ☕ No custom server needed for Next.js 9+ [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/next-9)
+- 🔧 Handle PWA lifecycle events opt-in [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/lifecycle)
+- 📐 Custom worker to run extra code in service worker [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/custom-worker)
 - ✨ Optimized precache and runtime cache
 - 🛠 Configurable by the same [workbox configuration options](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin) for [GenerateSW](https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-webpack-plugin.GenerateSW) and [InjectManifest](https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-webpack-plugin.InjectManifest)
 - 🚀 Spin up a [GitPod](https://gitpod.io/#https://github.com/shadowwalker/next-pwa/) and try out examples in rocket speed
