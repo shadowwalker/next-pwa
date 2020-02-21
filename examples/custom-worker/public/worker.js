@@ -1,3 +1,5 @@
+'use strict'
+
 console.log('This is custom code running in service worker')
 
 // listen to message event from window
