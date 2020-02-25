@@ -228,7 +228,7 @@ module.exports = withPWA({
 ### Default Runtime Caching
 
 ``` javascript
-const defaultCache = [{
+[{
   urlPattern: /^https:\/\/fonts\.(?:googleapis|gstatic)\.com\/.*/i,
   handler: 'CacheFirst',
   options: {
@@ -283,6 +283,16 @@ const defaultCache = [{
   handler: 'StaleWhileRevalidate',
   options: {
     cacheName: 'static-style-assets',
+    expiration: {
+      maxEntries: 16,
+      maxAgeSeconds: 24 * 60 * 60  // 24 hours
+    }
+  }
+}, {
+  urlPattern: /\.(?:json|xml|csv)$/i,
+  handler: 'StaleWhileRevalidate',
+  options: {
+    cacheName: 'static-data-assets',
     expiration: {
       maxEntries: 16,
       maxAgeSeconds: 24 * 60 * 60  // 24 hours
