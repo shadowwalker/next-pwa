@@ -116,13 +116,13 @@ module.exports = (nextConfig = {}) => ({
       ...workbox
     } = pwa
 
+    if (typeof nextConfig.webpack === 'function') {
+      config = nextConfig.webpack(config, options)
+    }
+
     if (disable) {
       console.log('> [PWA] PWA support is disabled')
       return config
-    }
-
-    if (typeof nextConfig.webpack === 'function') {
-      config = nextConfig.webpack(config, options)
     }
 
     // TODO: add an option to allow additional precache include/exclude
