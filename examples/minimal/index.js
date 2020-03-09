@@ -2,15 +2,15 @@ const { join } = require('path')
 const { parse } = require('url')
 const fastify = require('fastify')({})
 const Next = require('next')
+const nextConfig = require('./next.config')
 
 const port = parseInt(process.env.PORT, 10) || 3000
 const dev = process.env.NODE_ENV !== 'production'
-const app = Next({ dev })
+const app = Next({ dev, conf: nextConfig })
 
 fastify.register(require('fastify-compress'))
 
 fastify.register((fastify, options, next) => {
-  const app = Next({ dev })
   app
     .prepare()
     .then(() => {
