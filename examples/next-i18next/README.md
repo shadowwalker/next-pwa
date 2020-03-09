@@ -23,3 +23,11 @@ yarn build
 yarn start
 ```
 
+Then try out following path:
+
+```
+https://localhost:3000/
+https://localhost:3000/en
+https://localhost:3000/zh
+```
+
