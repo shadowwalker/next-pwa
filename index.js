@@ -26,13 +26,17 @@ module.exports = (nextConfig = {}) => ({
     // For workbox configurations:
     // https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin
     const {
-      disable = dev,
+      disable = false, // dev,
       register = true,
       dest = distDir,
       sw = 'sw.js',
       scope = '/',
+      skipWaiting = true,
+      clientsClaim = true,
+      cleanupOutdatedCaches = true,
       runtimeCaching = defaultCache,
       additionalManifestEntries,
+      ignoreURLParametersMatching = [],
       ...workbox
     } = pwa
 
@@ -61,9 +65,7 @@ module.exports = (nextConfig = {}) => ({
 
     const registerJs = path.join(__dirname, 'register.js')
 
-    console.log(
-      `> [PWA] compile ${options.isServer ? 'server' : 'client (static)'}`
-    )
+    console.log(`> [PWA] Compile ${options.isServer ? 'server' : 'client (static)'}`)
 
     const _sw = sw.startsWith('/') ? sw : `/${sw}`
     const _dest = path.join(options.dir, dest)
@@ -89,20 +91,19 @@ module.exports = (nextConfig = {}) => ({
       })
 
     if (!options.isServer) {
+      if (dev) {
+        console.log('> [PWA] Build in develop mode, cache and precache are mostly disabled. \
+        This means offine support is disabled, but you can continue developing other functions in service worker.')
+      }
+
       if (register) {
-        console.log(
-          `> [PWA] auto register service worker with: ${path.resolve(
-            registerJs
-          )}`
-        )
+        console.log(`> [PWA] Auto register service worker with: ${path.resolve(registerJs)}`)
       } else {
-        console.log(
-          `> [PWA] auto register service worker is disabled, please call following code in componentDidMount callback or useEffect hook`
-        )
+        console.log(`> [PWA] Auto register service worker is disabled, please call following code in componentDidMount callback or useEffect hook`)
         console.log(`> [PWA]   window.workbox.register()`)
       }
 
-      console.log(`> [PWA] service worker: ${path.join(_dest, sw)}`)
+      console.log(`> [PWA] Service worker: ${path.join(_dest, sw)}`)
       console.log(`> [PWA]   url: ${_sw}`)
       console.log(`> [PWA]   scope: ${scope}`)
 
@@ -110,20 +111,26 @@ module.exports = (nextConfig = {}) => ({
         new CleanWebpackPlugin({
           cleanOnceBeforeBuildPatterns: [
             path.join(_dest, 'workbox-*.js'),
-            path.join(_dest, sw)
+            path.join(_dest, 'workbox-*.js.map'),
+            path.join(_dest, sw),
+            path.join(_dest, `${sw}.map`)
           ]
         })
       )
 
-      const prefix = config.output.publicPath
-        ? `${config.output.publicPath}static/`
-        : 'static/'
+      const prefix = config.output.publicPath ? `${config.output.publicPath}static/` : 'static/'
       const workboxCommon = {
         swDest: path.join(_dest, sw),
-        additionalManifestEntries: manifestEntries,
+        additionalManifestEntries: dev ? undefined : manifestEntries,
         exclude: [
           ({ asset, compilation }) => {
-            return asset.chunks.length === 0
+            if (asset.name.match(/^(build-manifest\.json|react-loadable-manifest\.json)$/)) {
+              return true
+            }
+            if (dev && !asset.name.startsWith('static/runtime/')) {
+              return true
+            }
+            return false
           }
         ],
         modifyURLPrefix: {
@@ -133,7 +140,7 @@ module.exports = (nextConfig = {}) => ({
 
       if (workbox.swSrc) {
         const swSrc = path.join(options.dir, workbox.swSrc)
-        console.log('> [PWA] inject manifest in', swSrc)
+        console.log('> [PWA] Inject manifest in', swSrc)
         config.plugins.push(
           new WorkboxPlugin.InjectManifest({
             ...workboxCommon,
@@ -146,13 +153,17 @@ module.exports = (nextConfig = {}) => ({
           runtimeCaching = runtimeCaching(defaultCache)
         }
 
+        if (dev) {
+          ignoreURLParametersMatching.push(/ts/)
+        }
         config.plugins.push(
           new WorkboxPlugin.GenerateSW({
             ...workboxCommon,
-            skipWaiting: true,
-            clientsClaim: true,
-            cleanupOutdatedCaches: true,
-            runtimeCaching,
+            skipWaiting,
+            clientsClaim,
+            cleanupOutdatedCaches,
+            ignoreURLParametersMatching,
+            runtimeCaching: dev ? undefined : runtimeCaching,
             ...workbox
           })
         )

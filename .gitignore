@@ -6,5 +6,8 @@ yarn-error.log
 **/public/precache.*.*.js
 **/public/sw.js
 **/public/workbox-*.js
+**/public/precache.*.*.js.map
+**/public/sw.js.map
+**/public/workbox-*.js.map
 examples/**/yarn.lock
 examples/**/package-lock.json
