@@ -10,8 +10,8 @@
     "start": "next start"
   },
   "dependencies": {
-    "next": "^9.2.2",
-    "next-pwa": "^2.2.0",
+    "next": "^9.3.0",
+    "next-pwa": "^2.3.0",
     "react": "^16.13.0",
     "react-dom": "^16.13.0"
   }
