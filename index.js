@@ -1,17 +1,14 @@
 'use strict'
 
 const path = require('path')
+const fs = require('fs-extra')
 const globby = require('globby')
 const crypto = require('crypto')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const WorkboxPlugin = require('workbox-webpack-plugin')
 const defaultCache = require('./cache')
 
-const getRevision = file =>
-  crypto
-    .createHash('md5')
-    .update(Buffer.from(file))
-    .digest('hex')
+const getRevision = file => crypto.createHash('md5').update(Buffer.from(file)).digest('hex')
 
 module.exports = (nextConfig = {}) => ({
   ...nextConfig,
@@ -24,9 +21,9 @@ module.exports = (nextConfig = {}) => ({
     } = options
 
     // For workbox configurations:
-    // https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin
+    // https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-webpack-plugin.GenerateSW
     const {
-      disable = false, // dev,
+      disable = false,
       register = true,
       dest = distDir,
       sw = 'sw.js',
@@ -37,6 +34,8 @@ module.exports = (nextConfig = {}) => ({
       runtimeCaching = defaultCache,
       additionalManifestEntries,
       ignoreURLParametersMatching = [],
+      importScripts = [],
+      publicExcludes = [],
       ...workbox
     } = pwa
 
@@ -49,28 +48,42 @@ module.exports = (nextConfig = {}) => ({
       return config
     }
 
-    // TODO: add an option to allow additional precache include/exclude
-    let manifestEntries = additionalManifestEntries
-    if (!Array.isArray(manifestEntries)) {
-      manifestEntries = globby
-        .sync(['**/*', '!workbox-*.js', `!${sw.replace(/^\/+/, '')}`], {
-          cwd: 'public'
-        })
-        .map(f => ({
-          url: `/${f}`,
-          revision: getRevision(`public/${f}`)
-        }))
-      manifestEntries.push({ url: '/', revision: buildId })
-    }
-
-    const registerJs = path.join(__dirname, 'register.js')
-
     console.log(`> [PWA] Compile ${options.isServer ? 'server' : 'client (static)'}`)
 
-    const _sw = sw.startsWith('/') ? sw : `/${sw}`
     const _dest = path.join(options.dir, dest)
 
-    // replace strings in register js script
+    // build custom worker
+    const customWorkerEntry = path.join(options.dir, 'worker', 'index.js')
+    const customWorkerName = `worker-${buildId}.js`
+    if (!options.isServer && fs.existsSync(customWorkerEntry)) {
+      webpack({
+        mode: config.mode,
+        target: 'webworker',
+        entry: customWorkerEntry,
+        output: {
+          path: _dest,
+          filename: customWorkerName
+        },
+        plugins: [
+          new CleanWebpackPlugin({
+            cleanOnceBeforeBuildPatterns: [
+              path.join(_dest, 'worker-*.js'),
+              path.join(_dest, 'worker-*.js.map')
+            ]
+          })
+        ]
+      }).run((error, status) => {
+        if (error || status.hasErrors()) {
+          console.error(`> [PWA] Failed to build custom worker: ${error}`)
+          process.exit(-1)
+        }
+        importScripts.unshift(customWorkerName)
+      })
+    }
+
+    // inject register script to main.js
+    const _sw = sw.startsWith('/') ? sw : `/${sw}`
+    
     config.plugins.push(
       new webpack.DefinePlugin({
         __PWA_SW__: `"${_sw}"`,
@@ -79,10 +92,9 @@ module.exports = (nextConfig = {}) => ({
       })
     )
 
-    // register script is prepended to main entry in both server and client side for consistency,
-    // it won't run any actual code on server side though
+    const registerJs = path.join(__dirname, 'register.js')
     const entry = config.entry
-    config.entry = async () =>
+    config.entry = () =>
       entry().then(entries => {
         if (entries['main.js'] && !entries['main.js'].includes(registerJs)) {
           entries['main.js'].unshift(registerJs)
@@ -117,6 +129,20 @@ module.exports = (nextConfig = {}) => ({
           ]
         })
       )
+
+      // precache files in public folder
+      let manifestEntries = additionalManifestEntries
+      if (!Array.isArray(manifestEntries)) {
+        manifestEntries = globby
+          .sync(['**/*', '!workbox-*.js', `!${sw.replace(/^\/+/, '')}`, '!worker-*.js'].concat(publicExcludes), {
+            cwd: 'public'
+          })
+          .map(f => ({
+            url: `/${f}`,
+            revision: getRevision(`public/${f}`)
+          }))
+        manifestEntries.push({ url: '/', revision: buildId })
+      }
 
       const prefix = config.output.publicPath ? `${config.output.publicPath}static/` : 'static/'
       const workboxCommon = {
@@ -163,6 +189,7 @@ module.exports = (nextConfig = {}) => ({
             clientsClaim,
             cleanupOutdatedCaches,
             ignoreURLParametersMatching,
+            importScripts,
             runtimeCaching: dev ? undefined : runtimeCaching,
             ...workbox
           })

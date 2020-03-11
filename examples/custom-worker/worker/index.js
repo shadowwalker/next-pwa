@@ -1,9 +1,10 @@
 'use strict'
 
-console.log('This is custom code running in service worker')
+const util = require('./util')
+
+util()
 
 // listen to message event from window
-
 self.addEventListener('message', event => {
   // HOW TO TEST THIS?
   // Run this in your browser console: 
