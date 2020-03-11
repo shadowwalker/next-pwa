@@ -13,13 +13,19 @@ This plugin is powered by [workbox](https://developers.google.com/web/tools/work
 - 🎈 Easy to understand examples
 - ☕ No custom server needed for Next.js 9+ [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/next-9)
 - 🔧 Handle PWA lifecycle events opt-in [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/lifecycle)
-- 📐 Custom worker to run extra code in service worker [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/custom-worker)
+- 📐 Custom worker to run extra code in service worker with code splitting [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/custom-worker) 🆕
 - 🌏 Internationalization (a.k.a I18N) with `next-i18next` [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/next-i18next)
 - ✨ Optimized precache and runtime cache
 - 🛠 Configurable by the same [workbox configuration options](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin) for [GenerateSW](https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-webpack-plugin.GenerateSW) and [InjectManifest](https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-webpack-plugin.InjectManifest)
 - 🚀 Spin up a [GitPod](https://gitpod.io/#https://github.com/shadowwalker/next-pwa/) and try out examples in rocket speed
 
 > **NOTE** - `next-pwa` version 2.0.0+ should only work with `next.js` 9.1+, and static files should only be served through `public` directory. This will make things simpler.
+
+> **VERSION** `2.3.0`
+>
+> - service worker runs in dev mode as well, good for debugging functionality with service worker during development
+> - custom worker with code splitting, simply write your service worker in `worker/index.js`
+> - new option to exclude files in `public` folder from being precached
 
 ----
 
@@ -205,7 +211,7 @@ module.exports = withPWA({
 ### Available Options
 
 - disable: boolean - whether to disable pwa feature as a whole
-  - default to disabled during `dev`
+  - default to `false`
   - set `disable: false`, so that it will generate service worker in both `dev` and `prod`
   - set `disable: true` to completely disable PWA
 - register: boolean - whether to let this plugin register service worker for you
@@ -221,6 +227,9 @@ module.exports = withPWA({
   - default: see the **Default Runtime Caching** section for the default configuration
   - accept an array of cache configurations
   - **OR** accept a callback function which takes default runtime caching array as parameter, so that you can modify default configurations and return your configurations
+- publicExcludes - array of glob pattern strings to excludes files in `public` folder being precached.
+  - default: `[]` - i.e. default behavior will precache all the files inside your `public` folder
+  - example: `['!img/super-large-image.jpg', '!fonts/not-used-fonts.otf']`
 
 ### Other Options
 
@@ -234,6 +243,7 @@ module.exports = withPWA({
 
 1. [Common UX pattern to ask user to reload when new service worker is installed](https://github.com/shadowwalker/next-pwa/blob/master/examples/lifecycle/pages/index.js#L26-L38)
 2. Use a convention like `{command: 'doSomething', message: ''}` object when `postMessage` to service worker. So that on the listener, it could do multiple different tasks using `if...else...`.
+3. When you debugging service worker, constantly `clean application cache` to reduce some flaky errors.
 
 ## Reference
 
