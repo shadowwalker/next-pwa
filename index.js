@@ -31,13 +31,14 @@ module.exports = (nextConfig = {}) => ({
       skipWaiting = true,
       clientsClaim = true,
       cleanupOutdatedCaches = true,
-      runtimeCaching = defaultCache,
       additionalManifestEntries,
       ignoreURLParametersMatching = [],
       importScripts = [],
       publicExcludes = [],
       ...workbox
     } = pwa
+
+    let { runtimeCaching = defaultCache } = pwa
 
     if (typeof nextConfig.webpack === 'function') {
       config = nextConfig.webpack(config, options)
