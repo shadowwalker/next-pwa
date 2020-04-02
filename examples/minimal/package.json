@@ -11,11 +11,11 @@
   },
   "dependencies": {
     "cross-env": "^7.0.2",
-    "fastify": "^2.12.1",
+    "fastify": "^2.13.0",
     "fastify-compress": "^2.0.1",
-    "next": "^9.3.0",
-    "next-pwa": "^2.3.0",
-    "react": "^16.13.0",
-    "react-dom": "^16.13.0"
+    "next": "^9.3.4",
+    "next-pwa": "^2.3.2",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
   }
 }
