@@ -1,6 +1,6 @@
 {
   "name": "next-pwa",
-  "version": "2.3.1",
+  "version": "2.3.2",
   "description": "Next.js with PWA, powered by workbox.",
   "main": "index.js",
   "repository": "https://github.com/shadowwalker/next-pwa",
@@ -17,8 +17,8 @@
   "dependencies": {
     "clean-webpack-plugin": "^3.0.0",
     "globby": "^11.0.0",
-    "workbox-webpack-plugin": "^5.0.0",
-    "workbox-window": "^5.0.0"
+    "workbox-webpack-plugin": "^5.1.2",
+    "workbox-window": "^5.1.2"
   },
   "devDependencies": {
     "webpack": "^4.41.5"
