@@ -15,7 +15,7 @@
     "fastify-compress": "^2.0.1",
     "next": "^9.3.4",
     "next-i18next": "^4.2.1",
-    "next-pwa": "^2.3.2",
+    "next-pwa": "^2.3.3",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   }
