@@ -51,37 +51,6 @@ module.exports = (nextConfig = {}) => ({
 
     console.log(`> [PWA] Compile ${options.isServer ? 'server' : 'client (static)'}`)
 
-    const _dest = path.join(options.dir, dest)
-
-    // build custom worker
-    const customWorkerEntry = path.join(options.dir, 'worker', 'index.js')
-    const customWorkerName = `worker-${buildId}.js`
-    if (!options.isServer && fs.existsSync(customWorkerEntry)) {
-      webpack({
-        mode: config.mode,
-        target: 'webworker',
-        entry: customWorkerEntry,
-        output: {
-          path: _dest,
-          filename: customWorkerName
-        },
-        plugins: [
-          new CleanWebpackPlugin({
-            cleanOnceBeforeBuildPatterns: [
-              path.join(_dest, 'worker-*.js'),
-              path.join(_dest, 'worker-*.js.map')
-            ]
-          })
-        ]
-      }).run((error, status) => {
-        if (error || status.hasErrors()) {
-          console.error(`> [PWA] Failed to build custom worker: ${error}`)
-          process.exit(-1)
-        }
-        importScripts.unshift(customWorkerName)
-      })
-    }
-
     // inject register script to main.js
     const _sw = sw.startsWith('/') ? sw : `/${sw}`
     
@@ -116,9 +85,42 @@ module.exports = (nextConfig = {}) => ({
         console.log(`> [PWA]   window.workbox.register()`)
       }
 
+      const _dest = path.join(options.dir, dest)
+
       console.log(`> [PWA] Service worker: ${path.join(_dest, sw)}`)
       console.log(`> [PWA]   url: ${_sw}`)
       console.log(`> [PWA]   scope: ${scope}`)
+
+      // build custom worker
+      let customWorkerEntry = path.join(options.dir, 'worker', 'index.js')
+      const customWorkerName = `worker-${buildId}.js`
+      if (fs.existsSync(customWorkerEntry)) {
+        console.log(`> [PWA] Custom worker found: ${customWorkerEntry}`)
+        console.log(`> [PWA] Build custom worker: ${path.join(_dest, customWorkerName)}`)
+        webpack({
+          mode: config.mode,
+          target: 'webworker',
+          entry: customWorkerEntry,
+          output: {
+            path: _dest,
+            filename: customWorkerName
+          },
+          plugins: [
+            new CleanWebpackPlugin({
+              cleanOnceBeforeBuildPatterns: [
+                path.join(_dest, 'worker-*.js'),
+                path.join(_dest, 'worker-*.js.map')
+              ]
+            })
+          ]
+        }).run((error, status) => {
+          if (error || status.hasErrors()) {
+            console.error(`> [PWA] Failed to build custom worker: ${error}`)
+            process.exit(-1)
+          }
+          importScripts.unshift(customWorkerName)
+        })
+      }
 
       config.plugins.push(
         new CleanWebpackPlugin({
@@ -135,7 +137,8 @@ module.exports = (nextConfig = {}) => ({
       let manifestEntries = additionalManifestEntries
       if (!Array.isArray(manifestEntries)) {
         manifestEntries = globby
-          .sync(['**/*', '!workbox-*.js', `!${sw.replace(/^\/+/, '')}`, '!worker-*.js'].concat(publicExcludes), {
+          .sync(['**/*', '!workbox-*.js', '!workbox-*.js.map', '!worker-*.js', '!worker-*.js.map',
+            `!${sw.replace(/^\/+/, '')}`, `!${sw.replace(/^\/+/, '')}.map`].concat(publicExcludes), {
             cwd: 'public'
           })
           .map(f => ({
@@ -176,10 +179,6 @@ module.exports = (nextConfig = {}) => ({
           })
         )
       } else {
-        if (typeof runtimeCaching === 'function') {
-          runtimeCaching = runtimeCaching(defaultCache)
-        }
-
         if (dev) {
           ignoreURLParametersMatching.push(/ts/)
         }

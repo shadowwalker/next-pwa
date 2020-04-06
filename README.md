@@ -226,7 +226,6 @@ module.exports = withPWA({
 - runtimeCaching - caching strategies (array or callback function)
   - default: see the **Default Runtime Caching** section for the default configuration
   - accept an array of cache configurations
-  - **OR** accept a callback function which takes default runtime caching array as parameter, so that you can modify default configurations and return your configurations
 - publicExcludes - array of glob pattern strings to excludes files in `public` folder being precached.
   - default: `[]` - i.e. default behavior will precache all the files inside your `public` folder
   - example: `['!img/super-large-image.jpg', '!fonts/not-used-fonts.otf']`
