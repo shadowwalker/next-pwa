@@ -31,7 +31,7 @@ module.exports = (nextConfig = {}) => ({
       skipWaiting = true,
       clientsClaim = true,
       cleanupOutdatedCaches = true,
-      additionalManifestEntries,
+      additionalManifestEntries = [],
       ignoreURLParametersMatching = [],
       importScripts = [],
       publicExcludes = [],
@@ -134,11 +134,9 @@ module.exports = (nextConfig = {}) => ({
       )
 
       // precache files in public folder
-      let manifestEntries = additionalManifestEntries
-      if (!Array.isArray(manifestEntries)) {
-        manifestEntries = globby
-          .sync(['**/*', '!workbox-*.js', '!workbox-*.js.map', '!worker-*.js', '!worker-*.js.map',
-            `!${sw.replace(/^\/+/, '')}`, `!${sw.replace(/^\/+/, '')}.map`].concat(publicExcludes), {
+      let manifestEntries = globby
+      .sync(['**/*', '!workbox-*.js', '!workbox-*.js.map', '!worker-*.js', '!worker-*.js.map',
+        `!${sw.replace(/^\/+/, '')}`, `!${sw.replace(/^\/+/, '')}.map`].concat(publicExcludes), {
             cwd: 'public'
           })
           .map(f => ({
@@ -146,7 +144,9 @@ module.exports = (nextConfig = {}) => ({
             revision: getRevision(`public/${f}`)
           }))
         manifestEntries.push({ url: '/', revision: buildId })
-      }
+
+      // Add additional manifest entries
+      additionalManifestEntries.forEach((url) => manifestEntries.push({ url, revision: buildId }))
 
       const prefix = config.output.publicPath ? `${config.output.publicPath}static/` : 'static/'
       const workboxCommon = {
