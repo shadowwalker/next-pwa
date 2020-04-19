@@ -229,6 +229,9 @@ module.exports = withPWA({
 - publicExcludes - array of glob pattern strings to excludes files in `public` folder being precached.
   - default: `[]` - i.e. default behavior will precache all the files inside your `public` folder
   - example: `['!img/super-large-image.jpg', '!fonts/not-used-fonts.otf']`
+- cdnPrefix: string - url prefix to allow hosting static files on cdn
+  - default: `""` - i.e. default with no prefix
+  - example: `/subdomain` if the app is hosted on `somehost.com/subdoamin`
 
 ### Other Options
 
