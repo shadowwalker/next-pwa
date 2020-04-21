@@ -172,7 +172,7 @@ Add following into `_document.jsx` or `_document.tsx`, in `<Head>`:
 <meta property='og:image' content='https://yourdomain.com/static/icons/apple-touch-icon.png' />
 ```
 
-## Usage Without Custom Server (next.js 9+, non-serverless only)
+## Usage Without Custom Server (next.js 9+)
 
 Thanks to **Next.js 9+**, we can use `public` folder to serve static files from root `/` url path. It cuts the need to write custom server only to serve those files. Therefore the setup is more easy and concise. We can use `next.config.js` to config `next-pwa` to generates service worker and workbox files into `public`folder.
 
