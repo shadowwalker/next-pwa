@@ -27,7 +27,7 @@ module.exports = (nextConfig = {}) => ({
       register = true,
       dest = distDir,
       sw = 'sw.js',
-      cdnPrefix = '',
+      subdomainPrefix = '',
       scope = '/',
       skipWaiting = true,
       clientsClaim = true,
@@ -57,8 +57,8 @@ module.exports = (nextConfig = {}) => ({
     
     config.plugins.push(
       new webpack.DefinePlugin({
-        __PWA_SW__: `"${path.join(cdnPrefix, _sw)}"`,
-        __PWA_SCOPE__: `"${path.join(cdnPrefix, scope)}"`,
+        __PWA_SW__: `"${path.join(subdomainPrefix, _sw)}"`,
+        __PWA_SCOPE__: `"${path.join(subdomainPrefix, scope)}"`,
         __PWA_ENABLE_REGISTER__: `${Boolean(register)}`
       })
     )
@@ -89,8 +89,8 @@ module.exports = (nextConfig = {}) => ({
       const _dest = path.join(options.dir, dest)
 
       console.log(`> [PWA] Service worker: ${path.join(_dest, sw)}`)
-      console.log(`> [PWA]   url: ${path.join(cdnPrefix, _sw)}`)
-      console.log(`> [PWA]   scope: ${path.join(cdnPrefix, scope)}`)
+      console.log(`> [PWA]   url: ${path.join(subdomainPrefix, _sw)}`)
+      console.log(`> [PWA]   scope: ${path.join(subdomainPrefix, scope)}`)
 
       // build custom worker
       let customWorkerEntry = path.join(options.dir, 'worker', 'index.js')
@@ -143,10 +143,10 @@ module.exports = (nextConfig = {}) => ({
             cwd: 'public'
           })
           .map(f => ({
-            url: path.join(cdnPrefix,`/${f}`),
+            url: path.join(subdomainPrefix,`/${f}`),
             revision: getRevision(`public/${f}`)
           }))
-        manifestEntries.push({ url: path.join(cdnPrefix, '/'), revision: buildId })
+        manifestEntries.push({ url: path.join(subdomainPrefix, '/'), revision: buildId })
       }
 
       const prefix = config.output.publicPath ? `${config.output.publicPath}static/` : 'static/'
@@ -165,7 +165,7 @@ module.exports = (nextConfig = {}) => ({
           }
         ],
         modifyURLPrefix: {
-          [prefix]: path.join(cdnPrefix, '/_next/static/')
+          [prefix]: path.join(subdomainPrefix, '/_next/static/')
         }
       }
 
