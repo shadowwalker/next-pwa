@@ -31,7 +31,7 @@ module.exports = (nextConfig = {}) => ({
       skipWaiting = true,
       clientsClaim = true,
       cleanupOutdatedCaches = true,
-      additionalManifestEntries,
+      additionalManifestEntries = [],
       ignoreURLParametersMatching = [],
       importScripts = [],
       publicExcludes = [],
@@ -134,24 +134,21 @@ module.exports = (nextConfig = {}) => ({
       )
 
       // precache files in public folder
-      let manifestEntries = additionalManifestEntries
-      if (!Array.isArray(manifestEntries)) {
-        manifestEntries = globby
-          .sync(['**/*', '!workbox-*.js', '!workbox-*.js.map', '!worker-*.js', '!worker-*.js.map',
-            `!${sw.replace(/^\/+/, '')}`, `!${sw.replace(/^\/+/, '')}.map`].concat(publicExcludes), {
-            cwd: 'public'
-          })
-          .map(f => ({
-            url: `/${f}`,
-            revision: getRevision(`public/${f}`)
-          }))
-        manifestEntries.push({ url: '/', revision: buildId })
-      }
+      const defaultManifestEntries = globby
+        .sync(['**/*', '!workbox-*.js', '!workbox-*.js.map', '!worker-*.js', '!worker-*.js.map',
+          `!${sw.replace(/^\/+/, '')}`, `!${sw.replace(/^\/+/, '')}.map`].concat(publicExcludes), {
+          cwd: 'public'
+        })
+        .map(f => ({
+          url: `/${f}`,
+          revision: getRevision(`public/${f}`)
+        }))
+      defaultManifestEntries.push({ url: '/', revision: buildId })
 
       const prefix = config.output.publicPath ? `${config.output.publicPath}static/` : 'static/'
       const workboxCommon = {
         swDest: path.join(_dest, sw),
-        additionalManifestEntries: dev ? undefined : manifestEntries,
+        additionalManifestEntries: dev ? undefined : defaultManifestEntries.concat(additionalManifestEntries),
         exclude: [
           ({ asset, compilation }) => {
             if (asset.name.match(/^(build-manifest\.json|react-loadable-manifest\.json)$/)) {
