@@ -231,7 +231,7 @@ module.exports = withPWA({
   - example: `['!img/super-large-image.jpg', '!fonts/not-used-fonts.otf']`
 - subdomainPrefix: string - url prefix to allow hosting static files on a subdomain
   - default: `""` - i.e. default with no prefix
-  - example: `/subdomain` if the app is hosted on `example.com/subdoamin`
+  - example: `/subdomain` if the app is hosted on `example.com/subdomain`
 
 ### Other Options
 
