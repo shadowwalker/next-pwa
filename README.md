@@ -214,6 +214,7 @@ module.exports = withPWA({
   - default to `false`
   - set `disable: false`, so that it will generate service worker in both `dev` and `prod`
   - set `disable: true` to completely disable PWA
+  - if you don't need debug service worker in `dev`, you can set `disable: process.env.NODE_ENV === "development"`
 - register: boolean - whether to let this plugin register service worker for you
   - default to `true`
   - set to `false` when you want to handle register service worker yourself, this could be done in `componentDidMount` of your root app. you can consider the [register.js](https://github.com/shadowwalker/next-pwa/blob/master/register.js) as an example.
