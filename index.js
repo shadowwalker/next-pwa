@@ -36,6 +36,7 @@ module.exports = (nextConfig = {}) => ({
       ignoreURLParametersMatching = [],
       importScripts = [],
       publicExcludes = [],
+      manifestTransforms = [],
       ...workbox
     } = pwa
 
@@ -139,7 +140,7 @@ module.exports = (nextConfig = {}) => ({
       if (!Array.isArray(manifestEntries)) {
         manifestEntries = globby
           .sync(['**/*', '!workbox-*.js', '!workbox-*.js.map', '!worker-*.js', '!worker-*.js.map',
-            `!${sw.replace(/^\/+/, '')}`, `!${sw.replace(/^\/+/, '')}.map`].concat(publicExcludes), {
+            `!${sw.replace(/^\/+/, '')}`, `!${sw.replace(/^\/+/, '')}.map`, ...publicExcludes], {
             cwd: 'public'
           })
           .map(f => ({
@@ -166,7 +167,17 @@ module.exports = (nextConfig = {}) => ({
         ],
         modifyURLPrefix: {
           [prefix]: path.posix.join(subdomainPrefix, '/_next/static/')
-        }
+        },
+        manifestTransforms: [
+          ...manifestTransforms,
+          async (manifestEntries, compilation) => {
+            const manifest = manifestEntries.map(m => {
+              m.url = m.url.replace(/\/\[/g, '/%5B').replace(/\]\.js/g, '%5D.js')
+              return m
+            })
+            return {manifest, warnings: []}
+          }
+        ]
       }
 
       if (workbox.swSrc) {

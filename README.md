@@ -199,7 +199,7 @@ const withPWA = require('next-pwa')
 
 module.exports = withPWA({
   pwa: {
-    disable: false,
+    disable: process.env.NODE_ENV === 'development',
     register: true,
     scope: '/app',
     sw: 'service-worker.js',
@@ -214,7 +214,7 @@ module.exports = withPWA({
   - default to `false`
   - set `disable: false`, so that it will generate service worker in both `dev` and `prod`
   - set `disable: true` to completely disable PWA
-  - if you don't need debug service worker in `dev`, you can set `disable: process.env.NODE_ENV === "development"`
+  - if you don't need debug service worker in `dev`, you can set `disable: process.env.NODE_ENV === 'development'`
 - register: boolean - whether to let this plugin register service worker for you
   - default to `true`
   - set to `false` when you want to handle register service worker yourself, this could be done in `componentDidMount` of your root app. you can consider the [register.js](https://github.com/shadowwalker/next-pwa/blob/master/register.js) as an example.
@@ -226,7 +226,8 @@ module.exports = withPWA({
   - set to other file name if you want to customize the output service worker file name
 - runtimeCaching - caching strategies (array or callback function)
   - default: see the **Default Runtime Caching** section for the default configuration
-  - accept an array of cache configurations
+  - accept an array of cache entry objects, [please follow the structure here](https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-build#.RuntimeCachingEntry)
+  - Note: the order in the array matters. The first rule that capture the request wins. Therefore, please **ALWAYS** put rules with larger scope behind the rules with smaller and specific scope.
 - publicExcludes - array of glob pattern strings to excludes files in `public` folder being precached.
   - default: `[]` - i.e. default behavior will precache all the files inside your `public` folder
   - example: `['!img/super-large-image.jpg', '!fonts/not-used-fonts.otf']`
@@ -247,6 +248,8 @@ module.exports = withPWA({
 1. [Common UX pattern to ask user to reload when new service worker is installed](https://github.com/shadowwalker/next-pwa/blob/master/examples/lifecycle/pages/index.js#L26-L38)
 2. Use a convention like `{command: 'doSomething', message: ''}` object when `postMessage` to service worker. So that on the listener, it could do multiple different tasks using `if...else...`.
 3. When you debugging service worker, constantly `clean application cache` to reduce some flaky errors.
+4. If you are redirecting user to another route, please note [workbox by default only cache response with 200 HTTP status](https://developers.google.com/web/tools/workbox/modules/workbox-cacheable-response#what_are_the_defaults), if you really want to cache redirected page for the route, you can specify it in `runtimeCaching` such as `options.cacheableResponse.statuses=[200,302]`.
+5. When debugging issue, you may want to format your generated `sw.js` file to figure out what's really going on.
 
 ## Reference
 
