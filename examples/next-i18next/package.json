@@ -13,9 +13,9 @@
     "cross-env": "^7.0.2",
     "express": "^4.17.1",
     "fastify-compress": "^2.0.1",
-    "next": "^9.4.0",
+    "next": "^9.4.4",
     "next-i18next": "^4.4.2",
-    "next-pwa": "^2.4.1",
+    "next-pwa": "^2.5.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   }
