@@ -8,7 +8,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const WorkboxPlugin = require('workbox-webpack-plugin')
 const defaultCache = require('./cache')
 
-const getRevision = file => crypto.createHash('md5').update(Buffer.from(file)).digest('hex')
+const getRevision = file => crypto.createHash('md5').update(fs.readFileSync(file)).digest('hex')
 
 module.exports = (nextConfig = {}) => ({
   ...nextConfig,
