@@ -1,7 +1,7 @@
 'use strict'
 
 const path = require('path')
-const fs = require('fs-extra')
+const fs = require('fs')
 const globby = require('globby')
 const crypto = require('crypto')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
