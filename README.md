@@ -225,7 +225,7 @@ module.exports = withPWA({
   - default to `/sw.js`
   - set to other file name if you want to customize the output service worker file name
 - runtimeCaching - caching strategies (array or callback function)
-  - default: see the **Default Runtime Caching** section for the default configuration
+  - default: see the **Runtime Caching** section for the default configuration
   - accept an array of cache entry objects, [please follow the structure here](https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-build#.RuntimeCachingEntry)
   - Note: the order in the array matters. The first rule that capture the request wins. Therefore, please **ALWAYS** put rules with larger scope behind the rules with smaller and specific scope.
 - publicExcludes - array of glob pattern strings to excludes files in `public` folder being precached.
@@ -239,9 +239,13 @@ module.exports = withPWA({
 
 `next-pwa` uses `workbox-webpack-plugin`, other options which could also be put in `pwa` object can be find [**ON THE DOCUMENTATION**](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin) for [GenerateSW](https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-webpack-plugin.GenerateSW) and [InjectManifest](https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-webpack-plugin.InjectManifest). If you specify `swSrc`, `InjectManifest` plugin will be used, otherwise `GenerateSW` will be used to generate service worker.
 
-### Default Runtime Caching
+### Runtime Caching
 
 `next-pwa` use a default runtime [cache.js](https://github.com/shadowwalker/next-pwa/blob/master/cache.js)
+
+There is a great chance you may want to customize your own runtime caching rule. Please feel free to copy the default `cache.js` file and customize the rules as you like. And don't forget to inject the configurations into your `pwa` config in `next.config.js`.
+
+Here is the [document on how to write runtime caching configurations](https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-build#.RuntimeCachingEntry), including background sync and broadcast update features and more!
 
 ## Tips
 
