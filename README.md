@@ -241,7 +241,7 @@ module.exports = withPWA({
 
 ### Runtime Caching
 
-`next-pwa` use a default runtime [cache.js](https://github.com/shadowwalker/next-pwa/blob/master/cache.js)
+`next-pwa` uses a default runtime [cache.js](https://github.com/shadowwalker/next-pwa/blob/master/cache.js)
 
 There is a great chance you may want to customize your own runtime caching rule. Please feel free to copy the default `cache.js` file and customize the rules as you like. And don't forget to inject the configurations into your `pwa` config in `next.config.js`.
 
