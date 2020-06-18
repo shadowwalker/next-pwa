@@ -234,6 +234,9 @@ module.exports = withPWA({
 - subdomainPrefix: string - url prefix to allow hosting static files on a subdomain
   - default: `""` - i.e. default with no prefix
   - example: `/subdomain` if the app is hosted on `example.com/subdomain`
+- precacheHomePage: boolean - whether or not the pwa should precache the home page.
+  - default: `true` - i.e. it will precache the `/` page by default.
+  - example: `false` the home page won't be precached.
 
 ### Other Options
 
