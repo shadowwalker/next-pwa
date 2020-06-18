@@ -37,7 +37,7 @@ module.exports = (nextConfig = {}) => ({
       importScripts = [],
       publicExcludes = [],
       manifestTransforms = [],
-      precacheHomePage = false,
+      precacheHomePage = true,
       ...workbox
     } = pwa
 
