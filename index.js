@@ -37,6 +37,7 @@ module.exports = (nextConfig = {}) => ({
       importScripts = [],
       publicExcludes = [],
       manifestTransforms = [],
+      precacheHomePage = true,
       ...workbox
     } = pwa
 
@@ -147,7 +148,10 @@ module.exports = (nextConfig = {}) => ({
             url: path.posix.join(subdomainPrefix,`/${f}`),
             revision: getRevision(`public/${f}`)
           }))
-        manifestEntries.push({ url: path.posix.join(subdomainPrefix, '/'), revision: buildId })
+        
+        if (precacheHomePage) {
+          manifestEntries.push({ url: path.posix.join(subdomainPrefix, '/'), revision: buildId })
+        }
       }
 
       const prefix = config.output.publicPath ? `${config.output.publicPath}static/` : 'static/'
