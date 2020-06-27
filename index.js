@@ -17,7 +17,7 @@ module.exports = (nextConfig = {}) => ({
       webpack,
       buildId,
       dev,
-      config: { distDir = '.next', pwa = {} }
+      config: { distDir = '.next', pwa = {}, experimental = {} /*, modern = false*/ }
     } = options
 
     // For workbox configurations:
@@ -36,6 +36,7 @@ module.exports = (nextConfig = {}) => ({
       ignoreURLParametersMatching = [],
       importScripts = [],
       publicExcludes = [],
+      buildExcludes = [],
       manifestTransforms = [],
       precacheHomePage = true,
       ...workbox
@@ -166,8 +167,17 @@ module.exports = (nextConfig = {}) => ({
             if (dev && !asset.name.startsWith('static/runtime/')) {
               return true
             }
+            if (experimental.modern /* modern */) {
+              if (asset.name.endsWith(".module.js")) {
+                return false
+              }
+              if (asset.name.endsWith(".js")) {
+                return true
+              }
+            }
             return false
-          }
+          },
+          ...buildExcludes
         ],
         modifyURLPrefix: {
           [prefix]: path.posix.join(subdomainPrefix, '/_next/static/')
@@ -176,7 +186,7 @@ module.exports = (nextConfig = {}) => ({
           ...manifestTransforms,
           async (manifestEntries, compilation) => {
             const manifest = manifestEntries.map(m => {
-              m.url = m.url.replace(/\/\[/g, '/%5B').replace(/\]\.js/g, '%5D.js')
+              m.url = m.url.replace(/\/\[/g, '/%5B').replace(/\]/, '%5D')
               return m
             })
             return {manifest, warnings: []}

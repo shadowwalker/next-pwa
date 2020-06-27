@@ -18,6 +18,7 @@ This plugin is powered by [workbox](https://developers.google.com/web/tools/work
 - ✨ Optimized precache and runtime cache
 - 🛠 Configurable by the same [workbox configuration options](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin) for [GenerateSW](https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-webpack-plugin.GenerateSW) and [InjectManifest](https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-webpack-plugin.InjectManifest)
 - 🚀 Spin up a [GitPod](https://gitpod.io/#https://github.com/shadowwalker/next-pwa/) and try out examples in rocket speed
+- 🔩 (Experimental) precaching `.module.js` when `next.config.js` has `experimental.modern` set to `true`
 
 > **NOTE** - `next-pwa` version 2.0.0+ should only work with `next.js` 9.1+, and static files should only be served through `public` directory. This will make things simpler.
 
@@ -228,9 +229,12 @@ module.exports = withPWA({
   - default: see the **Runtime Caching** section for the default configuration
   - accept an array of cache entry objects, [please follow the structure here](https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-build#.RuntimeCachingEntry)
   - Note: the order in the array matters. The first rule that capture the request wins. Therefore, please **ALWAYS** put rules with larger scope behind the rules with smaller and specific scope.
-- publicExcludes - array of glob pattern strings to excludes files in `public` folder being precached.
-  - default: `[]` - i.e. default behavior will precache all the files inside your `public` folder
+- publicExcludes - array of glob pattern strings to exclude files in `public` folder being precached.
+  - default: `[]` - this means default behavior will precache all the files inside your `public` folder
   - example: `['!img/super-large-image.jpg', '!fonts/not-used-fonts.otf']`
+- buildExcludes - array of extra pattern or function to exclude files for precaching in `.next/static` (or your custom build) folder
+  - default: `[]`
+  - doc: Array of (string, RegExp, or function()). One or more specifiers used to exclude assets from the precache manifest. This is interpreted following the same rules as webpack's standard exclude option.
 - subdomainPrefix: string - url prefix to allow hosting static files on a subdomain
   - default: `""` - i.e. default with no prefix
   - example: `/subdomain` if the app is hosted on `example.com/subdomain`
