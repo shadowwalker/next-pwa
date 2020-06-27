@@ -186,7 +186,7 @@ module.exports = (nextConfig = {}) => ({
           ...manifestTransforms,
           async (manifestEntries, compilation) => {
             const manifest = manifestEntries.map(m => {
-              m.url = m.url.replace(/\/\[/g, '/%5B').replace(/\]/, '%5D')
+              m.url = m.url.replace(/\/\[/g, '/%5B').replace(/\]/g, '%5D')
               return m
             })
             return {manifest, warnings: []}
