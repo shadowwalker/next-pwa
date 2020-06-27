@@ -13,17 +13,6 @@ module.exports = [
     }
   },
   {
-    urlPattern: /^https:\/\/use\.fontawesome\.com\/releases\/.*/i,
-    handler: 'CacheFirst',
-    options: {
-      cacheName: 'font-awesome',
-      expiration: {
-        maxEntries: 1,
-        maxAgeSeconds: 365 * 24 * 60 * 60 // 365 days
-      }
-    }
-  },
-  {
     urlPattern: /\.(?:eot|otf|ttc|ttf|woff|woff2|font.css)$/i,
     handler: 'StaleWhileRevalidate',
     options: {
@@ -106,13 +95,14 @@ module.exports = [
   },
   {
     urlPattern: /.*/i,
-    handler: 'StaleWhileRevalidate',
+    handler: 'NetworkFirst',
     options: {
       cacheName: 'others',
       expiration: {
-        maxEntries: 16,
+        maxEntries: 32,
         maxAgeSeconds: 24 * 60 * 60 // 24 hours
       }
-    }
+    },
+    networkTimeoutSeconds: 10
   }
 ]

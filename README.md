@@ -10,6 +10,7 @@ This plugin is powered by [workbox](https://developers.google.com/web/tools/work
 - 📴 Completely offline support
 - 💯 Maximize lighthouse score
 - 📦 Use workbox and workbox-window v5
+- 🍪 Work with cookies out of the box 
 - 🎈 Easy to understand examples
 - ☕ No custom server needed for Next.js 9+ [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/next-9)
 - 🔧 Handle PWA lifecycle events opt-in [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/lifecycle)
@@ -234,13 +235,11 @@ module.exports = withPWA({
   - example: `['!img/super-large-image.jpg', '!fonts/not-used-fonts.otf']`
 - buildExcludes - array of extra pattern or function to exclude files for precaching in `.next/static` (or your custom build) folder
   - default: `[]`
+  - example: `[/chunks\/images\/.*$/]` - Don't precache all files under `.next/static/chunks/images` (Highly recommend this to work with  `next-optimized-images` plugin)
   - doc: Array of (string, RegExp, or function()). One or more specifiers used to exclude assets from the precache manifest. This is interpreted following the same rules as webpack's standard exclude option.
 - subdomainPrefix: string - url prefix to allow hosting static files on a subdomain
   - default: `""` - i.e. default with no prefix
   - example: `/subdomain` if the app is hosted on `example.com/subdomain`
-- precacheHomePage: boolean - whether or not the pwa should precache the home page.
-  - default: `true` - i.e. it will precache the `/` page by default.
-  - example: `false` the home page won't be precached.
 
 ### Other Options
 

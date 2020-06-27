@@ -38,9 +38,11 @@ module.exports = (nextConfig = {}) => ({
       publicExcludes = [],
       buildExcludes = [],
       manifestTransforms = [],
-      precacheHomePage = true,
+      precacheHomePage,  // Deprecated
       ...workbox
     } = pwa
+
+    if (precacheHomePage !== undefined) console.warn('> [PWA] precacheHomePage configuration is deprecated in current version, feel free to remove it. Home page route / is not cached through runtime caching');
 
     let { runtimeCaching = defaultCache } = pwa
 
@@ -149,10 +151,6 @@ module.exports = (nextConfig = {}) => ({
             url: path.posix.join(subdomainPrefix,`/${f}`),
             revision: getRevision(`public/${f}`)
           }))
-        
-        if (precacheHomePage) {
-          manifestEntries.push({ url: path.posix.join(subdomainPrefix, '/'), revision: buildId })
-        }
       }
 
       const prefix = config.output.publicPath ? `${config.output.publicPath}static/` : 'static/'
