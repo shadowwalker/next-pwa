@@ -40,7 +40,7 @@ module.exports = [
     options: {
       cacheName: 'static-js-assets',
       expiration: {
-        maxEntries: 16,
+        maxEntries: 32,
         maxAgeSeconds: 24 * 60 * 60 // 24 hours
       }
     }
@@ -51,18 +51,18 @@ module.exports = [
     options: {
       cacheName: 'static-style-assets',
       expiration: {
-        maxEntries: 16,
+        maxEntries: 32,
         maxAgeSeconds: 24 * 60 * 60 // 24 hours
       }
     }
   },
   {
     urlPattern: /\.(?:json|xml|csv)$/i,
-    handler: 'StaleWhileRevalidate',
+    handler: 'NetworkFirst',
     options: {
       cacheName: 'static-data-assets',
       expiration: {
-        maxEntries: 16,
+        maxEntries: 32,
         maxAgeSeconds: 24 * 60 * 60 // 24 hours
       }
     }

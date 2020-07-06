@@ -223,6 +223,9 @@ module.exports = withPWA({
 - scope: string - url scope for pwa
   - default to `/`
   - set to `/app`, so that all sub url under `/app` will be PWA, other url paths are still normal web app with no PWA support.
+- startUrl: string - must be the same as `start_url` in your web `manifest.json` file
+  - default to `/`
+  - this is usually the same as `scope` in most cases
 - sw: string - service worker script file name
   - default to `/sw.js`
   - set to other file name if you want to customize the output service worker file name

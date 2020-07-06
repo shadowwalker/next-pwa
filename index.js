@@ -38,13 +38,28 @@ module.exports = (nextConfig = {}) => ({
       publicExcludes = [],
       buildExcludes = [],
       manifestTransforms = [],
-      precacheHomePage,  // Deprecated
+      precacheHomePage, // Deprecated,
+      startUrl = '/',
       ...workbox
     } = pwa
 
-    if (precacheHomePage !== undefined) console.warn('> [PWA] precacheHomePage configuration is deprecated in current version, feel free to remove it. Home page route / is not cached through runtime caching');
+    if (precacheHomePage !== undefined)
+      console.warn(
+        '> [PWA] precacheHomePage configuration is deprecated in current version, feel free to remove it. Home page route / is not cached through runtime caching'
+      )
 
     let { runtimeCaching = defaultCache } = pwa
+    runtimeCaching.unshift({
+      urlPattern: startUrl,
+      handler: 'NetworkFirst',
+      options: {
+        cacheName: 'start-url',
+        expiration: {
+          maxEntries: 1,
+          maxAgeSeconds: 24 * 60 * 60 // 24 hours
+        }
+      }
+    })
 
     if (typeof nextConfig.webpack === 'function') {
       config = nextConfig.webpack(config, options)
@@ -59,12 +74,13 @@ module.exports = (nextConfig = {}) => ({
 
     // inject register script to main.js
     const _sw = sw.startsWith('/') ? sw : `/${sw}`
-    
+
     config.plugins.push(
       new webpack.DefinePlugin({
-        __PWA_SW__: `"${path.posix.join(subdomainPrefix, _sw)}"`,
-        __PWA_SCOPE__: `"${path.posix.join(subdomainPrefix, scope)}"`,
-        __PWA_ENABLE_REGISTER__: `${Boolean(register)}`
+        __PWA_SW__: `'${path.posix.join(subdomainPrefix, _sw)}'`,
+        __PWA_SCOPE__: `'${path.posix.join(subdomainPrefix, scope)}'`,
+        __PWA_ENABLE_REGISTER__: `${Boolean(register)}`,
+        __PWA_START_URL__: `'${startUrl}'`
       })
     )
 
@@ -80,14 +96,18 @@ module.exports = (nextConfig = {}) => ({
 
     if (!options.isServer) {
       if (dev) {
-        console.log('> [PWA] Build in develop mode, cache and precache are mostly disabled. \
-        This means offine support is disabled, but you can continue developing other functions in service worker.')
+        console.log(
+          '> [PWA] Build in develop mode, cache and precache are mostly disabled. \
+        This means offine support is disabled, but you can continue developing other functions in service worker.'
+        )
       }
 
       if (register) {
         console.log(`> [PWA] Auto register service worker with: ${path.resolve(registerJs)}`)
       } else {
-        console.log(`> [PWA] Auto register service worker is disabled, please call following code in componentDidMount callback or useEffect hook`)
+        console.log(
+          `> [PWA] Auto register service worker is disabled, please call following code in componentDidMount callback or useEffect hook`
+        )
         console.log(`> [PWA]   window.workbox.register()`)
       }
 
@@ -97,7 +117,7 @@ module.exports = (nextConfig = {}) => ({
       console.log(`> [PWA]   url: ${path.posix.join(subdomainPrefix, _sw)}`)
       console.log(`> [PWA]   scope: ${path.posix.join(subdomainPrefix, scope)}`)
 
-      // build custom worker
+      // build custom script into service worker
       let customWorkerEntry = path.join(options.dir, 'worker', 'index.js')
       const customWorkerName = `worker-${buildId}.js`
       if (fs.existsSync(customWorkerEntry)) {
@@ -113,10 +133,7 @@ module.exports = (nextConfig = {}) => ({
           },
           plugins: [
             new CleanWebpackPlugin({
-              cleanOnceBeforeBuildPatterns: [
-                path.join(_dest, 'worker-*.js'),
-                path.join(_dest, 'worker-*.js.map')
-              ]
+              cleanOnceBeforeBuildPatterns: [path.join(_dest, 'worker-*.js'), path.join(_dest, 'worker-*.js.map')]
             })
           ]
         }).run((error, status) => {
@@ -143,12 +160,25 @@ module.exports = (nextConfig = {}) => ({
       let manifestEntries = additionalManifestEntries
       if (!Array.isArray(manifestEntries)) {
         manifestEntries = globby
-          .sync(['**/*', '!workbox-*.js', '!workbox-*.js.map', '!worker-*.js', '!worker-*.js.map',
-            `!${sw.replace(/^\/+/, '')}`, `!${sw.replace(/^\/+/, '')}.map`, ...publicExcludes], {
-            cwd: 'public'
-          })
+          .sync(
+            [
+              '**/*',
+              '!workbox-*.js',
+              '!workbox-*.js.map',
+              '!worker-*.js',
+              '!worker-*.js.map',
+              '!fallback-*.js',
+              '!fallback-*.js.map',
+              `!${sw.replace(/^\/+/, '')}`,
+              `!${sw.replace(/^\/+/, '')}.map`,
+              ...publicExcludes
+            ],
+            {
+              cwd: 'public'
+            }
+          )
           .map(f => ({
-            url: path.posix.join(subdomainPrefix,`/${f}`),
+            url: path.posix.join(subdomainPrefix, `/${f}`),
             revision: getRevision(`public/${f}`)
           }))
       }
@@ -166,10 +196,10 @@ module.exports = (nextConfig = {}) => ({
               return true
             }
             if (experimental.modern /* modern */) {
-              if (asset.name.endsWith(".module.js")) {
+              if (asset.name.endsWith('.module.js')) {
                 return false
               }
-              if (asset.name.endsWith(".js")) {
+              if (asset.name.endsWith('.js')) {
                 return true
               }
             }
@@ -187,7 +217,7 @@ module.exports = (nextConfig = {}) => ({
               m.url = m.url.replace(/\/\[/g, '/%5B').replace(/\]/g, '%5D')
               return m
             })
-            return {manifest, warnings: []}
+            return { manifest, warnings: [] }
           }
         ]
       }
