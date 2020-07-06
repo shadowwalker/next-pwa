@@ -13,7 +13,7 @@
     "js-cookie": "^2.2.1",
     "next": "^9.4.4",
     "next-cookies": "^2.0.3",
-    "next-pwa": "^3.0.1",
+    "next-pwa": "^3.0.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   }
