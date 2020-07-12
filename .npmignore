@@ -5,3 +5,5 @@ yarn-error.log
 examples/
 .gitignore
 .gitattributes
+CHANGELOG.md
+LICENSE
