@@ -1,0 +1,20 @@
+{
+  "name": "next-pwa-example",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start",
+    "vapid": "web-push generate-vapid-keys"
+  },
+  "dependencies": {
+    "next": "^9.4.4",
+    "next-pwa": "latest",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "web-push": "^3.4.4"
+  }
+}

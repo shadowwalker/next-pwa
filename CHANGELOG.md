@@ -1,6 +1,15 @@
 # CHANGELOG
 
-## Pending Version
+## 3.0.3
+
+### Fix
+
+- Duplicate `start-url` runtime cache entry in generated `sw.js`
+
+### Example
+
+- Add offline fallback example
+- Add web push example
 
 ### Misc
 

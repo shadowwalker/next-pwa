@@ -49,17 +49,6 @@ module.exports = (nextConfig = {}) => ({
       )
 
     let { runtimeCaching = defaultCache } = pwa
-    runtimeCaching.unshift({
-      urlPattern: startUrl,
-      handler: 'NetworkFirst',
-      options: {
-        cacheName: 'start-url',
-        expiration: {
-          maxEntries: 1,
-          maxAgeSeconds: 24 * 60 * 60 // 24 hours
-        }
-      }
-    })
 
     if (typeof nextConfig.webpack === 'function') {
       config = nextConfig.webpack(config, options)
@@ -236,6 +225,19 @@ module.exports = (nextConfig = {}) => ({
         if (dev) {
           ignoreURLParametersMatching.push(/ts/)
         }
+        
+        runtimeCaching.unshift({
+          urlPattern: startUrl,
+          handler: 'NetworkFirst',
+          options: {
+            cacheName: 'start-url',
+            expiration: {
+              maxEntries: 1,
+              maxAgeSeconds: 24 * 60 * 60 // 24 hours
+            }
+          }
+        })
+
         config.plugins.push(
           new WorkboxPlugin.GenerateSW({
             ...workboxCommon,
