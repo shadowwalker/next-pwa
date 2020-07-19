@@ -1,5 +1,20 @@
 # CHANGELOG
 
+## 3.1.0
+
+### Fix
+
+- Fix `register.js` to cache `start-url` when auto register is off
+- Give back full control of runtime caching for `start-url`
+
+### Example
+
+- [lifecycle] Update prompt user to reload web app when new version is available
+
+### Misc
+
+- Add more instruction for customizing runtime caching
+
 ## 3.0.3
 
 ### Fix

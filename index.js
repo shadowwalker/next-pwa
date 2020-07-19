@@ -7,6 +7,7 @@ const crypto = require('crypto')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const WorkboxPlugin = require('workbox-webpack-plugin')
 const defaultCache = require('./cache')
+const { exit } = require('process')
 
 const getRevision = file => crypto.createHash('md5').update(fs.readFileSync(file)).digest('hex')
 
@@ -38,15 +39,8 @@ module.exports = (nextConfig = {}) => ({
       publicExcludes = [],
       buildExcludes = [],
       manifestTransforms = [],
-      precacheHomePage, // Deprecated,
-      startUrl = '/',
       ...workbox
     } = pwa
-
-    if (precacheHomePage !== undefined)
-      console.warn(
-        '> [PWA] precacheHomePage configuration is deprecated in current version, feel free to remove it. Home page route / is not cached through runtime caching'
-      )
 
     let { runtimeCaching = defaultCache } = pwa
 
@@ -63,6 +57,10 @@ module.exports = (nextConfig = {}) => ({
 
     // inject register script to main.js
     const _sw = sw.startsWith('/') ? sw : `/${sw}`
+    if (runtimeCaching[0].options.cacheName !== 'start-url') {
+      throw new Error('[PWA] Fisrt item in runtimeCaching array is not "start-url"')
+    }
+    const startUrl = runtimeCaching[0].urlPattern
 
     config.plugins.push(
       new webpack.DefinePlugin({
@@ -225,18 +223,6 @@ module.exports = (nextConfig = {}) => ({
         if (dev) {
           ignoreURLParametersMatching.push(/ts/)
         }
-        
-        runtimeCaching.unshift({
-          urlPattern: startUrl,
-          handler: 'NetworkFirst',
-          options: {
-            cacheName: 'start-url',
-            expiration: {
-              maxEntries: 1,
-              maxAgeSeconds: 24 * 60 * 60 // 24 hours
-            }
-          }
-        })
 
         config.plugins.push(
           new WorkboxPlugin.GenerateSW({
