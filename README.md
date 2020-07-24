@@ -223,9 +223,6 @@ module.exports = withPWA({
 - scope: string - url scope for pwa
   - default to `/`
   - set to `/app`, so that all sub url under `/app` will be PWA, other url paths are still normal web app with no PWA support.
-- startUrl: string - must be the same as `start_url` in your web `manifest.json` file
-  - default to `/`
-  - this is usually the same as `scope` in most cases
 - sw: string - service worker script file name
   - default to `/sw.js`
   - set to other file name if you want to customize the output service worker file name
@@ -252,7 +249,7 @@ module.exports = withPWA({
 
 `next-pwa` uses a default runtime [cache.js](https://github.com/shadowwalker/next-pwa/blob/master/cache.js)
 
-There is a great chance you may want to customize your own runtime caching rule. Please feel free to copy the default `cache.js` file and customize the rules as you like. And don't forget to inject the configurations into your `pwa` config in `next.config.js`.
+There is a great chance you may want to customize your own runtime caching rules. Please feel free to copy the default `cache.js` file and customize the rules as you like. And don't forget to inject the configurations into your `pwa` config in `next.config.js`.
 
 Here is the [document on how to write runtime caching configurations](https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-build#.RuntimeCachingEntry), including background sync and broadcast update features and more!
 
