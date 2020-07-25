@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 3.1.1
+
+### Fix
+
+- Remove POST api runtime cache from default cache configuration as it's not supported in service worker
+
 ## 3.1.0
 
 ### Fix
