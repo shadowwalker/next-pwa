@@ -1,34 +1,44 @@
 const { join } = require('path')
 const { parse } = require('url')
-const fastify = require('fastify')({})
+const fs = require('fs')
+const fastify = require('fastify')({
+  logger: false
+})
 const Next = require('next')
 const nextConfig = require('./next.config')
 
 const port = parseInt(process.env.PORT, 10) || 3000
 const dev = process.env.NODE_ENV !== 'production'
-const app = Next({ dev, conf: nextConfig })
+
+const swJs = fs.readFileSync(join(__dirname, '.next', 'sw.js'))
+let workboxJs
 
 fastify.register(require('fastify-compress'))
 
 fastify.register((fastify, options, next) => {
+  const app = Next({ dev, conf: nextConfig })
+  const handle = app.getRequestHandler()
   app
     .prepare()
     .then(() => {
       fastify.get('/sw.js', (request, reply) => {
-        return app.serveStatic(request.req, reply.res, join(__dirname, '.next', 'sw.js')).then(() => {
-          reply.sent = true
-        })
+        reply.type('application/javascript').send(swJs)
       })
 
       fastify.get('/workbox-*.js', (request, reply) => {
-        const { pathname } = parse(request.req.url, true)
-        return app.serveStatic(request.req, reply.res, join(__dirname, '.next', pathname)).then(() => {
+        const { pathname } = parse(request.raw.url, true)
+        if (!workboxJs) workboxJs = fs.readFileSync(join(__dirname, '.next', pathname))
+        reply.type('application/javascript').send(workboxJs)
+      })
+
+      fastify.all('/*', (request, reply) => {
+        return handle(request.raw, reply.raw).then(() => {
           reply.sent = true
         })
       })
 
-      fastify.get('/*', (request, reply) => {
-        return app.handleRequest(request.req, reply.res).then(() => {
+      fastify.setNotFoundHandler((request, reply) => {
+        return app.render404(request.raw, reply.raw).then(() => {
           reply.sent = true
         })
       })
