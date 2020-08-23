@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 3.1.2
+
+### Misc
+
+- Update examples and dependencies
+
 ## 3.1.1
 
 ### Fix
