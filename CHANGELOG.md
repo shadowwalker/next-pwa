@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 3.1.3
+
+### Fix
+
+- `dev` mode borken due to empty runtime caching and precaching
+
 ## 3.1.2
 
 ### Misc

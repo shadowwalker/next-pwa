@@ -84,8 +84,7 @@ module.exports = (nextConfig = {}) => ({
     if (!options.isServer) {
       if (dev) {
         console.log(
-          '> [PWA] Build in develop mode, cache and precache are mostly disabled. \
-        This means offine support is disabled, but you can continue developing other functions in service worker.'
+          '> [PWA] Build in develop mode, cache and precache are mostly disabled. This means offine support is disabled, but you can continue developing other functions in service worker.'
         )
       }
 
@@ -173,7 +172,7 @@ module.exports = (nextConfig = {}) => ({
       const prefix = config.output.publicPath ? `${config.output.publicPath}static/` : 'static/'
       const workboxCommon = {
         swDest: path.join(_dest, sw),
-        additionalManifestEntries: dev ? undefined : manifestEntries,
+        additionalManifestEntries: dev ? [] : manifestEntries,
         exclude: [
           ({ asset, compilation }) => {
             if (asset.name.match(/^(build-manifest\.json|react-loadable-manifest\.json)$/)) {
@@ -232,7 +231,17 @@ module.exports = (nextConfig = {}) => ({
             cleanupOutdatedCaches,
             ignoreURLParametersMatching,
             importScripts,
-            runtimeCaching: dev ? undefined : runtimeCaching,
+            runtimeCaching: dev
+              ? [
+                  {
+                    urlPattern: /.*/i,
+                    handler: 'NetworkOnly',
+                    options: {
+                      cacheName: 'dev'
+                    }
+                  }
+                ]
+              : runtimeCaching,
             ...workbox
           })
         )

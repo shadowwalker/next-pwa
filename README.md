@@ -7,27 +7,22 @@ This plugin is powered by [workbox](https://developers.google.com/web/tools/work
 **Features**
 
 - 0️⃣ Zero config for registering and generating service worker
-- 📴 Completely offline support
+- ✨ Optimized precache and runtime cache
 - 💯 Maximize lighthouse score
+- 🎈 Easy to understand examples
+- 📴 Completely offline support
 - 📦 Use workbox and workbox-window v5
 - 🍪 Work with cookies out of the box 
-- 🎈 Easy to understand examples
 - ☕ No custom server needed for Next.js 9+ [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/next-9)
 - 🔧 Handle PWA lifecycle events opt-in [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/lifecycle)
-- 📐 Custom worker to run extra code in service worker with code splitting [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/custom-worker) 🆕
+- 📐 Custom worker to run extra code in service worker with code splitting [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/custom-worker)
+- 🐞 Debug service worker with confidence in development mode without caching
 - 🌏 Internationalization (a.k.a I18N) with `next-i18next` [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/next-i18next)
-- ✨ Optimized precache and runtime cache
 - 🛠 Configurable by the same [workbox configuration options](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin) for [GenerateSW](https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-webpack-plugin.GenerateSW) and [InjectManifest](https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-webpack-plugin.InjectManifest)
 - 🚀 Spin up a [GitPod](https://gitpod.io/#https://github.com/shadowwalker/next-pwa/) and try out examples in rocket speed
 - 🔩 (Experimental) precaching `.module.js` when `next.config.js` has `experimental.modern` set to `true`
 
 > **NOTE** - `next-pwa` version 2.0.0+ should only work with `next.js` 9.1+, and static files should only be served through `public` directory. This will make things simpler.
-
-> **VERSION** `2.3.0`
->
-> - service worker runs in dev mode as well, good for debugging functionality with service worker during development
-> - custom worker with code splitting, simply write your service worker in `worker/index.js`
-> - new option to exclude files in `public` folder from being precached
 
 ----
 
