@@ -145,7 +145,6 @@ Add following into `_document.jsx` or `_document.tsx`, in `<Head>`:
 <meta name='msapplication-TileColor' content='#2B5797' />
 <meta name='msapplication-tap-highlight' content='no' />
 <meta name='theme-color' content='#000000' />
-<meta name='viewport' content='minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover' />
           
 <link rel='apple-touch-icon' sizes='180x180' href='/static/icons/apple-touch-icon.png' />
 <link rel='icon' type='image/png' sizes='32x32' href='/static/icons/favicon-32x32.png' />
@@ -167,6 +166,12 @@ Add following into `_document.jsx` or `_document.tsx`, in `<Head>`:
 <meta property='og:site_name' content='PWA App' />
 <meta property='og:url' content='https://yourdomain.com' />
 <meta property='og:image' content='https://yourdomain.com/static/icons/apple-touch-icon.png' />
+```
+
+> Tip: `viewport` head meta tag should be put into `_app.js` rather than in `_document.js` if you need it.
+
+``` typescript
+<meta name='viewport' content='minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover' />
 ```
 
 ## Usage Without Custom Server (next.js 9+)

@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 3.1.4
+
+### Fix
+
+- `viewport` head meta tag not recommended to be put in the `_document.js`
+
+### Misc
+
+- Update `workbox` to `5.1.4`
+- Update examples and dependencies
+
 ## 3.1.3
 
 ### Fix
