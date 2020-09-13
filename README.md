@@ -265,6 +265,7 @@ Here is the [document on how to write runtime caching configurations](https://de
 
 1. [Google Workbox](https://developers.google.com/web/tools/workbox/guides/get-started)
 2. [ServiceWorker, MessageChannel, & postMessage](https://ponyfoo.com/articles/serviceworker-messagechannel-postmessage) by [Nicolás Bevacqua](https://ponyfoo.com/contributors/ponyfoo)
+3. [The Service Worker Lifecycle](https://developers.google.com/web/fundamentals/primers/service-workers/lifecycle)
 
 ## License
 

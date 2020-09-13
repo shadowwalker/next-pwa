@@ -1,4 +1,4 @@
-import Document, { Head, Main, NextScript } from 'next/document'
+import Document, { Html, Head, Main, NextScript } from 'next/document'
 
 const APP_NAME = 'next-pwa example'
 const APP_DESCRIPTION = 'This is an example of using next-pwa plugin'
@@ -10,7 +10,7 @@ export default class extends Document {
 
   render() {
     return (
-      <html lang='en' dir='ltr'>
+      <Html lang='en' dir='ltr'>
         <Head>
           <meta name='application-name' content={APP_NAME} />
           <meta name='apple-mobile-web-app-capable' content='yes' />
@@ -44,7 +44,7 @@ export default class extends Document {
           <Main />
           <NextScript />
         </body>
-      </html>
+      </Html>
     )
   }
 }

@@ -10,6 +10,7 @@
 
 - Update `workbox` to `5.1.4`
 - Update examples and dependencies
+- Add cache on front end navigation example
 
 ## 3.1.3
 
