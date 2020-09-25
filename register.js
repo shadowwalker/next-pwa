@@ -3,12 +3,13 @@ import { Workbox } from 'workbox-window'
 if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
   window.workbox = new Workbox(__PWA_SW__, { scope: __PWA_SCOPE__ })
   
-  window.workbox.addEventListener('activated', async event => {
+  window.workbox.addEventListener('activated', function(event) {
     if (!event.isUpdate) {
-      const c = await caches.keys()
-      if (!c.includes('start-url')) {
-        fetch(__PWA_START_URL__)
-      }
+      caches.keys().then(function(c) {
+        if (!c.includes('start-url')) {
+          fetch(__PWA_START_URL__)
+        }
+      });
     }
   })
 
