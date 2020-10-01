@@ -6,7 +6,7 @@ This plugin is powered by [workbox](https://developers.google.com/web/tools/work
 
 **Features**
 
-- 0️⃣ Zero config for registering and generating service worker
+- 0️⃣ Zero config for registering and generating a service worker
 - ✨ Optimized precache and runtime cache
 - 💯 Maximize lighthouse score
 - 🎈 Easy to understand examples
@@ -54,15 +54,15 @@ After running `next build`, this will generate two files in your `distDir` (defa
 
 ### Option 1: Host Static Files
 
-Copy files to your static file hosting server, so that they could be access using URL: `https://yourdomain.com/sw.js` and `https://yourdomain.com/workbox-*.js`.
+Copy files to your static file hosting server, so that they are accessible from the following paths: `https://yourdomain.com/sw.js` and `https://yourdomain.com/workbox-*.js`.
 
-One example is using firebase hosting service to host those files statically. You can automate the copy step using scripts in your deployment workflow.
+One example is using Firebase hosting service to host those files statically. You can automate the copy step using scripts in your deployment workflow.
 
-> For security reason, these files must be hosted directly from your domain. If the content is delivered using a redirect, the browser will refuse to run the service worker.
+> For security reasons, you must host these files directly from your domain. If the content is delivered using a redirect, the browser will refuse to run the service worker.
 
 ### Option 2: Use Custom Server
 
-When a http request is received, test if those files are requested, then return those static files.
+When an HTTP request is received, test if those files are requested, then return those static files.
 
 Example `server.js`
 
@@ -131,7 +131,7 @@ Create a `manifest.json` file in your `static` folder:
 
 ### Step 3: Add Head Meta (Example)
 
-Add following into `_document.jsx` or `_document.tsx`, in `<Head>`:
+Add the following into `_document.jsx` or `_document.tsx`, in `<Head>`:
 
 ``` typescript
 <meta name='application-name' content='PWA App' />
@@ -168,7 +168,7 @@ Add following into `_document.jsx` or `_document.tsx`, in `<Head>`:
 <meta property='og:image' content='https://yourdomain.com/static/icons/apple-touch-icon.png' />
 ```
 
-> Tip: `viewport` head meta tag should be put into `_app.js` rather than in `_document.js` if you need it.
+> Tip:  Put the `viewport` head meta tag into `_app.js` rather than in `_document.js` if you need it.
 
 ``` typescript
 <meta name='viewport' content='minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover' />
@@ -176,8 +176,7 @@ Add following into `_document.jsx` or `_document.tsx`, in `<Head>`:
 
 ## Usage Without Custom Server (next.js 9+)
 
-Thanks to **Next.js 9+**, we can use `public` folder to serve static files from root `/` url path. It cuts the need to write custom server only to serve those files. Therefore the setup is more easy and concise. We can use `next.config.js` to config `next-pwa` to generates service worker and workbox files into `public`folder.
-
+Thanks to **Next.js 9+**, we can use the `public` folder to serve static files from the root `/` URL path. It cuts the need to write custom server only to serve those files. Therefore the setup is easier and concise. We can use `next.config.js` to config `next-pwa` to generates service worker and workbox files into the `public` folder.
 ### withPWA
 
 ``` javascript
@@ -194,7 +193,7 @@ module.exports = withPWA({
 
 ## Configuration
 
-There are options you can use to customize behavior of this plugin by adding `pwa` object in the next config in `next.config.js`:
+There are options you can use to customize the behavior of this plugin by adding `pwa` object in the next config in `next.config.js`:
 
 ```javascript
 const withPWA = require('next-pwa')
@@ -216,40 +215,40 @@ module.exports = withPWA({
   - default to `false`
   - set `disable: false`, so that it will generate service worker in both `dev` and `prod`
   - set `disable: true` to completely disable PWA
-  - if you don't need debug service worker in `dev`, you can set `disable: process.env.NODE_ENV === 'development'`
+  - if you don't need to debug service worker in `dev`, you can set `disable: process.env.NODE_ENV === 'development'`
 - register: boolean - whether to let this plugin register service worker for you
   - default to `true`
   - set to `false` when you want to handle register service worker yourself, this could be done in `componentDidMount` of your root app. you can consider the [register.js](https://github.com/shadowwalker/next-pwa/blob/master/register.js) as an example.
 - scope: string - url scope for pwa
   - default to `/`
-  - set to `/app`, so that all sub url under `/app` will be PWA, other url paths are still normal web app with no PWA support.
+  - set to `/app` so that path under `/app` will be PWA while others are not
 - sw: string - service worker script file name
   - default to `/sw.js`
-  - set to other file name if you want to customize the output service worker file name
+  - set to another file name if you want to customize the output file name
 - runtimeCaching - caching strategies (array or callback function)
   - default: see the **Runtime Caching** section for the default configuration
-  - accept an array of cache entry objects, [please follow the structure here](https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-build#.RuntimeCachingEntry)
-  - Note: the order in the array matters. The first rule that capture the request wins. Therefore, please **ALWAYS** put rules with larger scope behind the rules with smaller and specific scope.
-- publicExcludes - array of glob pattern strings to exclude files in `public` folder being precached.
-  - default: `[]` - this means default behavior will precache all the files inside your `public` folder
+  - accepts an array of cache entry objects, [please follow the structure here](https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-build#.RuntimeCachingEntry)
+  - Note: the order of the array matters. The first rule that matches is effective. Therefore, please **ALWAYS** put rules with larger scope behind the rules with a smaller and specific scope.
+- publicExcludes - an array of glob pattern strings to exclude files in the `public` folder from being precached.
+  - default: `[]` - this means that the default behavior will precache all the files inside your `public` folder
   - example: `['!img/super-large-image.jpg', '!fonts/not-used-fonts.otf']`
-- buildExcludes - array of extra pattern or function to exclude files for precaching in `.next/static` (or your custom build) folder
+- buildExcludes - an array of extra pattern or function to exclude files from being precached in `.next/static` (or your custom build) folder
   - default: `[]`
-  - example: `[/chunks\/images\/.*$/]` - Don't precache all files under `.next/static/chunks/images` (Highly recommend this to work with  `next-optimized-images` plugin)
-  - doc: Array of (string, RegExp, or function()). One or more specifiers used to exclude assets from the precache manifest. This is interpreted following the same rules as webpack's standard exclude option.
+  - example: `[/chunks\/images\/.*$/]` - Don't precache files under `.next/static/chunks/images` (Highly recommend this to work with  `next-optimized-images` plugin)
+  - doc: Array of (string, RegExp, or function()). One or more specifiers used to exclude assets from the precache manifest. This is interpreted following the same rules as Webpack's standard exclude option.
 - subdomainPrefix: string - url prefix to allow hosting static files on a subdomain
   - default: `""` - i.e. default with no prefix
   - example: `/subdomain` if the app is hosted on `example.com/subdomain`
 
 ### Other Options
 
-`next-pwa` uses `workbox-webpack-plugin`, other options which could also be put in `pwa` object can be find [**ON THE DOCUMENTATION**](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin) for [GenerateSW](https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-webpack-plugin.GenerateSW) and [InjectManifest](https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-webpack-plugin.InjectManifest). If you specify `swSrc`, `InjectManifest` plugin will be used, otherwise `GenerateSW` will be used to generate service worker.
+`next-pwa` uses `workbox-webpack-plugin`, other options which could also be put in `pwa` object can be found [**ON THE DOCUMENTATION**](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin) for [GenerateSW](https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-webpack-plugin.GenerateSW) and [InjectManifest](https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-webpack-plugin.InjectManifest). If you specify `swSrc`, `InjectManifest` plugin will be used, otherwise `GenerateSW` will be used to generate service worker.
 
 ### Runtime Caching
 
 `next-pwa` uses a default runtime [cache.js](https://github.com/shadowwalker/next-pwa/blob/master/cache.js)
 
-There is a great chance you may want to customize your own runtime caching rules. Please feel free to copy the default `cache.js` file and customize the rules as you like. And don't forget to inject the configurations into your `pwa` config in `next.config.js`.
+There is a great chance you may want to customize your own runtime caching rules. Please feel free to copy the default `cache.js` file and customize the rules as you like. Don't forget to inject the configurations into your `pwa` config in `next.config.js`.
 
 Here is the [document on how to write runtime caching configurations](https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-build#.RuntimeCachingEntry), including background sync and broadcast update features and more!
 
@@ -257,9 +256,9 @@ Here is the [document on how to write runtime caching configurations](https://de
 
 1. [Common UX pattern to ask user to reload when new service worker is installed](https://github.com/shadowwalker/next-pwa/blob/master/examples/lifecycle/pages/index.js#L26-L38)
 2. Use a convention like `{command: 'doSomething', message: ''}` object when `postMessage` to service worker. So that on the listener, it could do multiple different tasks using `if...else...`.
-3. When you debugging service worker, constantly `clean application cache` to reduce some flaky errors.
-4. If you are redirecting user to another route, please note [workbox by default only cache response with 200 HTTP status](https://developers.google.com/web/tools/workbox/modules/workbox-cacheable-response#what_are_the_defaults), if you really want to cache redirected page for the route, you can specify it in `runtimeCaching` such as `options.cacheableResponse.statuses=[200,302]`.
-5. When debugging issue, you may want to format your generated `sw.js` file to figure out what's really going on.
+3. When you are debugging service worker, constantly `clean application cache` to reduce some flaky errors.
+4. If you are redirecting the user to another route, please note [workbox by default only cache response with 200 HTTP status](https://developers.google.com/web/tools/workbox/modules/workbox-cacheable-response#what_are_the_defaults), if you really want to cache redirected page for the route, you can specify it in `runtimeCaching` such as `options.cacheableResponse.statuses=[200,302]`.
+5. When debugging issues, you may want to format your generated `sw.js` file to figure out what's really going on.
 
 ## Reference
 

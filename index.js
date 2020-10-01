@@ -7,7 +7,6 @@ const crypto = require('crypto')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const WorkboxPlugin = require('workbox-webpack-plugin')
 const defaultCache = require('./cache')
-const { exit } = require('process')
 
 const getRevision = file => crypto.createHash('md5').update(fs.readFileSync(file)).digest('hex')
 
@@ -58,7 +57,7 @@ module.exports = (nextConfig = {}) => ({
     // inject register script to main.js
     const _sw = sw.startsWith('/') ? sw : `/${sw}`
     if (runtimeCaching[0].options.cacheName !== 'start-url') {
-      throw new Error('[PWA] Fisrt item in runtimeCaching array is not "start-url"')
+      throw new Error('[PWA] The first rule in runtimeCaching array must be "start-url"')
     }
     const startUrl = runtimeCaching[0].urlPattern
 
@@ -84,7 +83,7 @@ module.exports = (nextConfig = {}) => ({
     if (!options.isServer) {
       if (dev) {
         console.log(
-          '> [PWA] Build in develop mode, cache and precache are mostly disabled. This means offine support is disabled, but you can continue developing other functions in service worker.'
+          '> [PWA] Build in develop mode, cache and precache are mostly disabled. This means offline support is disabled, but you can continue developing other functions in service worker.'
         )
       }
 
