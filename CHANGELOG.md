@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 3.1.5
+
+### Fix
+
+- Fix register script to run on IE11
+
+### Misc
+
+- Update README.md
+- Fix typo in logs
+
 ## 3.1.4
 
 ### Fix

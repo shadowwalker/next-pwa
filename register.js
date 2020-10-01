@@ -9,7 +9,7 @@ if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
         if (!c.includes('start-url')) {
           fetch(__PWA_START_URL__)
         }
-      });
+      })
     }
   })
 
