@@ -40,7 +40,7 @@ export default () => {
           wb.messageSW({ type: 'SKIP_WAITING' })
         } else {
           console.log(
-            'User rejected to reload the web app, keep using old verion. New verion will be automatically load when user open the app next time.'
+            'User rejected to reload the web app, keep using old version. New version will be automatically load when user open the app next time.'
           )
         }
       }
