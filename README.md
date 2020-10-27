@@ -259,6 +259,10 @@ Here is the [document on how to write runtime caching configurations](https://de
 3. When you are debugging service worker, constantly `clean application cache` to reduce some flaky errors.
 4. If you are redirecting the user to another route, please note [workbox by default only cache response with 200 HTTP status](https://developers.google.com/web/tools/workbox/modules/workbox-cacheable-response#what_are_the_defaults), if you really want to cache redirected page for the route, you can specify it in `runtimeCaching` such as `options.cacheableResponse.statuses=[200,302]`.
 5. When debugging issues, you may want to format your generated `sw.js` file to figure out what's really going on.
+6. Force `next-pwa` to generate worker box production build by specify the option `mode: 'production'` in your `pwa` section of `next.config.js`. Though `next-pwa` automatically generate the worker box development build during development (by running `next`)  and worker box production build during production (by running `next build` and `next start`). You may still want to force it to production build even during development of your web app for following reason:
+   1. Reduce logging noise due to production build doesn't include logging.
+   2. Improve performance a bit due to production build is optimized and minified.
+7. If you just want to disable worker box logging while keeping development build during development, [simply put `self.__WB_DISABLE_DEV_LOGS = true` in your `worker/index.js` (create one if you don't have one)](https://github.com/shadowwalker/next-pwa/blob/c48ef110360d0138ad2dacd82ab96964e3da2daf/examples/custom-worker/worker/index.js#L6).
 
 ## Reference
 
