@@ -87,15 +87,6 @@ registerRoute(
   'GET'
 )
 registerRoute(
-  /\/api\/.*$/i,
-  new NetworkFirst({
-    cacheName: 'apis',
-    networkTimeoutSeconds: 10,
-    plugins: [new ExpirationPlugin({ maxEntries: 16, maxAgeSeconds: 86400, purgeOnQuotaError: !0 })]
-  }),
-  'POST'
-)
-registerRoute(
   /.*/i,
   new NetworkFirst({
     cacheName: 'others',

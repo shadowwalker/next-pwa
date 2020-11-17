@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 4.0.0.beta.0
+
+### Major
+
+- Upgrade to workbox 6.0.0-rc.0
+- Support webpack 5
+
+### Misc
+
+- Update examples and dependencies
+
 ## 3.1.5
 
 ### Fix
