@@ -2,7 +2,7 @@
 
 This plugin is powered by [workbox](https://developers.google.com/web/tools/workbox/) and other good stuff.
 
-![size](https://img.shields.io/bundlephobia/minzip/next-pwa.svg) ![dependencies](https://img.shields.io/david/shadowwalker/next-pwa.svg) ![downloads](https://img.shields.io/npm/dw/next-pwa.svg) ![license](https://img.shields.io/npm/l/next-pwa.svg)
+![size](https://img.shields.io/bundlephobia/minzip/next-pwa.svg) ![dependencies](https://img.shields.io/librariesio/release/npm/next-pwa) ![downloads](https://img.shields.io/npm/dw/next-pwa.svg) ![license](https://img.shields.io/npm/l/next-pwa.svg)
 
 **Features**
 
@@ -11,7 +11,7 @@ This plugin is powered by [workbox](https://developers.google.com/web/tools/work
 - 💯 Maximize lighthouse score
 - 🎈 Easy to understand examples
 - 📴 Completely offline support
-- 📦 Use workbox and workbox-window v5
+- 📦 Use workbox and workbox-window v6
 - 🍪 Work with cookies out of the box 
 - ☕ No custom server needed for Next.js 9+ [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/next-9)
 - 🔧 Handle PWA lifecycle events opt-in [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/lifecycle)
