@@ -30,6 +30,8 @@ This plugin is powered by [workbox](https://developers.google.com/web/tools/work
 
 ## Install
 
+> If you are new to `next.js` or `react.js` at all, you may want to first checkout [learn next.js](https://nextjs.org/learn/basics/create-nextjs-app) or [next.js document](https://nextjs.org/docs/getting-started). Then start from [a simple example](https://github.com/shadowwalker/next-pwa/tree/master/examples/next-9) or [progressive-web-app example in next.js repository](https://github.com/vercel/next.js/tree/canary/examples/progressive-web-app).
+
 ``` bash
 yarn add next-pwa
 ```
