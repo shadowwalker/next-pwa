@@ -47,7 +47,7 @@ module.exports = (nextConfig = {}) => ({
       config = nextConfig.webpack(config, options)
     }
 
-    if (disable) {
+    if (disable && options.isServer) {
       console.log('> [PWA] PWA support is disabled')
       return config
     }
