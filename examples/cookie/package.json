@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "js-cookie": "^2.2.1",
-    "next": "^10.0.1",
+    "next": "^10.0.3",
     "next-cookies": "^2.0.3",
     "next-pwa": "latest",
     "react": "^17.0.1",

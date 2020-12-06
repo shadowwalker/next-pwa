@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 5.0.0
+
+### Major
+
+1. Upgrade workbox to 6.0.2
+2. Fix modifyURLPrefix config injection
+3. Add build id as revision for precache entries
+
+### Misc
+
+- Update examples and dependencies
+
 ## 4.0.0.beta.0
 
 ### Major

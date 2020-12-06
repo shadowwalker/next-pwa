@@ -38,6 +38,7 @@ module.exports = (nextConfig = {}) => ({
       publicExcludes = [],
       buildExcludes = [],
       manifestTransforms = [],
+      modifyURLPrefix={},
       ...workbox
     } = pwa
 
@@ -193,6 +194,7 @@ module.exports = (nextConfig = {}) => ({
           ...buildExcludes
         ],
         modifyURLPrefix: {
+          ...modifyURLPrefix,
           [prefix]: path.posix.join(subdomainPrefix, '/_next/static/')
         },
         manifestTransforms: [
@@ -200,6 +202,7 @@ module.exports = (nextConfig = {}) => ({
           async (manifestEntries, compilation) => {
             const manifest = manifestEntries.map(m => {
               m.url = m.url.replace(/\/\[/g, '/%5B').replace(/\]/g, '%5D')
+              m.revision = buildId
               return m
             })
             return { manifest, warnings: [] }
