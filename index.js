@@ -125,6 +125,7 @@ module.exports = (nextConfig = {}) => ({
         }).run((error, status) => {
           if (error || status.hasErrors()) {
             console.error(`> [PWA] Failed to build custom worker: ${error}`)
+            console.error(status.toString({ colors: true }))
             process.exit(-1)
           }
           importScripts.unshift(customWorkerName)
