@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 5.0.1
+
+### Major
+
+1. Fix bug for default runtimeCaching not populated
+2. Improve log when build custom worker failed
+
 ## 5.0.0
 
 ### Major

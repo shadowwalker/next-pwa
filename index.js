@@ -38,7 +38,7 @@ module.exports = (nextConfig = {}) => ({
       publicExcludes = [],
       buildExcludes = [],
       manifestTransforms = [],
-      modifyURLPrefix={},
+      modifyURLPrefix = {},
       ...workbox
     } = pwa
 
@@ -124,7 +124,7 @@ module.exports = (nextConfig = {}) => ({
           ]
         }).run((error, status) => {
           if (error || status.hasErrors()) {
-            console.error(`> [PWA] Failed to build custom worker: ${error}`)
+            console.error(`> [PWA] Failed to build custom worker`)
             console.error(status.toString({ colors: true }))
             process.exit(-1)
           }
@@ -218,6 +218,7 @@ module.exports = (nextConfig = {}) => ({
           new WorkboxPlugin.InjectManifest({
             ...workboxCommon,
             ...workbox,
+            runtimeCaching,
             swSrc
           })
         )
@@ -234,6 +235,7 @@ module.exports = (nextConfig = {}) => ({
             cleanupOutdatedCaches,
             ignoreURLParametersMatching,
             importScripts,
+            ...workbox,
             runtimeCaching: dev
               ? [
                   {
@@ -244,8 +246,7 @@ module.exports = (nextConfig = {}) => ({
                     }
                   }
                 ]
-              : runtimeCaching,
-            ...workbox
+              : runtimeCaching
           })
         )
       }
