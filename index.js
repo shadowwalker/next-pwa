@@ -218,7 +218,6 @@ module.exports = (nextConfig = {}) => ({
           new WorkboxPlugin.InjectManifest({
             ...workboxCommon,
             ...workbox,
-            runtimeCaching,
             swSrc
           })
         )
