@@ -1,6 +1,16 @@
 # CHANGELOG
 
-## 5.0.1
+## 5.0.3
+
+### Major
+
+1. Support ES6+ syntax in custom worker
+
+### Misc
+
+- Update examples and dependencies
+
+## 5.0.2
 
 ### Major
 

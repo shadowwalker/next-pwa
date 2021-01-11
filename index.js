@@ -113,6 +113,21 @@ module.exports = (nextConfig = {}) => ({
           mode: config.mode,
           target: 'webworker',
           entry: customWorkerEntry,
+          module: {
+            rules: [
+              {
+                test: /\.js$/i,
+                use: [
+                  {
+                    loader: "babel-loader",
+                    options: {
+                      presets: ["@babel/preset-env"],
+                    },
+                  },
+                ],
+              },
+            ],
+          },
           output: {
             path: _dest,
             filename: customWorkerName
