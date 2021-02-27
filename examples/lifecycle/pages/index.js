@@ -37,7 +37,7 @@ export default () => {
           })
 
           // Send a message to the waiting service worker, instructing it to activate.
-          wb.messageSW({ type: 'SKIP_WAITING' })
+          wb.messageSkipWaiting()
         } else {
           console.log(
             'User rejected to reload the web app, keep using old version. New version will be automatically load when user open the app next time.'
@@ -46,7 +46,6 @@ export default () => {
       }
 
       wb.addEventListener('waiting', promptNewVersionAvailable)
-      wb.addEventListener('externalwaiting', promptNewVersionAvailable)
 
       // ISSUE - this is not working as expected, why?
       // I could only make message event listenser work when I manually add this listenser into sw.js file
