@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 5.0.6
+
+### Major
+
+1. Update workbox depdencies to 6.1.1
+
+### Misc
+
+- Update examples and dependencies
+
 ## 5.0.4
 
 ### Major

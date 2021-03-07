@@ -12,9 +12,9 @@
   "dependencies": {
     "cross-env": "^7.0.3",
     "express": "^4.17.1",
-    "fastify-compress": "^3.4.1",
-    "next": "^10.0.6",
-    "next-i18next": "^7.0.1",
+    "fastify-compress": "^3.4.2",
+    "next": "^10.0.8",
+    "next-i18next": "^8.1.0",
     "next-pwa": "latest",
     "react": "^17.0.1",
     "react-dom": "^17.0.1"
