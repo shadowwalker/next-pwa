@@ -136,7 +136,7 @@ module.exports = (nextConfig = {}) => ({
             new CleanWebpackPlugin({
               cleanOnceBeforeBuildPatterns: [path.join(_dest, 'worker-*.js'), path.join(_dest, 'worker-*.js.map')]
             })
-          ]
+          ].concat(config.plugins.filter(plugin => plugin instanceof webpack.DefinePlugin))
         }).run((error, status) => {
           if (error || status.hasErrors()) {
             console.error(`> [PWA] Failed to build custom worker`)
