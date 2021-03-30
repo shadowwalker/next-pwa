@@ -104,24 +104,44 @@ module.exports = (nextConfig = {}) => ({
       console.log(`> [PWA]   scope: ${path.posix.join(subdomainPrefix, scope)}`)
 
       // build custom script into service worker
-      let customWorkerEntry = path.join(options.dir, 'worker', 'index.js')
+      const customWorkerEntries = ['js', 'ts']
+        .map((extension) =>
+          path.join(options.dir, 'worker', `index.${extension}`)
+        )
+        .filter((entry) => fs.existsSync(entry))
+
       const customWorkerName = `worker-${buildId}.js`
-      if (fs.existsSync(customWorkerEntry)) {
+      if (customWorkerEntries.length === 1) {
+        const customWorkerEntry = customWorkerEntries.pop()
         console.log(`> [PWA] Custom worker found: ${customWorkerEntry}`)
         console.log(`> [PWA] Build custom worker: ${path.join(_dest, customWorkerName)}`)
         webpack({
           mode: config.mode,
           target: 'webworker',
           entry: customWorkerEntry,
+          resolve: {
+            extensions: ['.ts', '.js'],
+          },
           module: {
             rules: [
               {
-                test: /\.js$/i,
+                test: /\.(j|t)s$/i,
                 use: [
                   {
-                    loader: "babel-loader",
+                    loader: 'babel-loader',
                     options: {
-                      presets: ["@babel/preset-env"],
+                      presets: [['next/babel', {
+                        'transform-runtime': {
+                          corejs: false,
+                          helpers: true,
+                          regenerator: false,
+                          useESModules: true
+                        },
+                        'preset-env': {
+                          modules: false,
+                          targets: 'chrome >= 56'
+                        }
+                      }]],
                     },
                   },
                 ],
