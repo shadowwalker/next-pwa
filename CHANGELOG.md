@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 5.1.3
+
+### Major
+
+1. Fix webpack build on custom worker
+2. Support typescript for custom worker - Thanks @felixmosh
+3. Support environment variable in custom worker - Thanks @felixmosh
+
+### Misc
+
+- Update examples and dependencies
+
 ## 5.0.6
 
 ### Major

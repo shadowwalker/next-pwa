@@ -15,7 +15,8 @@ This plugin is powered by [workbox](https://developers.google.com/web/tools/work
 - 🍪 Work with cookies out of the box 
 - ☕ No custom server needed for Next.js 9+ [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/next-9)
 - 🔧 Handle PWA lifecycle events opt-in [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/lifecycle)
-- 📐 Custom worker to run extra code in service worker with code splitting [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/custom-worker)
+- 📐 Custom worker to run extra code with code splitting and **typescript** support [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/custom-ts-worker)
+- 📜 Environment variable exposed to custom worker
 - 🐞 Debug service worker with confidence in development mode without caching
 - 🌏 Internationalization (a.k.a I18N) with `next-i18next` [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/next-i18next)
 - 🛠 Configurable by the same [workbox configuration options](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin) for [GenerateSW](https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-webpack-plugin.GenerateSW) and [InjectManifest](https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-webpack-plugin.InjectManifest)
@@ -110,7 +111,8 @@ Create a `manifest.json` file in your `static` folder:
     {
       "src": "/static/icons/android-chrome-192x192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
       "src": "/static/icons/android-chrome-384x384.png",
@@ -238,6 +240,9 @@ module.exports = withPWA({
   - default: `[]`
   - example: `[/chunks\/images\/.*$/]` - Don't precache files under `.next/static/chunks/images` (Highly recommend this to work with  `next-optimized-images` plugin)
   - doc: Array of (string, RegExp, or function()). One or more specifiers used to exclude assets from the precache manifest. This is interpreted following the same rules as Webpack's standard exclude option.
+- dynamicStartUrl - If your start url returns different HTML document under different state (such as logged in vs. not logged in), this should be set to true.
+  - default: true
+  - recommend: set to **false** if your start url always returns same HTML document, then start url will be precached, this will help to speed up first load.
 - ~~subdomainPrefix: string - url prefix to allow hosting static files on a subdomain~~
   - ~~default: `""` - i.e. default with no prefix~~
   - ~~example: `/subdomain` if the app is hosted on `example.com/subdomain`~~
