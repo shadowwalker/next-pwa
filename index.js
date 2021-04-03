@@ -7,6 +7,7 @@ const crypto = require('crypto')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const WorkboxPlugin = require('workbox-webpack-plugin')
 const defaultCache = require('./cache')
+const buildCustomWorker = require('./build-custom-worker')
 
 const getRevision = file => crypto.createHash('md5').update(fs.readFileSync(file)).digest('hex')
 
@@ -20,7 +21,7 @@ module.exports = (nextConfig = {}) => ({
       config: { distDir = '.next', pwa = {}, experimental = {}}
     } = options
 
-    let basePath = options.config.basePath ?? '/'
+    let basePath = options.config.basePath
     if (!basePath) basePath = '/'
 
     // For workbox configurations:
@@ -52,23 +53,6 @@ module.exports = (nextConfig = {}) => ({
     let { runtimeCaching = defaultCache, scope = basePath } = pwa
     scope = path.posix.join(scope, '/')
 
-    // mitigate Chrome 89 auto offline check issue
-    // blog: https://developer.chrome.com/blog/improved-pwa-offline-detection/ 
-    // issue: https://github.com/GoogleChrome/workbox/issues/2749
-    // if (dynamicStartUrl) {
-    //   runtimeCaching.unshift({
-    //     urlPattern: basePath,
-    //     handler: 'CacheFirst',
-    //     options: {
-    //       cacheName: 'start-url',
-    //       expiration: {
-    //         maxEntries: 1,
-    //         maxAgeSeconds: 1  // 1s ~= NetworkFirst
-    //       }
-    //     }
-    //   })
-    // }
-
     if (typeof nextConfig.webpack === 'function') {
       config = nextConfig.webpack(config, options)
     }
@@ -81,7 +65,7 @@ module.exports = (nextConfig = {}) => ({
     console.log(`> [PWA] Compile ${options.isServer ? 'server' : 'client (static)'}`)
 
     // inject register script to main.js
-    const _sw = path.posix.join(basePath, sw.startsWith('/') ? _sw : `/${sw}`)
+    const _sw = path.posix.join(basePath, sw.startsWith('/') ? sw : `/${sw}`)
     config.plugins.push(
       new webpack.DefinePlugin({
         __PWA_SW__: `'${_sw}'`,
@@ -108,84 +92,45 @@ module.exports = (nextConfig = {}) => ({
         )
       }
 
-      if (register) {
-        console.log(`> [PWA] Auto register service worker with: ${path.resolve(registerJs)}`)
-      } else {
-        console.log(
-          `> [PWA] Auto register service worker is disabled, please call following code in componentDidMount callback or useEffect hook`
-        )
-        console.log(`> [PWA]   window.workbox.register()`)
+      // mitigate Chrome 89 auto offline check issue
+      // blog: https://developer.chrome.com/blog/improved-pwa-offline-detection/ 
+      // issue: https://github.com/GoogleChrome/workbox/issues/2749
+      if (dynamicStartUrl) {
+        runtimeCaching.unshift({
+          urlPattern: basePath,
+          handler: 'NetworkFirst',
+          options: {
+            cacheName: 'start-url',
+            expiration: {
+              maxEntries: 1,
+              maxAgeSeconds: 24 * 60 * 60 // 24 hours
+            },
+            networkTimeoutSeconds: 10
+          }
+        })
       }
 
       const _dest = path.join(options.dir, dest)
 
+      const customWorkerName = `worker-${buildId}.js`
+      buildCustomWorker({
+        name: customWorkerName,
+        basedir: options.dir,
+        destdir: _dest,
+        mode: config.mode
+      })
+      importScripts.unshift(customWorkerName)
+
+      if (register) {
+        console.log(`> [PWA] Auto register service worker with: ${path.resolve(registerJs)}`)
+      } else {
+        console.log(`> [PWA] Auto register service worker is disabled, please call following code in componentDidMount callback or useEffect hook`)
+        console.log(`> [PWA]   window.workbox.register()`)
+      }
+
       console.log(`> [PWA] Service worker: ${path.join(_dest, sw)}`)
       console.log(`> [PWA]   url: ${_sw}`)
       console.log(`> [PWA]   scope: ${scope}`)
-
-      // build custom script into service worker
-      const customWorkerEntries = ['js', 'ts']
-        .map((extension) =>
-          path.join(options.dir, 'worker', `index.${extension}`)
-        )
-        .filter((entry) => fs.existsSync(entry))
-
-      const customWorkerName = `worker-${buildId}.js`
-      if (customWorkerEntries.length === 1) {
-        const customWorkerEntry = customWorkerEntries.pop()
-        console.log(`> [PWA] Custom worker found: ${customWorkerEntry}`)
-        console.log(`> [PWA] Build custom worker: ${path.join(_dest, customWorkerName)}`)
-        webpack({
-          mode: config.mode,
-          target: 'webworker',
-          entry: customWorkerEntry,
-          resolve: {
-            extensions: ['.ts', '.js'],
-          },
-          module: {
-            rules: [
-              {
-                test: /\.(j|t)s$/i,
-                use: [
-                  {
-                    loader: 'babel-loader',
-                    options: {
-                      presets: [['next/babel', {
-                        'transform-runtime': {
-                          corejs: false,
-                          helpers: true,
-                          regenerator: false,
-                          useESModules: true
-                        },
-                        'preset-env': {
-                          modules: false,
-                          targets: 'chrome >= 56'
-                        }
-                      }]],
-                    },
-                  },
-                ],
-              },
-            ],
-          },
-          output: {
-            path: _dest,
-            filename: customWorkerName
-          },
-          plugins: [
-            new CleanWebpackPlugin({
-              cleanOnceBeforeBuildPatterns: [path.join(_dest, 'worker-*.js'), path.join(_dest, 'worker-*.js.map')]
-            })
-          ].concat(config.plugins.filter(plugin => plugin instanceof webpack.DefinePlugin))
-        }).run((error, status) => {
-          if (error || status.hasErrors()) {
-            console.error(`> [PWA] Failed to build custom worker`)
-            console.error(status.toString({ colors: true }))
-            process.exit(-1)
-          }
-          importScripts.unshift(customWorkerName)
-        })
-      }
 
       config.plugins.push(
         new CleanWebpackPlugin({
