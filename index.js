@@ -81,7 +81,7 @@ module.exports = (nextConfig = {}) => ({
     console.log(`> [PWA] Compile ${options.isServer ? 'server' : 'client (static)'}`)
 
     // inject register script to main.js
-    const _sw = path.posix.join(basePath, sw.startsWith('/') ? _sw : `/${sw}`)
+    const _sw = path.posix.join(basePath, sw.startsWith('/') ? sw : `/${sw}`)
     config.plugins.push(
       new webpack.DefinePlugin({
         __PWA_SW__: `'${_sw}'`,
