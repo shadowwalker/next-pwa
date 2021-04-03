@@ -5,7 +5,7 @@ const fs = require('fs')
 const webpack = require('webpack')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
-const buildCustomWorker = ({ name, basedir, destdir, mode }) => {
+const buildCustomWorker = ({ name, basedir, destdir, mode, plugins, success }) => {
   const customWorkerEntries = ['ts', 'js']
     .map(ext => path.join(basedir, 'worker', `index.${ext}`))
     .filter(entry => fs.existsSync(entry))
@@ -56,12 +56,14 @@ const buildCustomWorker = ({ name, basedir, destdir, mode }) => {
         new CleanWebpackPlugin({
           cleanOnceBeforeBuildPatterns: [path.join(destdir, 'worker-*.js'), path.join(destdir, 'worker-*.js.map')]
         })
-      ]//.concat(config.plugins.filter(plugin => plugin instanceof webpack.DefinePlugin))
+      ].concat(plugins)
     }).run((error, status) => {
       if (error || status.hasErrors()) {
         console.error(`> [PWA] Failed to build custom worker`)
         console.error(status.toString({ colors: true }))
         process.exit(-1)
+      } else {
+        success()
       }
     })
   }

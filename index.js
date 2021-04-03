@@ -117,9 +117,10 @@ module.exports = (nextConfig = {}) => ({
         name: customWorkerName,
         basedir: options.dir,
         destdir: _dest,
-        mode: config.mode
+        mode: config.mode,
+        plugins: config.plugins.filter(plugin => plugin instanceof webpack.DefinePlugin),
+        success: () => importScripts.unshift(customWorkerName)
       })
-      importScripts.unshift(customWorkerName)
 
       if (register) {
         console.log(`> [PWA] Auto register service worker with: ${path.resolve(registerJs)}`)
