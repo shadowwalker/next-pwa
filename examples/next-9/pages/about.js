@@ -1,14 +1,14 @@
 import Head from 'next/head'
 import Link from 'next/link'
 
-const Index = () => (
+const About = () => (
   <>
     <Head>
       <title>next-pwa example</title>
     </Head>
-    <h1>Next.js + PWA = AWESOME!</h1>
-    <Link href='/about'>About</Link>
+    <h1>About</h1>
+    <Link href='/'>Home</Link>
   </>
 )
 
-export default Index
+export default About

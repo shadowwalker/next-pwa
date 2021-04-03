@@ -238,9 +238,10 @@ module.exports = withPWA({
   - default: `[]`
   - example: `[/chunks\/images\/.*$/]` - Don't precache files under `.next/static/chunks/images` (Highly recommend this to work with  `next-optimized-images` plugin)
   - doc: Array of (string, RegExp, or function()). One or more specifiers used to exclude assets from the precache manifest. This is interpreted following the same rules as Webpack's standard exclude option.
-- subdomainPrefix: string - url prefix to allow hosting static files on a subdomain
-  - default: `""` - i.e. default with no prefix
-  - example: `/subdomain` if the app is hosted on `example.com/subdomain`
+- ~~subdomainPrefix: string - url prefix to allow hosting static files on a subdomain~~
+  - ~~default: `""` - i.e. default with no prefix~~
+  - ~~example: `/subdomain` if the app is hosted on `example.com/subdomain`~~
+  - deprecated, use [basePath](https://nextjs.org/docs/api-reference/next.config.js/basepath) instead
 
 ### Other Options
 

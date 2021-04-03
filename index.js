@@ -17,8 +17,11 @@ module.exports = (nextConfig = {}) => ({
       webpack,
       buildId,
       dev,
-      config: { distDir = '.next', pwa = {}, experimental = {} /*, modern = false*/ }
+      config: { distDir = '.next', pwa = {}, experimental = {}}
     } = options
+
+    let basePath = options.config.basePath ?? '/'
+    if (!basePath) basePath = '/'
 
     // For workbox configurations:
     // https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-webpack-plugin.GenerateSW
@@ -27,8 +30,7 @@ module.exports = (nextConfig = {}) => ({
       register = true,
       dest = distDir,
       sw = 'sw.js',
-      subdomainPrefix = '',
-      scope = '/',
+      dynamicStartUrl = true,
       skipWaiting = true,
       clientsClaim = true,
       cleanupOutdatedCaches = true,
@@ -39,10 +41,33 @@ module.exports = (nextConfig = {}) => ({
       buildExcludes = [],
       manifestTransforms = [],
       modifyURLPrefix = {},
+      subdomainPrefix,  // deprecated, use basePath in next.config.js instead
       ...workbox
     } = pwa
 
-    let { runtimeCaching = defaultCache } = pwa
+    if (subdomainPrefix !== undefined) {
+      console.error('> [PWA] subdomainPrefix is deprecated, use basePath in next.config.js instead: https://nextjs.org/docs/api-reference/next.config.js/basepath')
+    }
+
+    let { runtimeCaching = defaultCache, scope = basePath } = pwa
+    scope = path.posix.join(scope, '/')
+
+    // mitigate Chrome 89 auto offline check issue
+    // blog: https://developer.chrome.com/blog/improved-pwa-offline-detection/ 
+    // issue: https://github.com/GoogleChrome/workbox/issues/2749
+    // if (dynamicStartUrl) {
+    //   runtimeCaching.unshift({
+    //     urlPattern: basePath,
+    //     handler: 'CacheFirst',
+    //     options: {
+    //       cacheName: 'start-url',
+    //       expiration: {
+    //         maxEntries: 1,
+    //         maxAgeSeconds: 1  // 1s ~= NetworkFirst
+    //       }
+    //     }
+    //   })
+    // }
 
     if (typeof nextConfig.webpack === 'function') {
       config = nextConfig.webpack(config, options)
@@ -56,18 +81,13 @@ module.exports = (nextConfig = {}) => ({
     console.log(`> [PWA] Compile ${options.isServer ? 'server' : 'client (static)'}`)
 
     // inject register script to main.js
-    const _sw = sw.startsWith('/') ? sw : `/${sw}`
-    if (runtimeCaching[0].options.cacheName !== 'start-url') {
-      throw new Error('[PWA] The first rule in runtimeCaching array must be "start-url"')
-    }
-    const startUrl = runtimeCaching[0].urlPattern
-
+    const _sw = path.posix.join(basePath, sw.startsWith('/') ? _sw : `/${sw}`)
     config.plugins.push(
       new webpack.DefinePlugin({
-        __PWA_SW__: `'${path.posix.join(subdomainPrefix, _sw)}'`,
-        __PWA_SCOPE__: `'${path.posix.join(subdomainPrefix, scope)}'`,
+        __PWA_SW__: `'${_sw}'`,
+        __PWA_SCOPE__: `'${scope}'`,
         __PWA_ENABLE_REGISTER__: `${Boolean(register)}`,
-        __PWA_START_URL__: `'${startUrl}'`
+        __PWA_START_URL__: dynamicStartUrl ? `'${basePath}'` : undefined
       })
     )
 
@@ -100,8 +120,8 @@ module.exports = (nextConfig = {}) => ({
       const _dest = path.join(options.dir, dest)
 
       console.log(`> [PWA] Service worker: ${path.join(_dest, sw)}`)
-      console.log(`> [PWA]   url: ${path.posix.join(subdomainPrefix, _sw)}`)
-      console.log(`> [PWA]   scope: ${path.posix.join(subdomainPrefix, scope)}`)
+      console.log(`> [PWA]   url: ${_sw}`)
+      console.log(`> [PWA]   scope: ${scope}`)
 
       // build custom script into service worker
       const customWorkerEntries = ['js', 'ts']
@@ -200,9 +220,16 @@ module.exports = (nextConfig = {}) => ({
             }
           )
           .map(f => ({
-            url: path.posix.join(subdomainPrefix, `/${f}`),
+            url: path.posix.join(basePath, `/${f}`),
             revision: getRevision(`public/${f}`)
           }))
+      }
+
+      if (!dynamicStartUrl) {
+        manifestEntries.push({
+          url: basePath,
+          revision: buildId
+        })
       }
 
       const prefix = config.output.publicPath ? `${config.output.publicPath}static/` : 'static/'
@@ -231,7 +258,7 @@ module.exports = (nextConfig = {}) => ({
         ],
         modifyURLPrefix: {
           ...modifyURLPrefix,
-          [prefix]: path.posix.join(subdomainPrefix, '/_next/static/')
+          [prefix]: path.posix.join(basePath, '/_next/static/')
         },
         manifestTransforms: [
           ...manifestTransforms,
