@@ -92,6 +92,18 @@ module.exports = (nextConfig = {}) => ({
         )
       }
 
+      if (dev) {
+        runtimeCaching = [
+          {
+            urlPattern: /.*/i,
+            handler: 'NetworkOnly',
+            options: {
+              cacheName: 'dev'
+            }
+          }
+        ]
+      }
+
       // mitigate Chrome 89 auto offline check issue
       // blog: https://developer.chrome.com/blog/improved-pwa-offline-detection/ 
       // issue: https://github.com/GoogleChrome/workbox/issues/2749
@@ -117,9 +129,9 @@ module.exports = (nextConfig = {}) => ({
         name: customWorkerName,
         basedir: options.dir,
         destdir: _dest,
-        mode: config.mode,
         plugins: config.plugins.filter(plugin => plugin instanceof webpack.DefinePlugin),
-        success: () => importScripts.unshift(customWorkerName)
+        success: () => importScripts.unshift(customWorkerName),
+        minify: !dev
       })
 
       if (register) {
@@ -243,17 +255,7 @@ module.exports = (nextConfig = {}) => ({
             ignoreURLParametersMatching,
             importScripts,
             ...workbox,
-            runtimeCaching: dev
-              ? [
-                  {
-                    urlPattern: /.*/i,
-                    handler: 'NetworkOnly',
-                    options: {
-                      cacheName: 'dev'
-                    }
-                  }
-                ]
-              : runtimeCaching
+            runtimeCaching
           })
         )
       }

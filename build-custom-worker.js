@@ -4,8 +4,9 @@ const path = require('path')
 const fs = require('fs')
 const webpack = require('webpack')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
 
-const buildCustomWorker = ({ name, basedir, destdir, mode, plugins, success }) => {
+const buildCustomWorker = ({ name, basedir, destdir, plugins, success, minify }) => {
   const customWorkerEntries = ['ts', 'js']
     .map(ext => path.join(basedir, 'worker', `index.${ext}`))
     .filter(entry => fs.existsSync(entry))
@@ -15,9 +16,11 @@ const buildCustomWorker = ({ name, basedir, destdir, mode, plugins, success }) =
     console.log(`> [PWA] Custom worker found: ${customWorkerEntry}`)
     console.log(`> [PWA] Build custom worker: ${path.join(destdir, name)}`)
     webpack({
-      mode,
+      mode: 'none',
       target: 'webworker',
-      entry: customWorkerEntry,
+      entry: {
+        main: customWorkerEntry
+      },
       resolve: {
         extensions: ['.ts', '.js']
       },
@@ -29,7 +32,6 @@ const buildCustomWorker = ({ name, basedir, destdir, mode, plugins, success }) =
               {
                 loader: 'babel-loader',
                 options: {
-                  //presets: ['@babel/preset-env']
                   presets: [['next/babel', {
                     'transform-runtime': {
                       corejs: false,
@@ -56,7 +58,11 @@ const buildCustomWorker = ({ name, basedir, destdir, mode, plugins, success }) =
         new CleanWebpackPlugin({
           cleanOnceBeforeBuildPatterns: [path.join(destdir, 'worker-*.js'), path.join(destdir, 'worker-*.js.map')]
         })
-      ].concat(plugins)
+      ].concat(plugins),
+      optimization: minify ? {
+        minimize: true,
+        minimizer: [new TerserPlugin()]
+      } : undefined
     }).run((error, status) => {
       if (error || status.hasErrors()) {
         console.error(`> [PWA] Failed to build custom worker`)
