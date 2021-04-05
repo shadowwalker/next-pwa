@@ -21,9 +21,6 @@ module.exports = (nextConfig = {}) => ({
       config: { distDir = '.next', pwa = {}, experimental = {}}
     } = options
 
-    let basePath = options.config.basePath
-    if (!basePath) basePath = '/'
-
     // For workbox configurations:
     // https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-webpack-plugin.GenerateSW
     const {
@@ -46,13 +43,6 @@ module.exports = (nextConfig = {}) => ({
       ...workbox
     } = pwa
 
-    if (subdomainPrefix !== undefined) {
-      console.error('> [PWA] subdomainPrefix is deprecated, use basePath in next.config.js instead: https://nextjs.org/docs/api-reference/next.config.js/basepath')
-    }
-
-    let { runtimeCaching = defaultCache, scope = basePath } = pwa
-    scope = path.posix.join(scope, '/')
-
     if (typeof nextConfig.webpack === 'function') {
       config = nextConfig.webpack(config, options)
     }
@@ -62,7 +52,17 @@ module.exports = (nextConfig = {}) => ({
       return config
     }
 
+    if (subdomainPrefix) {
+      console.error('> [PWA] subdomainPrefix is deprecated, use basePath in next.config.js instead: https://nextjs.org/docs/api-reference/next.config.js/basepath')
+    }
+
     console.log(`> [PWA] Compile ${options.isServer ? 'server' : 'client (static)'}`)
+
+    let basePath = options.config.basePath
+    if (!basePath) basePath = '/'
+    
+    let { runtimeCaching = defaultCache, scope = basePath } = pwa
+    scope = path.posix.join(scope, '/')
 
     // inject register script to main.js
     const _sw = path.posix.join(basePath, sw.startsWith('/') ? sw : `/${sw}`)
@@ -86,44 +86,7 @@ module.exports = (nextConfig = {}) => ({
       })
 
     if (!options.isServer) {
-      if (dev) {
-        console.log(
-          '> [PWA] Build in develop mode, cache and precache are mostly disabled. This means offline support is disabled, but you can continue developing other functions in service worker.'
-        )
-      }
-
-      if (dev) {
-        runtimeCaching = [
-          {
-            urlPattern: /.*/i,
-            handler: 'NetworkOnly',
-            options: {
-              cacheName: 'dev'
-            }
-          }
-        ]
-      }
-
-      // mitigate Chrome 89 auto offline check issue
-      // blog: https://developer.chrome.com/blog/improved-pwa-offline-detection/ 
-      // issue: https://github.com/GoogleChrome/workbox/issues/2749
-      if (dynamicStartUrl) {
-        runtimeCaching.unshift({
-          urlPattern: basePath,
-          handler: 'NetworkFirst',
-          options: {
-            cacheName: 'start-url',
-            expiration: {
-              maxEntries: 1,
-              maxAgeSeconds: 24 * 60 * 60 // 24 hours
-            },
-            networkTimeoutSeconds: 10
-          }
-        })
-      }
-
       const _dest = path.join(options.dir, dest)
-
       const customWorkerName = `worker-${buildId}.js`
       buildCustomWorker({
         name: customWorkerName,
@@ -181,6 +144,11 @@ module.exports = (nextConfig = {}) => ({
             url: path.posix.join(basePath, `/${f}`),
             revision: getRevision(`public/${f}`)
           }))
+        
+        manifestEntries.push({
+          url: `/_error`,
+          revision: buildId
+        })
       }
 
       if (!dynamicStartUrl) {
@@ -233,7 +201,7 @@ module.exports = (nextConfig = {}) => ({
 
       if (workbox.swSrc) {
         const swSrc = path.join(options.dir, workbox.swSrc)
-        console.log('> [PWA] Inject manifest in', swSrc)
+        console.log(`> [PWA] Inject manifest in ${swSrc}`)
         config.plugins.push(
           new WorkboxPlugin.InjectManifest({
             ...workboxCommon,
@@ -243,7 +211,42 @@ module.exports = (nextConfig = {}) => ({
         )
       } else {
         if (dev) {
+          console.log(
+            '> [PWA] Build in develop mode, cache and precache are mostly disabled. This means offline support is disabled, but you can continue developing other functions in service worker.'
+          )
+
           ignoreURLParametersMatching.push(/ts/)
+          runtimeCaching = [
+            {
+              urlPattern: /.*/i,
+              handler: 'NetworkOnly',
+              options: {
+                cacheName: 'dev'
+              }
+            }
+          ]
+        }
+
+        if (dynamicStartUrl) {
+          runtimeCaching.unshift({
+            urlPattern: basePath,
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'start-url',
+              expiration: {
+                maxEntries: 1,
+                maxAgeSeconds: 24 * 60 * 60 // 24 hours
+              },
+              networkTimeoutSeconds: 10,
+              plugins: [{
+                // mitigate Chrome 89 auto offline check issue
+                // blog: https://developer.chrome.com/blog/improved-pwa-offline-detection/ 
+                // issue: https://github.com/GoogleChrome/workbox/issues/2749
+                // I know this seems dummy, but it does the trick by gain some time for the cache to be ready :)
+                requestWillFetch: async ({request}) => (Request(), request)
+              }]
+            }
+          })
         }
 
         config.plugins.push(

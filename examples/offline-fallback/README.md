@@ -4,7 +4,7 @@
 
 [TOC]
 
-This example demonstrates how to use `next-pwa` plugin to implement fallback route, image or font when fetch error. Fetch error usually happens when **offline**. Note fetch is successful even when server returns error codes `404, 400, 500, ...`
+This example demonstrates how to use `next-pwa` to implement fallback route, image or font when fetch error. Fetch error usually happens when **offline**. (Note fetch is successful even when server returns error codes `404, 400, 500, ...`)
 
 This example uses **Inject Manifest** module from `workbox`. The advantage of using this module is you get more control over your service worker. The disadvantage is that it's more complicated and needs to write more code.
 

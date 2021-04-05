@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 5.1.4
+
+### Misc
+
+1. Offline fallback concept with `handlerDidError` cache plugin
+
+### Fix
+
+1. Pass auto offline check in Chrome
+
 ## 5.1.3
 
 ### Major
