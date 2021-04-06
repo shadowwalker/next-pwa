@@ -6,13 +6,13 @@ This plugin is powered by [workbox](https://developers.google.com/web/tools/work
 
 **Features**
 
-- 0️⃣ Zero config for registering and generating a service worker
+- 0️⃣ Zero config for registering and generating service worker
 - ✨ Optimized precache and runtime cache
 - 💯 Maximize lighthouse score
 - 🎈 Easy to understand examples
-- 📴 Completely offline support
-- 📦 Use workbox and workbox-window v6
-- 🍪 Work with cookies out of the box 
+- 📴 Completely offline support with fallbacks [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/offline-fallback-v2) 🆕
+- 📦 Use [workbox](https://developers.google.com/web/tools/workbox/) and [workbox-window](https://developers.google.com/web/tools/workbox/modules/workbox-window) v6
+- 🍪 Work with cookies out of the box
 - ☕ No custom server needed for Next.js 9+ [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/next-9)
 - 🔧 Handle PWA lifecycle events opt-in [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/lifecycle)
 - 📐 Custom worker to run extra code with code splitting and **typescript** support [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/custom-ts-worker)
@@ -201,6 +201,16 @@ module.exports = withPWA({
 
 **[Use this example to see it in action](https://github.com/shadowwalker/next-pwa/tree/master/examples/next-9)**
 
+## Offline Fallbacks
+
+Offline fallbacks are useful when the fetch failed from both cache and network, a precached resource is served instead of present an error from browser.
+
+To get started simply add a `/_offline` page such as `pages/_offline.js` or `pages/_offline.jsx` or `pages/_offline.ts` or `pages/_offline.tsx`. Then you are all set! When the user is offline, all pages which are not cached will fallback to '/_offline'.
+
+**[Use this example to see it in action](https://github.com/shadowwalker/next-pwa/tree/master/examples/offline-fallback-v2)**
+
+ `next-pwa` helps you precache those resources on the first load, then inject a fallback handler to `handlerDidError` plugin to all `runtimeCaching` configs, so that precached resources are served when fetch failed.
+
 ## Configuration
 
 There are options you can use to customize the behavior of this plugin by adding `pwa` object in the next config in `next.config.js`:
@@ -246,9 +256,17 @@ module.exports = withPWA({
   - default: `[]`
   - example: `[/chunks\/images\/.*$/]` - Don't precache files under `.next/static/chunks/images` (Highly recommend this to work with  `next-optimized-images` plugin)
   - doc: Array of (string, RegExp, or function()). One or more specifiers used to exclude assets from the precache manifest. This is interpreted following the same rules as Webpack's standard exclude option.
-- dynamicStartUrl - If your start url returns different HTML document under different state (such as logged in vs. not logged in), this should be set to true.
+- dynamicStartUrl - if your start url returns different HTML document under different state (such as logged in vs. not logged in), this should be set to true.
   - default: true
   - recommend: set to **false** if your start url always returns same HTML document, then start url will be precached, this will help to speed up first load.
+- fallbacks - config precached routes to fallback when both cache and network not available to serve resources.
+  - **if you just need a offline fallback page, simply create a `/_offline` page such as `pages/_offline.js` and you are all set, no configuration necessary**
+  - default: `object`
+    - `fallbacks.document` - fallback route for document (page), default to `/_offline` if you created that page
+    - `fallbacks.image` - fallback route for image, default to none
+    - `fallbacks.audio` - fallback route for audio, default to none
+    - `fallbacks.video` - fallback route for video, default to none
+    - `fallbacks.font` - fallback route for font, default to none
 - ~~subdomainPrefix: string - url prefix to allow hosting static files on a subdomain~~
   - ~~default: `""` - i.e. default with no prefix~~
   - ~~example: `/subdomain` if the app is hosted on `example.com/subdomain`~~

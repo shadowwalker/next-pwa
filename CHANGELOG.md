@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 5.2.0
+
+### Major
+
+1. Implement offline fallbacks feature
+
+### Fix
+
+1. Not precache `/_error`
+
 ## 5.1.4
 
 ### Misc

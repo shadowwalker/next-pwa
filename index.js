@@ -8,6 +8,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const WorkboxPlugin = require('workbox-webpack-plugin')
 const defaultCache = require('./cache')
 const buildCustomWorker = require('./build-custom-worker')
+const buildFallbackWorker = require('./build-fallback-worker')
 
 const getRevision = file => crypto.createHash('md5').update(fs.readFileSync(file)).digest('hex')
 
@@ -39,6 +40,7 @@ module.exports = (nextConfig = {}) => ({
       buildExcludes = [],
       manifestTransforms = [],
       modifyURLPrefix = {},
+      fallbacks = {},
       subdomainPrefix,  // deprecated, use basePath in next.config.js instead
       ...workbox
     } = pwa
@@ -87,13 +89,12 @@ module.exports = (nextConfig = {}) => ({
 
     if (!options.isServer) {
       const _dest = path.join(options.dir, dest)
-      const customWorkerName = `worker-${buildId}.js`
       buildCustomWorker({
-        name: customWorkerName,
+        id: buildId,
         basedir: options.dir,
         destdir: _dest,
         plugins: config.plugins.filter(plugin => plugin instanceof webpack.DefinePlugin),
-        success: () => importScripts.unshift(customWorkerName),
+        success: ({name}) => importScripts.unshift(name),
         minify: !dev
       })
 
@@ -144,17 +145,33 @@ module.exports = (nextConfig = {}) => ({
             url: path.posix.join(basePath, `/${f}`),
             revision: getRevision(`public/${f}`)
           }))
-        
-        manifestEntries.push({
-          url: `/_error`,
-          revision: buildId
-        })
       }
 
       if (!dynamicStartUrl) {
         manifestEntries.push({
           url: basePath,
           revision: buildId
+        })
+      }
+
+      if (fallbacks) {
+        buildFallbackWorker({
+          id: buildId,
+          fallbacks,
+          basedir: options.dir,
+          destdir: _dest,
+          success: ({name, precaches}) => {
+            importScripts.unshift(name)
+            precaches.forEach(route => {
+              if (!manifestEntries.find(entry => entry.url.startsWith(route))) {
+                manifestEntries.push({
+                  url: route,
+                  revision: buildId
+                })
+              }
+            })
+          },
+          minify: !dev
         })
       }
 
@@ -243,9 +260,19 @@ module.exports = (nextConfig = {}) => ({
                 // blog: https://developer.chrome.com/blog/improved-pwa-offline-detection/ 
                 // issue: https://github.com/GoogleChrome/workbox/issues/2749
                 // I know this seems dummy, but it does the trick by gain some time for the cache to be ready :)
-                requestWillFetch: async ({request}) => (Request(), request)
+                requestWillFetch: async ({request}) => (Request(), console.log(process.env.NODE_ENV), request)
               }]
             }
+          })
+        }
+
+        if (fallbacks) {
+          runtimeCaching.forEach(c => {
+            if (Array.isArray(c.options.plugins) && c.options.plugins.find(p => 'handlerDidError' in p)) return
+            if (!c.options.plugins) c.options.plugins = []
+            c.options.plugins.push({
+              handlerDidError: async ({request}) => self.fallback(request)
+            })
           })
         }
 

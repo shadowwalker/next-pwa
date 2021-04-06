@@ -32,15 +32,7 @@ module.exports = [
       expiration: {
         maxEntries: 64,
         maxAgeSeconds: 24 * 60 * 60 // 24 hours
-      },
-      // plugin callbacks must have semicolons
-      plugins: [{
-        handlerDidError: async ({request, event, error, state}) => {
-          // offline fallback to route /offline.jpg, you can customize to any other precached routes.
-          // note: you will need to put an offline.jpg image file in public folder or serve under /offline.jpg route to make this work
-          return caches.match('/offline.jpg', { ignoreSearch: true });
-        }
-      }]
+      }
     }
   },
   {
@@ -109,14 +101,7 @@ module.exports = [
         maxEntries: 32,
         maxAgeSeconds: 24 * 60 * 60 // 24 hours
       },
-      networkTimeoutSeconds: 10,
-      // plugin callbacks must have semicolons
-      plugins: [{
-        handlerDidError: async ({request, event, error, state}) => {
-          // offline fallback to route /_error, you can customize to any other precached routes.
-          return caches.match('/_error', { ignoreSearch: true });
-        }
-      }]
+      networkTimeoutSeconds: 10
     }
   }
 ]
