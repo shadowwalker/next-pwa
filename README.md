@@ -16,7 +16,7 @@ This plugin is powered by [workbox](https://developers.google.com/web/tools/work
 - ☕ No custom server needed for Next.js 9+ [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/next-9)
 - 🔧 Handle PWA lifecycle events opt-in [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/lifecycle)
 - 📐 Custom worker to run extra code with code splitting and **typescript** support [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/custom-ts-worker)
-- 📜 Environment variable exposed to custom worker
+- 📜 [Public environment variables](https://nextjs.org/docs/basic-features/environment-variables#exposing-environment-variables-to-the-browser) available in custom worker as usual
 - 🐞 Debug service worker with confidence in development mode without caching
 - 🌏 Internationalization (a.k.a I18N) with `next-i18next` [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/next-i18next)
 - 🛠 Configurable by the same [workbox configuration options](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin) for [GenerateSW](https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-webpack-plugin.GenerateSW) and [InjectManifest](https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-webpack-plugin.InjectManifest)
@@ -35,6 +35,12 @@ This plugin is powered by [workbox](https://developers.google.com/web/tools/work
 
 ``` bash
 yarn add next-pwa
+```
+
+> `terser-webpack-plugin` should be included in the latest `next.js` dependency chain. But if you encounter error of not finding this dependency during build, simply add it:
+
+``` bash
+yarn add terser-webpack-plugin
 ```
 
 ## Basic Usage
