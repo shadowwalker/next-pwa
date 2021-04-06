@@ -36,7 +36,7 @@ Then service worker generated will automatically import your code and run it bef
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/shadowwalker/next-pwa/)
 
 ``` bash
-cd examples/custom-server
+cd examples/custom-ts-server
 yarn install
 yarn build
 yarn start

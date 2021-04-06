@@ -29,7 +29,7 @@ pwa: {
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/shadowwalker/next-pwa/)
 
 ``` bash
-cd examples/offline-fallback
+cd examples/offline-fallback-v2
 yarn install
 yarn build
 yarn start
