@@ -37,7 +37,7 @@ This plugin is powered by [workbox](https://developers.google.com/web/tools/work
 yarn add next-pwa
 ```
 
-> `terser-webpack-plugin` should be included in the latest `next.js` dependency chain. But if you encounter error of not finding this dependency during build, simply add it:
+> `terser-webpack-plugin` should be included in the latest `next.js` dependency chain. But if you encounter error of not finding this dependency during build, consider [using `webpack5` in `next.js`](https://nextjs.org/docs/messages/webpack5) **or** simply add it:
 
 ``` bash
 yarn add terser-webpack-plugin
@@ -209,7 +209,9 @@ To get started simply add a `/_offline` page such as `pages/_offline.js` or `pag
 
 **[Use this example to see it in action](https://github.com/shadowwalker/next-pwa/tree/master/examples/offline-fallback-v2)**
 
- `next-pwa` helps you precache those resources on the first load, then inject a fallback handler to `handlerDidError` plugin to all `runtimeCaching` configs, so that precached resources are served when fetch failed.
+`next-pwa` helps you precache those resources on the first load, then inject a fallback handler to `handlerDidError` plugin to all `runtimeCaching` configs, so that precached resources are served when fetch failed.
+
+You can also setup `precacheFallback.fallbackURL` in your [runtimeCaching config entry](https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-build#.RuntimeCachingEntry) to implement similar functionality. The difference is that above method is based on the resource type, this method is based matched url pattern. If this config is set in the runtimeCaching config entry, resource type based fallback will be disabled automatically for this particular url pattern to avoid conflict.
 
 ## Configuration
 

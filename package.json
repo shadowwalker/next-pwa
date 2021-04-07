@@ -22,10 +22,9 @@
     "workbox-window": "^6.1.2"
   },
   "devDependencies": {
-    "webpack": "^4.46.0"
+    "webpack": "^5.31.0"
   },
   "peerDependencies": {
-    "next": ">=7.0.0",
-    "webpack": ">=4.0.0"
+    "next": ">=7.0.0"
   }
 }

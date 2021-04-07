@@ -266,6 +266,7 @@ module.exports = (nextConfig = {}) => ({
 
         if (_fallbacks) {
           runtimeCaching.forEach(c => {
+            if (c.options.precacheFallback) return
             if (Array.isArray(c.options.plugins) && c.options.plugins.find(p => 'handlerDidError' in p)) return
             if (!c.options.plugins) c.options.plugins = []
             c.options.plugins.push({
