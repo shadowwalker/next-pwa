@@ -12,7 +12,7 @@ It uses `fastify` as a custom server in order to serve `sw.js` and `precache` sc
 
 ## Usage
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/shadowwalker/next-pwa/)
+[![Open in Gitpod](https://img.shields.io/badge/Open%20In-Gitpod.io-%231966D2?style=for-the-badge&logo=gitpod)](https://gitpod.io/#https://github.com/shadowwalker/next-pwa/)
 
 ``` bash
 cd examples/minimal

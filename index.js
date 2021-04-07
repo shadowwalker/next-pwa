@@ -40,6 +40,7 @@ module.exports = (nextConfig = {}) => ({
       buildExcludes = [],
       manifestTransforms = [],
       modifyURLPrefix = {},
+      fallbacks = {},
       cacheOnFrontEndNav = false,
       subdomainPrefix,  // deprecated, use basePath in next.config.js instead
       ...workbox
@@ -63,7 +64,7 @@ module.exports = (nextConfig = {}) => ({
     let basePath = options.config.basePath
     if (!basePath) basePath = '/'
     
-    let { runtimeCaching = defaultCache, scope = basePath, fallbacks = {} } = pwa
+    let { runtimeCaching = defaultCache, scope = basePath } = pwa
     scope = path.posix.join(scope, '/')
 
     // inject register script to main.js
@@ -155,8 +156,9 @@ module.exports = (nextConfig = {}) => ({
         })
       }
 
-      if (fallbacks) {
-        fallbacks = buildFallbackWorker({
+      let _fallbacks = fallbacks
+      if (_fallbacks) {
+        _fallbacks = buildFallbackWorker({
           id: buildId,
           fallbacks,
           basedir: options.dir,
@@ -262,7 +264,7 @@ module.exports = (nextConfig = {}) => ({
           })
         }
 
-        if (fallbacks) {
+        if (_fallbacks) {
           runtimeCaching.forEach(c => {
             if (Array.isArray(c.options.plugins) && c.options.plugins.find(p => 'handlerDidError' in p)) return
             if (!c.options.plugins) c.options.plugins = []
