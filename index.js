@@ -40,7 +40,7 @@ module.exports = (nextConfig = {}) => ({
       buildExcludes = [],
       manifestTransforms = [],
       modifyURLPrefix = {},
-      fallbacks = {},
+      cacheOnFrontEndNav = false,
       subdomainPrefix,  // deprecated, use basePath in next.config.js instead
       ...workbox
     } = pwa
@@ -63,7 +63,7 @@ module.exports = (nextConfig = {}) => ({
     let basePath = options.config.basePath
     if (!basePath) basePath = '/'
     
-    let { runtimeCaching = defaultCache, scope = basePath } = pwa
+    let { runtimeCaching = defaultCache, scope = basePath, fallbacks = {} } = pwa
     scope = path.posix.join(scope, '/')
 
     // inject register script to main.js
@@ -73,7 +73,8 @@ module.exports = (nextConfig = {}) => ({
         __PWA_SW__: `'${_sw}'`,
         __PWA_SCOPE__: `'${scope}'`,
         __PWA_ENABLE_REGISTER__: `${Boolean(register)}`,
-        __PWA_START_URL__: dynamicStartUrl ? `'${basePath}'` : undefined
+        __PWA_START_URL__: dynamicStartUrl ? `'${basePath}'` : undefined,
+        __PWA_CACHE_ON_FRONT_END_NAV__: `${Boolean(cacheOnFrontEndNav)}`
       })
     )
 
@@ -155,7 +156,7 @@ module.exports = (nextConfig = {}) => ({
       }
 
       if (fallbacks) {
-        buildFallbackWorker({
+        fallbacks = buildFallbackWorker({
           id: buildId,
           fallbacks,
           basedir: options.dir,
@@ -250,11 +251,6 @@ module.exports = (nextConfig = {}) => ({
             handler: 'NetworkFirst',
             options: {
               cacheName: 'start-url',
-              expiration: {
-                maxEntries: 1,
-                maxAgeSeconds: 24 * 60 * 60 // 24 hours
-              },
-              networkTimeoutSeconds: 10,
               plugins: [{
                 // mitigate Chrome 89 auto offline check issue
                 // blog: https://developer.chrome.com/blog/improved-pwa-offline-detection/ 

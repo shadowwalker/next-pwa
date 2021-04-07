@@ -257,7 +257,7 @@ module.exports = withPWA({
   - example: `[/chunks\/images\/.*$/]` - Don't precache files under `.next/static/chunks/images` (Highly recommend this to work with  `next-optimized-images` plugin)
   - doc: Array of (string, RegExp, or function()). One or more specifiers used to exclude assets from the precache manifest. This is interpreted following the same rules as Webpack's standard exclude option.
 - dynamicStartUrl - if your start url returns different HTML document under different state (such as logged in vs. not logged in), this should be set to true.
-  - default: true
+  - default: `true`
   - recommend: set to **false** if your start url always returns same HTML document, then start url will be precached, this will help to speed up first load.
 - fallbacks - config precached routes to fallback when both cache and network not available to serve resources.
   - **if you just need a offline fallback page, simply create a `/_offline` page such as `pages/_offline.js` and you are all set, no configuration necessary**
@@ -267,6 +267,9 @@ module.exports = withPWA({
     - `fallbacks.audio` - fallback route for audio, default to none
     - `fallbacks.video` - fallback route for video, default to none
     - `fallbacks.font` - fallback route for font, default to none
+- cacheOnFrontEndNav - enable additional route cache when navigate between pages with `next/link` on front end. Checkout this [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/cache-on-front-end-nav) for some context about why this is implemented.
+  - default: `false`
+  - note: this improve user experience on special use cases but it also adds some overhead because additional network call, I suggest you consider this as a trade off.
 - ~~subdomainPrefix: string - url prefix to allow hosting static files on a subdomain~~
   - ~~default: `""` - i.e. default with no prefix~~
   - ~~example: `/subdomain` if the app is hosted on `example.com/subdomain`~~

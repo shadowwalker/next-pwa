@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 5.2.1
+
+### Major
+
+1. Implement cache on front end navigation feature
+
 ## 5.2.0
 
 ### Major

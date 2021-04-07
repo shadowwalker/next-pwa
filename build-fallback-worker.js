@@ -40,7 +40,7 @@ const getFallbackEnvs = ({fallbacks, basedir}) => {
 
 const buildFallbackWorker = ({ id, fallbacks, basedir, destdir, success, minify }) => {
   const envs = getFallbackEnvs({fallbacks, basedir})
-  if (!envs) return
+  if (!envs) return false
 
   const name = `fallback-${id}.js`
   const fallbackJs = path.join(__dirname, `fallback.js`)
@@ -103,6 +103,8 @@ const buildFallbackWorker = ({ id, fallbacks, basedir, destdir, success, minify 
       success({name, precaches: Object.values(envs).filter(v => !!v)})
     }
   })
+
+  return fallbacks
 }
 
 module.exports = buildFallbackWorker
