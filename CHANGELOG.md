@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 5.2.4
+
+### Major
+
+1. Fix start url redirect use case
+
 ## 5.2.1
 
 ### Major

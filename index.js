@@ -30,6 +30,7 @@ module.exports = (nextConfig = {}) => ({
       dest = distDir,
       sw = 'sw.js',
       dynamicStartUrl = true,
+      dynamicStartUrlRedirect,
       skipWaiting = true,
       clientsClaim = true,
       cleanupOutdatedCaches = true,
@@ -154,6 +155,11 @@ module.exports = (nextConfig = {}) => ({
           url: basePath,
           revision: buildId
         })
+      } else if (typeof dynamicStartUrlRedirect === 'string' && dynamicStartUrlRedirect.length > 0) {
+        manifestEntries.push({
+          url: dynamicStartUrlRedirect,
+          revision: buildId
+        })
       }
 
       let _fallbacks = fallbacks
@@ -254,11 +260,12 @@ module.exports = (nextConfig = {}) => ({
             options: {
               cacheName: 'start-url',
               plugins: [{
-                // mitigate Chrome 89 auto offline check issue
-                // blog: https://developer.chrome.com/blog/improved-pwa-offline-detection/ 
-                // issue: https://github.com/GoogleChrome/workbox/issues/2749
-                // I know this seems dummy, but it does the trick by gain some time for the cache to be ready :)
-                requestWillFetch: async ({request}) => (Request(), console.log(process.env.NODE_ENV), request)
+                cacheWillUpdate: async ({request, response, event, state}) => {
+                  if (response?.type === 'opaqueredirect') {
+                    return new Response(response.body, {status: 200, statusText: 'OK', headers: response.headers});
+                  }
+                  return response;
+                }
               }]
             }
           })

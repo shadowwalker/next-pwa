@@ -261,6 +261,8 @@ module.exports = withPWA({
 - dynamicStartUrl - if your start url returns different HTML document under different state (such as logged in vs. not logged in), this should be set to true.
   - default: `true`
   - recommend: set to **false** if your start url always returns same HTML document, then start url will be precached, this will help to speed up first load.
+- dynamicStartUrlRedirect - if your start url redirect to another route such as `/login`, it's recommended to setup this redirected url for the best user experience.
+  - default: `undefined`
 - fallbacks - config precached routes to fallback when both cache and network not available to serve resources.
   - **if you just need a offline fallback page, simply create a `/_offline` page such as `pages/_offline.js` and you are all set, no configuration necessary**
   - default: `object`
