@@ -161,7 +161,7 @@ Add the following into `_document.jsx` or `_document.tsx`, in `<Head>`:
 <link rel='icon' type='image/png' sizes='16x16' href='/static/icons/favicon-16x16.png' />
 <link rel='manifest' href='/static/manifest.json' />
 <link rel='mask-icon' href='/static/icons/safari-pinned-tab.svg' color='#5bbad5' />
-<link rel='shortcut icon' href='/static/icons/favicon.ico' />
+<link rel='shortcut icon' href='/favicon.ico' />
 <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:300,400,500' />
      
 <meta name='twitter:card' content='summary' />
@@ -222,10 +222,11 @@ const withPWA = require('next-pwa')
 
 module.exports = withPWA({
   pwa: {
-    disable: process.env.NODE_ENV === 'development',
-    register: true,
-    scope: '/app',
-    sw: 'service-worker.js',
+    dest: 'public',
+    // disable: process.env.NODE_ENV === 'development',
+    // register: true,
+    // scope: '/app',
+    // sw: 'service-worker.js',
     //...
   }
 })
@@ -234,7 +235,7 @@ module.exports = withPWA({
 ### Available Options
 
 - disable: boolean - whether to disable pwa feature as a whole
-  - default to `false`
+  - default: `false`
   - set `disable: false`, so that it will generate service worker in both `dev` and `prod`
   - set `disable: true` to completely disable PWA
   - if you don't need to debug service worker in `dev`, you can set `disable: process.env.NODE_ENV === 'development'`
@@ -242,10 +243,10 @@ module.exports = withPWA({
   - default to `true`
   - set to `false` when you want to handle register service worker yourself, this could be done in `componentDidMount` of your root app. you can consider the [register.js](https://github.com/shadowwalker/next-pwa/blob/master/register.js) as an example.
 - scope: string - url scope for pwa
-  - default to `/`
+  - default: [`basePath`](https://nextjs.org/docs/api-reference/next.config.js/basepath) in `next.config.js` or `/`
   - set to `/app` so that path under `/app` will be PWA while others are not
 - sw: string - service worker script file name
-  - default to `/sw.js`
+  - default: `/sw.js`
   - set to another file name if you want to customize the output file name
 - runtimeCaching - caching strategies (array or callback function)
   - default: see the **Runtime Caching** section for the default configuration

@@ -22,6 +22,9 @@ module.exports = (nextConfig = {}) => ({
       config: { distDir = '.next', pwa = {}, experimental = {}}
     } = options
 
+    let basePath = options.config.basePath
+    if (!basePath) basePath = '/'
+
     // For workbox configurations:
     // https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-webpack-plugin.GenerateSW
     const {
@@ -43,6 +46,7 @@ module.exports = (nextConfig = {}) => ({
       modifyURLPrefix = {},
       fallbacks = {},
       cacheOnFrontEndNav = false,
+      scope = basePath,
       subdomainPrefix,  // deprecated, use basePath in next.config.js instead
       ...workbox
     } = pwa
@@ -61,19 +65,16 @@ module.exports = (nextConfig = {}) => ({
     }
 
     console.log(`> [PWA] Compile ${options.isServer ? 'server' : 'client (static)'}`)
-
-    let basePath = options.config.basePath
-    if (!basePath) basePath = '/'
     
-    let { runtimeCaching = defaultCache, scope = basePath } = pwa
-    scope = path.posix.join(scope, '/')
+    let { runtimeCaching = defaultCache } = pwa
+    const _scope = path.posix.join(scope, '/')
 
     // inject register script to main.js
     const _sw = path.posix.join(basePath, sw.startsWith('/') ? sw : `/${sw}`)
     config.plugins.push(
       new webpack.DefinePlugin({
         __PWA_SW__: `'${_sw}'`,
-        __PWA_SCOPE__: `'${scope}'`,
+        __PWA_SCOPE__: `'${_scope}'`,
         __PWA_ENABLE_REGISTER__: `${Boolean(register)}`,
         __PWA_START_URL__: dynamicStartUrl ? `'${basePath}'` : undefined,
         __PWA_CACHE_ON_FRONT_END_NAV__: `${Boolean(cacheOnFrontEndNav)}`
@@ -110,7 +111,7 @@ module.exports = (nextConfig = {}) => ({
 
       console.log(`> [PWA] Service worker: ${path.join(_dest, sw)}`)
       console.log(`> [PWA]   url: ${_sw}`)
-      console.log(`> [PWA]   scope: ${scope}`)
+      console.log(`> [PWA]   scope: ${_scope}`)
 
       config.plugins.push(
         new CleanWebpackPlugin({
