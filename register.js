@@ -43,7 +43,7 @@ if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
       } else if (__PWA_START_URL__ && url === __PWA_START_URL__) {
         return fetch(__PWA_START_URL__).then(function(response) {
           if (!response.redirected) {
-            return caches.open('start-url').then(cache => cache.put(__PWA_START_URL__, _response))
+            return caches.open('start-url').then(cache => cache.put(__PWA_START_URL__, response))
           }
           return Promise.resolve()
         })
