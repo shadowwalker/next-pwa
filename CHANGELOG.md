@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 5.2.5
+
+### Major
+
+1. Add dependency `terser-webpack-plugin`
+
 ## 5.2.4
 
 ### Major
