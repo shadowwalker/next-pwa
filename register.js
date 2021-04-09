@@ -1,11 +1,13 @@
 import { Workbox } from 'workbox-window'
 
 if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
-  caches.has('start-url').then(function(has) {
-    if (!has) {
-      caches.open('start-url').then(c => c.put(__PWA_START_URL__, new Response('', {status: 200})))
-    }
-  })
+  if (__PWA_START_URL__) {
+    caches.has('start-url').then(function(has) {
+      if (!has) {
+        caches.open('start-url').then(c => c.put(__PWA_START_URL__, new Response('', {status: 200})))
+      }
+    })
+  }
 
   window.workbox = new Workbox(__PWA_SW__, { scope: __PWA_SCOPE__ })
 
@@ -28,15 +30,24 @@ if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
     window.workbox.register()
   }
 
-  if(__PWA_CACHE_ON_FRONT_END_NAV__) {
+  if(__PWA_CACHE_ON_FRONT_END_NAV__ || __PWA_START_URL__) {
     const cacheOnFrontEndNav = function(url) {
       if (!window.navigator.onLine) return
-      if (__PWA_START_URL__ && url === __PWA_START_URL__) return
-      caches.open('others').then(cache =>
-        cache.match(url, {ignoreSearch: true}).then(res => {
-          if (!res) return cache.add(url)
+      if (__PWA_CACHE_ON_FRONT_END_NAV__ && url !== __PWA_START_URL__) {
+        return caches.open('others').then(cache =>
+          cache.match(url, {ignoreSearch: true}).then(res => {
+            if (!res) return cache.add(url)
+            return Promise.resolve()
+          })
+        )
+      } else if (__PWA_START_URL__ && url === __PWA_START_URL__) {
+        return fetch(__PWA_START_URL__).then(function(response) {
+          if (!response.redirected) {
+            return caches.open('start-url').then(cache => cache.put(__PWA_START_URL__, _response))
+          }
+          return Promise.resolve()
         })
-      )
+      }
     }
 
     const pushState = history.pushState

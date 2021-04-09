@@ -41,7 +41,7 @@ module.exports = [
     options: {
       cacheName: 'static-media-assets',
       expiration: {
-        maxEntries: 64,
+        maxEntries: 32,
         maxAgeSeconds: 24 * 60 * 60 // 24 hours
       }
     }
