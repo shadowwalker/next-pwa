@@ -2,7 +2,6 @@ import { Workbox } from 'workbox-window'
 
 if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
   caches.has('start-url').then(function(has) {
-    console.log('Created cache start-url: ', has)
     if (!has) {
       caches.open('start-url').then(c => c.put(__PWA_START_URL__, new Response('', {status: 200})))
     }

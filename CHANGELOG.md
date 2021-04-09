@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 5.2.6
+
+### Fix
+
+1. Fix minor issues
+
 ## 5.2.5
 
 ### Major
