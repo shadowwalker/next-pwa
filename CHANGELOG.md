@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 5.2.10
+
+### Fix
+
+1. [OAuth workflow in Safari, work out of box with next-auth](https://github.com/shadowwalker/next-pwa/issues/131#issuecomment-821894809)
+
 ## 5.2.6
 
 ### Fix

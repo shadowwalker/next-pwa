@@ -80,7 +80,10 @@ module.exports = [
     }
   },
   {
-    urlPattern: /\/api\/.*$/i,
+    // Exclude /api/auth/callback/* to fix OAuth workflow in Safari without impact other environment
+    // Above route is default for next-auth, you may need to change it if your OAuth workflow has a different callback route
+    // Issue: https://github.com/shadowwalker/next-pwa/issues/131#issuecomment-821894809
+    urlPattern: /^\/api\/(?!auth\/callback\/).*$/i,
     handler: 'NetworkFirst',
     method: 'GET',
     options: {
@@ -93,7 +96,7 @@ module.exports = [
     }
   },
   {
-    urlPattern: /.*/i,
+    urlPattern: /^\/(?!api\/).*$/i,
     handler: 'NetworkFirst',
     options: {
       cacheName: 'others',
