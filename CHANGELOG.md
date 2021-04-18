@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 5.2.12
+
+### Major
+
+1. Add `next-image` runtime cache rules by default
+
 ## 5.2.10
 
 ### Fix

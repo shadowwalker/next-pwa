@@ -23,7 +23,9 @@ This plugin is powered by [workbox](https://developers.google.com/web/tools/work
 - 🚀 Spin up a [GitPod](https://gitpod.io/#https://github.com/shadowwalker/next-pwa/) and try out examples in rocket speed
 - 🔩 (Experimental) precaching `.module.js` when `next.config.js` has `experimental.modern` set to `true`
 
-> **NOTE** - `next-pwa` version 2.0.0+ should only work with `next.js` 9.1+, and static files should only be served through `public` directory. This will make things simpler.
+> **NOTE 1** - `next-pwa` version 2.0.0+ should only work with `next.js` 9.1+, and static files should only be served through `public` directory. This will make things simpler.
+>
+> **NOTE 2** - If you encounter error `TypeError: Cannot read property **'javascript' of undefined**` during build, [please consider upgrade to webpack5 in `next.config.js`](https://github.com/shadowwalker/next-pwa/issues/198#issuecomment-817205700).
 
 ----
 
@@ -35,12 +37,6 @@ This plugin is powered by [workbox](https://developers.google.com/web/tools/work
 
 ``` bash
 yarn add next-pwa
-```
-
-> `terser-webpack-plugin` should be included in the latest `next.js` dependency chain. But if you encounter error of not finding this dependency during build, consider [using `webpack5` in `next.js`](https://nextjs.org/docs/messages/webpack5) **or** simply add it:
-
-``` bash
-yarn add terser-webpack-plugin
 ```
 
 ## Basic Usage
@@ -143,7 +139,7 @@ Create a `manifest.json` file in your `static` folder:
 
 Add the following into `_document.jsx` or `_document.tsx`, in `<Head>`:
 
-``` typescript
+``` html
 <meta name='application-name' content='PWA App' />
 <meta name='apple-mobile-web-app-capable' content='yes' />
 <meta name='apple-mobile-web-app-status-bar-style' content='default' />
@@ -155,8 +151,12 @@ Add the following into `_document.jsx` or `_document.tsx`, in `<Head>`:
 <meta name='msapplication-TileColor' content='#2B5797' />
 <meta name='msapplication-tap-highlight' content='no' />
 <meta name='theme-color' content='#000000' />
-          
-<link rel='apple-touch-icon' sizes='180x180' href='/static/icons/apple-touch-icon.png' />
+
+<link rel='apple-touch-icon' href='/static/icons/touch-icon-iphone.png'>
+<link rel='apple-touch-icon' sizes='152x152' href='/static/icons/touch-icon-ipad.png'>
+<link rel='apple-touch-icon' sizes='180x180' href='/static/icons/touch-icon-iphone-retina.png'>
+<link rel='apple-touch-icon' sizes='167x167' href='/static/icons/touch-icon-ipad-retina.png'>
+
 <link rel='icon' type='image/png' sizes='32x32' href='/static/icons/favicon-32x32.png' />
 <link rel='icon' type='image/png' sizes='16x16' href='/static/icons/favicon-16x16.png' />
 <link rel='manifest' href='/static/manifest.json' />
@@ -176,6 +176,17 @@ Add the following into `_document.jsx` or `_document.tsx`, in `<Head>`:
 <meta property='og:site_name' content='PWA App' />
 <meta property='og:url' content='https://yourdomain.com' />
 <meta property='og:image' content='https://yourdomain.com/static/icons/apple-touch-icon.png' />
+
+<!-- apple splash screen images -->
+<!--
+<link rel='apple-touch-startup-image' href='/static/images/apple_splash_2048.png' sizes='2048x2732' />
+<link rel='apple-touch-startup-image' href='/static/images/apple_splash_1668.png' sizes='1668x2224' />
+<link rel='apple-touch-startup-image' href='/static/images/apple_splash_1536.png' sizes='1536x2048' />
+<link rel='apple-touch-startup-image' href='/static/images/apple_splash_1125.png' sizes='1125x2436' />
+<link rel='apple-touch-startup-image' href='/static/images/apple_splash_1242.png' sizes='1242x2208' />
+<link rel='apple-touch-startup-image' href='/static/images/apple_splash_750.png' sizes='750x1334' />
+<link rel='apple-touch-startup-image' href='/static/images/apple_splash_640.png' sizes='640x1136' />
+-->
 ```
 
 > Tip:  Put the `viewport` head meta tag into `_app.js` rather than in `_document.js` if you need it.
@@ -253,7 +264,7 @@ module.exports = withPWA({
   - accepts an array of cache entry objects, [please follow the structure here](https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-build#.RuntimeCachingEntry)
   - Note: the order of the array matters. The first rule that matches is effective. Therefore, please **ALWAYS** put rules with larger scope behind the rules with a smaller and specific scope.
 - publicExcludes - an array of glob pattern strings to exclude files in the `public` folder from being precached.
-  - default: `[]` - this means that the default behavior will precache all the files inside your `public` folder
+  - default: `['!noprecache/**/*']` - this means that the default behavior will precache all the files inside your `public` folder but files inside `/public/noprecache` folder. You can simply put files inside that folder to not precache them without config this.
   - example: `['!img/super-large-image.jpg', '!fonts/not-used-fonts.otf']`
 - buildExcludes - an array of extra pattern or function to exclude files from being precached in `.next/static` (or your custom build) folder
   - default: `[]`
@@ -303,6 +314,7 @@ Here is the [document on how to write runtime caching configurations](https://de
    1. Reduce logging noise due to production build doesn't include logging.
    2. Improve performance a bit due to production build is optimized and minified.
 7. If you just want to disable worker box logging while keeping development build during development, [simply put `self.__WB_DISABLE_DEV_LOGS = true` in your `worker/index.js` (create one if you don't have one)](https://github.com/shadowwalker/next-pwa/blob/c48ef110360d0138ad2dacd82ab96964e3da2daf/examples/custom-worker/worker/index.js#L6).
+8. It is common developers have to use `userAgent` string to determine if users are using Safari/iOS/MacOS or some other platform, [ua-parser-js](https://www.npmjs.com/package/ua-parser-js) library is a good friend for that purpose.
 
 ## Reference
 
@@ -311,6 +323,12 @@ Here is the [document on how to write runtime caching configurations](https://de
 3. [The Service Worker Lifecycle](https://developers.google.com/web/fundamentals/primers/service-workers/lifecycle)
 4. [6 Tips to make your iOS PWA feel like a native app](https://www.netguru.com/codestories/pwa-ios)
 5. [Make Your PWA Available on Google Play Store](https://www.netguru.com/codestories/make-your-pwa-available-on-google-play-store)
+
+## Fun PWA Projects
+
+1. [Experience SAMSUNG on an iPhone - must open on an iPhone to start](https://itest.nz/)
+2. [App Scope - like an app store for PWA](https://appsco.pe/)
+3. [PWA Directory](https://pwa-directory.appspot.com/)
 
 ## License
 

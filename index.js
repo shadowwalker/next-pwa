@@ -40,7 +40,7 @@ module.exports = (nextConfig = {}) => ({
       additionalManifestEntries,
       ignoreURLParametersMatching = [],
       importScripts = [],
-      publicExcludes = [],
+      publicExcludes = ['!noprecache/**/*'],
       buildExcludes = [],
       manifestTransforms = [],
       modifyURLPrefix = {},

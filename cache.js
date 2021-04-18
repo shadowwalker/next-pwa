@@ -36,6 +36,17 @@ module.exports = [
     }
   },
   {
+    urlPattern: /^\/_next\/image\?url=.+$/i,
+    handler: "StaleWhileRevalidate",
+    options: {
+      cacheName: "next-image",
+      expiration: {
+        maxEntries: 64,
+        maxAgeSeconds: 24 * 60 * 60, // 24 hours
+      },
+    },
+  },
+  {
     urlPattern: /\.(?:mp3|mp4)$/i,
     handler: 'StaleWhileRevalidate',
     options: {
