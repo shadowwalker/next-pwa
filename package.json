@@ -1,6 +1,6 @@
 {
   "name": "next-pwa",
-  "version": "5.2.12",
+  "version": "5.2.13",
   "description": "Next.js with PWA, powered by workbox.",
   "main": "index.js",
   "repository": "https://github.com/shadowwalker/next-pwa",
