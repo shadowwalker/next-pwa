@@ -4,12 +4,16 @@ about: Report a bug
 title: ''
 labels: bug
 assignees: ''
-
 ---
 
 # Summary
 
 What can I help with? Please keep this clear and concise.
+
+# Versions
+
+- `next-pwa`: 
+- `next`:
 
 # How To Reproduce
 
@@ -23,6 +27,7 @@ Steps to reproduce the behavior:
 Link to minimal reproduce setup repository if any.
 
 # Expected Behaviors
+
 A clear and concise description of what you expected to happen.
 
 # Screenshots
