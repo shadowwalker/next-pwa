@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 5.2.14
+
+### Fix
+
+1. Fix custom worker and offline page not detected in `src` folders issue
+
 ## 5.2.12
 
 ### Major

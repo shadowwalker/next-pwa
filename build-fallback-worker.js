@@ -10,8 +10,18 @@ const getFallbackEnvs = ({fallbacks, basedir}) => {
   let { document } = fallbacks
 
   if (!document) {
+    let pagesDir = undefined
+
+    if (fs.existsSync(path.join(basedir, 'pages'))) {
+      pagesDir = path.join(basedir, 'pages')
+    } else if (fs.existsSync(path.join(basedir, 'src', 'pages'))) {
+      pagesDir = path.join(basedir, 'src', 'pages')
+    }
+
+    if (!pagesDir) return
+
     const offlines = ['tsx', 'ts', 'jsx', 'js']
-      .map(ext => path.join(basedir, 'pages', `_offline.${ext}`))
+      .map(ext => path.join(pagesDir, `_offline.${ext}`))
       .filter(entry => fs.existsSync(entry))
     if (offlines.length === 1) {
       document = '/_offline'
