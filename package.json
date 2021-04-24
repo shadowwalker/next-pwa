@@ -19,11 +19,11 @@
     "clean-webpack-plugin": "^3.0.0",
     "globby": "^11.0.3",
     "terser-webpack-plugin": "^5.1.1",
-    "workbox-webpack-plugin": "^6.1.2",
-    "workbox-window": "^6.1.2"
+    "workbox-webpack-plugin": "^6.1.5",
+    "workbox-window": "^6.1.5"
   },
   "devDependencies": {
-    "webpack": "^5.31.0"
+    "webpack": "^5.35.1"
   },
   "peerDependencies": {
     "next": ">=7.0.0"

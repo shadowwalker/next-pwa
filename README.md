@@ -4,6 +4,8 @@ This plugin is powered by [workbox](https://developers.google.com/web/tools/work
 
 ![size](https://img.shields.io/bundlephobia/minzip/next-pwa.svg) ![dependencies](https://img.shields.io/librariesio/release/npm/next-pwa) ![downloads](https://img.shields.io/npm/dw/next-pwa.svg) ![license](https://img.shields.io/npm/l/next-pwa.svg)
 
+👋 Share your awesome PWA project 👉 [here](https://github.com/shadowwalker/next-pwa/discussions/206)
+
 **Features**
 
 - 0️⃣ Zero config for registering and generating service worker
