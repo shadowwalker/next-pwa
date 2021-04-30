@@ -80,7 +80,7 @@ module.exports = [
     }
   },
   {
-    urlPattern: /\/_next\/data\/\w+\/.+\.json$/i,
+    urlPattern: /\/_next\/data\/.+\/.+\.json$/i,
     handler: "StaleWhileRevalidate",
     options: {
       cacheName: "next-data",
@@ -88,24 +88,6 @@ module.exports = [
         maxEntries: 32,
         maxAgeSeconds: 24 * 60 * 60, // 24 hours
       }
-      // plugins: [{
-      //   // This is for @next/mdx users to present a offline post page, feel free to customize
-      //   // But you shouldn't worry about it if you are not using @next/mdx
-      //   handlerDidError: async ({request, event, error, state}) => new Response(JSON.stringify({
-      //     pageProps: {
-      //       mdxSource: {
-      //         compiledSource: "function MDXContent(){}",
-      //         renderedOutput: "<p>Oops! Looks like there is no internet connection.</p>"
-      //       },
-      //       frontMatter: {
-      //         slug: 'no-internet-connection',
-      //         title: "Oops! No Internet Connection",
-      //         published: true,
-      //         publishedAt: new Date().toISOString().substring(0, 10),
-      //       }
-      //     }
-      //   }), { status: 200 })
-      // }]
     },
   },
   {

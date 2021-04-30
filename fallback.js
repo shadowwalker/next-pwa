@@ -1,7 +1,6 @@
 'use strict'
 
 self.fallback = async (request) => {
-    console.log(request)
     // https://developer.mozilla.org/en-US/docs/Web/API/RequestDestination
     switch (request.destination) {
       case 'document':
@@ -15,7 +14,7 @@ self.fallback = async (request) => {
       case 'font':
         if (process.env.__PWA_FALLBACK_FONT__) return caches.match(process.env.__PWA_FALLBACK_FONT__, {ignoreSearch: true})
       case '':
-        if (process.env.__PWA_FALLBACK_DATA__ && request.url.match(/\/_next\/data\/\w+\/.+\.json$/i)) return caches.match(process.env.__PWA_FALLBACK_DATA__, {ignoreSearch: true})
+        if (process.env.__PWA_FALLBACK_DATA__ && request.url.match(/\/_next\/data\/.+\/.+\.json$/i)) return caches.match(process.env.__PWA_FALLBACK_DATA__, {ignoreSearch: true})
       default:
         return Response.error()
     };
