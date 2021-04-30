@@ -66,4 +66,8 @@ if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
       cacheOnFrontEndNav(window.location.pathname)
     })
   }
+
+  window.addEventListener('online', () => {
+    location.reload()
+  })
 }

@@ -36,7 +36,7 @@ module.exports = [
     }
   },
   {
-    urlPattern: /^\/_next\/image\?url=.+$/i,
+    urlPattern: /\/_next\/image\?url=.+$/i,
     handler: "StaleWhileRevalidate",
     options: {
       cacheName: "next-image",
@@ -80,6 +80,35 @@ module.exports = [
     }
   },
   {
+    urlPattern: /\/_next\/data\/.+\/.+\.json$/i,
+    handler: "StaleWhileRevalidate",
+    options: {
+      cacheName: "next-data",
+      expiration: {
+        maxEntries: 32,
+        maxAgeSeconds: 24 * 60 * 60, // 24 hours
+      },
+      plugins: [{
+        // This is for @next/mdx users to present a offline post page, feel free to customize
+        // But you shouldn't worry about it if you are not using @next/mdx
+        handlerDidError: async ({request, event, error, state}) => new Response(JSON.stringify({
+          pageProps: {
+            mdxSource: {
+              compiledSource: "function MDXContent(){}",
+              renderedOutput: "<p>Oops! Looks like there is no internet connection.</p>"
+            },
+            frontMatter: {
+              slug: 'no-internet-connection',
+              title: "Oops! No Internet Connection",
+              published: true,
+              publishedAt: new Date().toISOString().substring(0, 10),
+            }
+          }
+        }), { status: 200 })
+      }]
+    },
+  },
+  {
     urlPattern: /\.(?:json|xml|csv)$/i,
     handler: 'NetworkFirst',
     options: {
@@ -91,10 +120,17 @@ module.exports = [
     }
   },
   {
-    // Exclude /api/auth/callback/* to fix OAuth workflow in Safari without impact other environment
-    // Above route is default for next-auth, you may need to change it if your OAuth workflow has a different callback route
-    // Issue: https://github.com/shadowwalker/next-pwa/issues/131#issuecomment-821894809
-    urlPattern: /^\/api\/(?!auth\/callback\/).*$/i,
+    urlPattern: ({url}) => {
+      const isSameOrigin = self.origin === url.origin
+      if (!isSameOrigin) return false
+      const pathname = url.pathname
+      // Exclude /api/auth/callback/* to fix OAuth workflow in Safari without impact other environment
+      // Above route is default for next-auth, you may need to change it if your OAuth workflow has a different callback route
+      // Issue: https://github.com/shadowwalker/next-pwa/issues/131#issuecomment-821894809
+      if (pathname.startsWith('/api/auth/')) return false
+      if (pathname.startsWith('/api/')) return true
+      return false
+    },
     handler: 'NetworkFirst',
     method: 'GET',
     options: {
@@ -107,7 +143,13 @@ module.exports = [
     }
   },
   {
-    urlPattern: /^\/(?!api\/).*$/i,
+    urlPattern: ({url}) => {
+      const isSameOrigin = self.origin === url.origin
+      if (!isSameOrigin) return false
+      const pathname = url.pathname
+      if (pathname.startsWith('/api/')) return false
+      return true
+    },
     handler: 'NetworkFirst',
     options: {
       cacheName: 'others',

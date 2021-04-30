@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 5.2.16
+
+### Fix
+
+1. Fix offline page fallback scenario
+2. Present offline post page for @next/mdx users
+3. Auto reload when app becomes online again
+
 ## 5.2.14
 
 ### Fix
