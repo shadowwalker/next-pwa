@@ -26,6 +26,13 @@ if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
     })
   }
 
+  window.workbox.addEventListener('installed', async () => {
+      const data = window.performance.getEntriesByType('resource').map(e => e.name).filter(n => n.startsWith(`${window.location.origin}/_next/data/`) && n.endsWith('.json'))
+      const cache = await caches.open('next-data')
+      data.forEach(d => cache.add(d))
+    }
+  )
+
   if(__PWA_ENABLE_REGISTER__) {
     window.workbox.register()
   }

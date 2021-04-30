@@ -6,8 +6,8 @@ const webpack = require('webpack')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 
-const getFallbackEnvs = ({fallbacks, basedir}) => {
-  let { document } = fallbacks
+const getFallbackEnvs = ({fallbacks, basedir, id}) => {
+  let { document, data } = fallbacks
 
   if (!document) {
     let pagesDir = undefined
@@ -20,20 +20,25 @@ const getFallbackEnvs = ({fallbacks, basedir}) => {
 
     if (!pagesDir) return
 
-    const offlines = ['tsx', 'ts', 'jsx', 'js']
+    const offlines = ['tsx', 'ts', 'jsx', 'js', 'mdx']
       .map(ext => path.join(pagesDir, `_offline.${ext}`))
       .filter(entry => fs.existsSync(entry))
     if (offlines.length === 1) {
       document = '/_offline'
     }
   }
+
+  if (data && data.endsWith('.json')) {
+    data = path.posix.join('/_next/data', id, data)
+  } 
   
   const envs = {
     __PWA_FALLBACK_DOCUMENT__: document || false,
     __PWA_FALLBACK_IMAGE__: fallbacks.image || false,
     __PWA_FALLBACK_AUDIO__: fallbacks.audio || false,
     __PWA_FALLBACK_VIDEO__: fallbacks.video || false,
-    __PWA_FALLBACK_FONT__: fallbacks.font || false
+    __PWA_FALLBACK_FONT__: fallbacks.font || false,
+    __PWA_FALLBACK_DATA__: data || false
   }
 
   if (Object.values(envs).filter(v => !!v).length === 0) return
@@ -44,12 +49,13 @@ const getFallbackEnvs = ({fallbacks, basedir}) => {
   if (envs.__PWA_FALLBACK_AUDIO__) console.log(`> [PWA]   audio: ${envs.__PWA_FALLBACK_AUDIO__}`)
   if (envs.__PWA_FALLBACK_VIDEO__) console.log(`> [PWA]   video: ${envs.__PWA_FALLBACK_VIDEO__}`)
   if (envs.__PWA_FALLBACK_FONT__) console.log(`> [PWA]   font: ${envs.__PWA_FALLBACK_FONT__}`)
+  if (envs.__PWA_FALLBACK_DATA__) console.log(`> [PWA]   data (/_next/data/**/*.json): ${envs.__PWA_FALLBACK_DATA__}`)
   
   return envs
 }
 
 const buildFallbackWorker = ({ id, fallbacks, basedir, destdir, success, minify }) => {
-  const envs = getFallbackEnvs({fallbacks, basedir})
+  const envs = getFallbackEnvs({fallbacks, basedir, id})
   if (!envs) return false
 
   const name = `fallback-${id}.js`
