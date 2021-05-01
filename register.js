@@ -60,13 +60,13 @@ if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
     const pushState = history.pushState
     history.pushState = function () {
       pushState.apply(history, arguments)
-      cacheOnFrontEndNav(arguments[0].as || arguments[0].url)
+      cacheOnFrontEndNav(arguments[2])
     }
 
     const replaceState = history.replaceState
     history.replaceState = function () {
       replaceState.apply(history, arguments)
-      cacheOnFrontEndNav(arguments[0].as || arguments[0].url)
+      cacheOnFrontEndNav(arguments[2])
     }
 
     window.addEventListener('online', () => {
