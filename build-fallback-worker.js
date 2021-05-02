@@ -102,7 +102,8 @@ const buildFallbackWorker = ({ id, fallbacks, basedir, destdir, success, minify 
     },
     plugins: [
       new CleanWebpackPlugin({
-        cleanOnceBeforeBuildPatterns: [path.join(destdir, 'fallback-*.js'), path.join(destdir, 'fallback-*.js.map')]
+        cleanOnceBeforeBuildPatterns: [path.join(destdir, 'fallback-*.js'), path.join(destdir, 'fallback-*.js.map')],
+        dangerouslyAllowCleanPatternsOutsideProject: true
       }),
       new webpack.EnvironmentPlugin(envs)
     ],

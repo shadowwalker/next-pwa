@@ -120,7 +120,8 @@ module.exports = (nextConfig = {}) => ({
             path.join(_dest, 'workbox-*.js.map'),
             path.join(_dest, sw),
             path.join(_dest, `${sw}.map`)
-          ]
+          ],
+          dangerouslyAllowCleanPatternsOutsideProject: true
         })
       )
 

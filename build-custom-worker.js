@@ -73,7 +73,8 @@ const buildCustomWorker = ({ id, basedir, destdir, plugins, success, minify }) =
     },
     plugins: [
       new CleanWebpackPlugin({
-        cleanOnceBeforeBuildPatterns: [path.join(destdir, 'worker-*.js'), path.join(destdir, 'worker-*.js.map')]
+        cleanOnceBeforeBuildPatterns: [path.join(destdir, 'worker-*.js'), path.join(destdir, 'worker-*.js.map')],
+        dangerouslyAllowCleanPatternsOutsideProject: true
       })
     ].concat(plugins),
     optimization: minify
