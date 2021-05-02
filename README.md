@@ -23,6 +23,7 @@ This plugin is powered by [workbox](https://developers.google.com/web/tools/work
 - 🌏 Internationalization (a.k.a I18N) with `next-i18next` [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/next-i18next)
 - 🛠 Configurable by the same [workbox configuration options](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin) for [GenerateSW](https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-webpack-plugin.GenerateSW) and [InjectManifest](https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-webpack-plugin.InjectManifest)
 - 🚀 Spin up a [GitPod](https://gitpod.io/#https://github.com/shadowwalker/next-pwa/) and try out examples in rocket speed
+- ⚡ Support [blitz.js](https://blitzjs.com/) (simply add to `blitz.config.js`)
 - 🔩 (Experimental) precaching `.module.js` when `next.config.js` has `experimental.modern` set to `true`
 
 > **NOTE 1** - `next-pwa` version 2.0.0+ should only work with `next.js` 9.1+, and static files should only be served through `public` directory. This will make things simpler.
