@@ -23,7 +23,7 @@ module.exports = [
         maxAgeSeconds: 7 * 24 * 60 * 60, // 7 days
       },
     },
-  }
+  },
   {
     urlPattern: /\.(?:eot|otf|ttc|ttf|woff|woff2|font.css)$/i,
     handler: 'StaleWhileRevalidate',
