@@ -1,6 +1,6 @@
 import { Workbox } from 'workbox-window'
 
-if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+if (typeof window !== 'undefined' && 'serviceWorker' in navigator && typeof caches !== 'undefined') {
   if (__PWA_START_URL__) {
     caches.has('start-url').then(function(has) {
       if (!has) {
