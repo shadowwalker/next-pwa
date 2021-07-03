@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 5.2.22
+
+### Fix
+
+1. [Fix dynamic routes url encoding issue](https://github.com/shadowwalker/next-pwa/issues/223)
+2. Add check for caches before register - @redian
+
+### Misc
+
+- Update examples and dependencies
+
 ## 5.2.17
 
 ### Fix
