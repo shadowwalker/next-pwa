@@ -6,6 +6,7 @@
 
 1. [Fix dynamic routes url encoding issue](https://github.com/shadowwalker/next-pwa/issues/223)
 2. Add check for caches before register - @redian
+3. Add cross origin cache configuration
 
 ### Misc
 

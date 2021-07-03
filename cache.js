@@ -152,5 +152,20 @@ module.exports = [
       },
       networkTimeoutSeconds: 10
     }
+  },
+  {
+    urlPattern: ({url}) => {
+      const isSameOrigin = self.origin === url.origin
+      return !isSameOrigin
+    },
+    handler: 'NetworkFirst',
+    options: {
+      cacheName: 'cross-origin',
+      expiration: {
+        maxEntries: 32,
+        maxAgeSeconds: 60 * 60 // 1 hour
+      },
+      networkTimeoutSeconds: 10
+    }
   }
 ]

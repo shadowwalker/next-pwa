@@ -11,9 +11,9 @@
   },
   "dependencies": {
     "cross-env": "^7.0.3",
-    "fastify": "^3.15.1",
-    "fastify-compress": "^3.4.2",
-    "next": "^10.2.0",
+    "fastify": "^3.18.1",
+    "fastify-compress": "^3.6.0",
+    "next": "^11.0.1",
     "next-pwa": "latest",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
