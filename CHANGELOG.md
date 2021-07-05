@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 5.2.23
+
+### Fix
+
+1. Fix double `//` when precache `next/image` url - [Issue 231](https://github.com/shadowwalker/next-pwa/issues/231)
+
+### Misc
+
+- Add `next-image` example
+
 ## 5.2.22
 
 ### Fix

@@ -1,5 +1,3 @@
-
-
 # next-pwa - next.js 9+ example
 
 [TOC]

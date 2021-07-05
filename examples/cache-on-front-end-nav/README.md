@@ -1,5 +1,3 @@
-
-
 # next-pwa - cache on front end navigation example
 
 [TOC]

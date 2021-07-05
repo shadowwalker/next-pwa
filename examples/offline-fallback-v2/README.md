@@ -1,5 +1,3 @@
-
-
 # next-pwa - offline fallback example
 
 [TOC]

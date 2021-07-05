@@ -1,5 +1,3 @@
-
-
 # next-pwa - minimal example
 
 [TOC]

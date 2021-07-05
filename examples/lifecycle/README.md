@@ -1,5 +1,3 @@
-
-
 # next-pwa - lifecycle and register workflow control example
 
 [TOC]

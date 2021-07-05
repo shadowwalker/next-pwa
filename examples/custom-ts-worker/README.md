@@ -1,5 +1,3 @@
-
-
 # next-pwa - custom worker example
 
 [TOC]

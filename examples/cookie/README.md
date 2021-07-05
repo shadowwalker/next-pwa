@@ -1,5 +1,3 @@
-
-
 # next-pwa - cookie example
 
 [TOC]
