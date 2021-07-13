@@ -74,7 +74,9 @@ if (typeof window !== 'undefined' && 'serviceWorker' in navigator && typeof cach
     })
   }
 
-  window.addEventListener('online', () => {
-    location.reload()
-  })
+  if(__PWA_RELOAD_ON_ONLINE__) {
+    window.addEventListener('online', () => {
+      location.reload()
+    })
+  }
 }

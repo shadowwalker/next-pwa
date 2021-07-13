@@ -46,6 +46,7 @@ module.exports = (nextConfig = {}) => ({
       modifyURLPrefix = {},
       fallbacks = {},
       cacheOnFrontEndNav = false,
+      reloadOnOnline = true,
       scope = basePath,
       subdomainPrefix,  // deprecated, use basePath in next.config.js instead
       ...workbox
@@ -77,7 +78,8 @@ module.exports = (nextConfig = {}) => ({
         __PWA_SCOPE__: `'${_scope}'`,
         __PWA_ENABLE_REGISTER__: `${Boolean(register)}`,
         __PWA_START_URL__: dynamicStartUrl ? `'${basePath}'` : undefined,
-        __PWA_CACHE_ON_FRONT_END_NAV__: `${Boolean(cacheOnFrontEndNav)}`
+        __PWA_CACHE_ON_FRONT_END_NAV__: `${Boolean(cacheOnFrontEndNav)}`,
+        __PWA_RELOAD_ON_ONLINE__: `${Boolean(reloadOnOnline)}`
       })
     )
 
