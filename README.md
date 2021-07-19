@@ -293,6 +293,8 @@ module.exports = withPWA({
   - ~~default: `""` - i.e. default with no prefix~~
   - ~~example: `/subdomain` if the app is hosted on `example.com/subdomain`~~
   - deprecated, use [basePath](https://nextjs.org/docs/api-reference/next.config.js/basepath) instead
+- reloadOnOnline - changes the behaviour of the app when the device detects that it has gone back "online" and has a network connection. Indicate if the app should call `location.reload()` to refresh the app.
+  - default: `true`
 
 ### Other Options
 
