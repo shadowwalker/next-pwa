@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 5.2.24
+
+### Fix
+
+1. [back online reload behaviour configurable](https://github.com/shadowwalker/next-pwa/issues/232)
+
 ## 5.2.23
 
 ### Fix
