@@ -4,7 +4,7 @@
 
 This example demonstrates how to use `next-pwa` to implement fallback routes for page, image or font when fetch error. Fetch error usually happens when **offline**. (Note fetch is successful even when server returns error codes `404, 400, 500, ...`)
 
-Simply add a `/_offline` page such as `pages/_offline.js` or `pages/_offline.jsx` or `pages/_offline.ts` or `pages/_offline.tsx`. Then you are all set! No configuration needed for this.
+Simply add a `/_offline` page such as `pages/_offline.js` or `pages/_offline.jsx` or `pages/_offline.tsx`. Then you are all set! No configuration needed for this.
 
 You can configure fallback routes for other type of resources
 
