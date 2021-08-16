@@ -1,10 +1,20 @@
 # CHANGELOG
 
+## 5.2.25
+
+### Fix
+
+1. [Add support for pageExtensions](https://github.com/shadowwalker/next-pwa/issues/261)
+
+### Misc
+
+- Update examples and dependencies
+
 ## 5.2.24
 
 ### Fix
 
-1. [back online reload behaviour configurable](https://github.com/shadowwalker/next-pwa/issues/232)
+1. [Back online reload behaviour configurable](https://github.com/shadowwalker/next-pwa/issues/232)
 
 ## 5.2.23
 
