@@ -6,7 +6,7 @@ const webpack = require('webpack')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 
-const getFallbackEnvs = ({fallbacks, basedir, id}) => {
+const getFallbackEnvs = ({fallbacks, basedir, id, pageExtensions}) => {
   let { document, data } = fallbacks
 
   if (!document) {
