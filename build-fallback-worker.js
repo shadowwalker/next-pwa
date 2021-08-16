@@ -68,7 +68,22 @@ const buildFallbackWorker = ({ id, fallbacks, basedir, destdir, success, minify,
       main: fallbackJs
     },
     resolve: {
-      extensions: ['.js']
+      extensions: ['.js'],
+      fallback: {
+        module: false,
+        dgram: false,
+        dns: false,
+        path: false,
+        fs: false,
+        os: false,
+        crypto: false,
+        stream: false,
+        http2: false,
+        net: false,
+        tls: false,
+        zlib: false,
+        child_process: false
+      }
     },
     module: {
       rules: [
