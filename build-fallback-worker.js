@@ -20,7 +20,7 @@ const getFallbackEnvs = ({fallbacks, basedir, id}) => {
 
     if (!pagesDir) return
 
-    const offlines = ['tsx', 'ts', 'jsx', 'js', 'mdx']
+    const offlines = pageExtensions
       .map(ext => path.join(pagesDir, `_offline.${ext}`))
       .filter(entry => fs.existsSync(entry))
     if (offlines.length === 1) {
@@ -54,8 +54,8 @@ const getFallbackEnvs = ({fallbacks, basedir, id}) => {
   return envs
 }
 
-const buildFallbackWorker = ({ id, fallbacks, basedir, destdir, success, minify }) => {
-  const envs = getFallbackEnvs({fallbacks, basedir, id})
+const buildFallbackWorker = ({ id, fallbacks, basedir, destdir, success, minify, pageExtensions }) => {
+  const envs = getFallbackEnvs({fallbacks, basedir, id, pageExtensions})
   if (!envs) return false
 
   const name = `fallback-${id}.js`
