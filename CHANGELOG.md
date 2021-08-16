@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 5.3.0
+## 5.3.1
 
 1. Default range requests for audios and videos
 
