@@ -15,6 +15,7 @@ This plugin is powered by [workbox](https://developers.google.com/web/tools/work
 - 📴 Completely offline support with fallbacks [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/offline-fallback-v2) 🆕
 - 📦 Use [workbox](https://developers.google.com/web/tools/workbox/) and [workbox-window](https://developers.google.com/web/tools/workbox/modules/workbox-window) v6
 - 🍪 Work with cookies out of the box
+- 🔉 Default range requests for audios and videos
 - ☕ No custom server needed for Next.js 9+ [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/next-9)
 - 🔧 Handle PWA lifecycle events opt-in [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/lifecycle)
 - 📐 Custom worker to run extra code with code splitting and **typescript** support [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/custom-ts-worker)
