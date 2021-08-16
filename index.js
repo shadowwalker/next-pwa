@@ -129,8 +129,7 @@ module.exports = (nextConfig = {}) => ({
       // precache files in public folder
       let manifestEntries = additionalManifestEntries
       if (!Array.isArray(manifestEntries)) {
-        manifestEntries = globby
-          .sync(
+        manifestEntries = globby.sync(
             [
               '**/*',
               '!workbox-*.js',
