@@ -141,7 +141,7 @@ Create a `manifest.json` file in your `public` folder:
 
 ### Step 3: Add Head Meta (Example)
 
-Add the following into `_document.jsx` or `_document.tsx`, in `<Head>`:
+Add the following into `_document.jsx`, `_app.tsx`, `_app.js`, or `_document.tsx`, in `<Head>`:
 
 ``` html
 <meta name='application-name' content='PWA App' />
