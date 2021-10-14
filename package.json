@@ -16,14 +16,14 @@
   ],
   "dependencies": {
     "babel-loader": "^8.2.2",
-    "clean-webpack-plugin": "^3.0.0",
+    "clean-webpack-plugin": "^4.0.0",
     "globby": "^11.0.4",
-    "terser-webpack-plugin": "^5.1.4",
-    "workbox-webpack-plugin": "^6.2.4",
-    "workbox-window": "^6.2.4"
+    "terser-webpack-plugin": "^5.2.4",
+    "workbox-webpack-plugin": "^6.3.0",
+    "workbox-window": "^6.3.0"
   },
   "devDependencies": {
-    "webpack": "^5.50.0"
+    "webpack": "^5.58.2"
   },
   "peerDependencies": {
     "next": ">=9.0.0"

@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 5.3.2
+
+### Misc
+
+- Update examples and dependencies
+
 ## 5.3.1
 
 1. Default range requests for audios and videos
