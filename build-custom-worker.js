@@ -6,13 +6,13 @@ const webpack = require('webpack')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 
-const buildCustomWorker = ({ id, basedir, destdir, plugins, success, minify }) => {
+const buildCustomWorker = ({ id, basedir, customWorkerDir, destdir, plugins, success, minify }) => {
   let workerDir = undefined
 
-  if (fs.existsSync(path.join(basedir, 'worker'))) {
-    workerDir = path.join(basedir, 'worker')
-  } else if (fs.existsSync(path.join(basedir, 'src', 'worker'))) {
-    workerDir = path.join(basedir, 'src', 'worker')
+  if (fs.existsSync(path.join(basedir, customWorkerDir))) {
+    workerDir = path.join(basedir, customWorkerDir)
+  } else if (fs.existsSync(path.join(basedir, 'src', customWorkerDir))) {
+    workerDir = path.join(basedir, 'src', customWorkerDir)
   }
 
   if (!workerDir) return

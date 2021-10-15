@@ -48,6 +48,7 @@ module.exports = (nextConfig = {}) => ({
       cacheOnFrontEndNav = false,
       reloadOnOnline = true,
       scope = basePath,
+      customWorkerDir = 'worker',
       subdomainPrefix,  // deprecated, use basePath in next.config.js instead
       ...workbox
     } = pwa
@@ -98,6 +99,7 @@ module.exports = (nextConfig = {}) => ({
       buildCustomWorker({
         id: buildId,
         basedir: options.dir,
+        customWorkerDir,
         destdir: _dest,
         plugins: config.plugins.filter(plugin => plugin instanceof webpack.DefinePlugin),
         success: ({name}) => importScripts.unshift(name),
