@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 5.4.0
+
+1. [Add custom worker directory config (@TimoWilhelm)](https://github.com/shadowwalker/next-pwa/pull/282)
+
 ## 5.3.2
 
 ### Misc
