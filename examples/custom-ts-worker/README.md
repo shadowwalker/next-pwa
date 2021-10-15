@@ -12,6 +12,25 @@ In this way, you get benefit of code splitting and size minimization automatical
 
 > - In dev mode, `worker/index.ts` is not watch, so it will not hot reload.
 
+### Custom Worker Directory
+
+You can customize the directory of your custom worker file by setting the `customWorkerDir` relative to the `basedir` in the `pwa` section of your `next.config.js`:
+
+
+``` javascript
+const withPWA = require('next-pwa')
+
+module.exports = withPWA({
+  pwa: {
+    customWorkerDir: 'serviceworker'
+    ...
+  }
+})
+```
+
+In this example, `next-pwa` would look for `serviceworker/index.ts`.
+
+
 ## Old Method (Still Works)
 
 Basically you need to create a file such as `worker.js` in `public` folder, then add an option `importScripts` to `pwa` object in `next.config.js`:
