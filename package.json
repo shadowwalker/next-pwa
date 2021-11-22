@@ -18,12 +18,12 @@
     "babel-loader": "^8.2.2",
     "clean-webpack-plugin": "^4.0.0",
     "globby": "^11.0.4",
-    "terser-webpack-plugin": "^5.2.4",
-    "workbox-webpack-plugin": "^6.3.0",
-    "workbox-window": "^6.3.0"
+    "terser-webpack-plugin": "^5.2.5",
+    "workbox-webpack-plugin": "^6.4.1",
+    "workbox-window": "^6.4.1"
   },
   "devDependencies": {
-    "webpack": "^5.58.2"
+    "webpack": "^5.64.2"
   },
   "peerDependencies": {
     "next": ">=9.0.0"

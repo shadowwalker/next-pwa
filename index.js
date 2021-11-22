@@ -195,7 +195,7 @@ module.exports = (nextConfig = {}) => ({
         additionalManifestEntries: dev ? [] : manifestEntries,
         exclude: [
           ({ asset, compilation }) => {
-            if (asset.name.match(/^(build-manifest\.json|react-loadable-manifest\.json)$/)) {
+            if (asset.name.match(/^(build-manifest\.json|react-loadable-manifest\.json|middleware-manifest\.json)$/)) {
               return true
             }
             if (dev && !asset.name.startsWith('static/runtime/')) {
