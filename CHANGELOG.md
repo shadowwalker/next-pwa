@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 5.4.3
+
+### Misc
+
+- Update examples and dependencies
+
 ## 5.4.2
 
 ### Fix

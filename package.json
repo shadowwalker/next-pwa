@@ -15,15 +15,15 @@
     "service-worker"
   ],
   "dependencies": {
-    "babel-loader": "^8.2.2",
+    "babel-loader": "^8.2.3",
     "clean-webpack-plugin": "^4.0.0",
     "globby": "^11.0.4",
     "terser-webpack-plugin": "^5.2.5",
-    "workbox-webpack-plugin": "^6.4.1",
-    "workbox-window": "^6.4.1"
+    "workbox-webpack-plugin": "^6.4.2",
+    "workbox-window": "^6.4.2"
   },
   "devDependencies": {
-    "webpack": "^5.64.2"
+    "webpack": "^5.64.4"
   },
   "peerDependencies": {
     "next": ">=9.0.0"
