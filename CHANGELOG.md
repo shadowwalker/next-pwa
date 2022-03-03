@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 5.4.5
+
+### Fix
+
+- [Fix double // for precache in static/media](https://github.com/shadowwalker/next-pwa/pull/319)
+- [Fixing middleware-runtime.js error](https://github.com/shadowwalker/next-pwa/pull/325)
+
 ## 5.4.4
 
 ### Misc
