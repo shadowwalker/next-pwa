@@ -67,7 +67,7 @@ module.exports = (nextConfig = {}) => ({
     }
 
     console.log(`> [PWA] Compile ${options.isServer ? 'server' : 'client (static)'}`)
-    
+
     let { runtimeCaching = defaultCache } = pwa
     const _scope = path.posix.join(scope, '/')
 
@@ -194,6 +194,7 @@ module.exports = (nextConfig = {}) => ({
         swDest: path.join(_dest, sw),
         additionalManifestEntries: dev ? [] : manifestEntries,
         exclude: [
+          ...buildExcludes
           ({ asset, compilation }) => {
             if (asset.name.match(/^(build-manifest\.json|react-loadable-manifest\.json|server\/middleware-manifest\.json|server\/middleware-runtime\.js|_middleware\.js|server\/pages\/_middleware\.js)$/)) {
               return true
@@ -210,8 +211,7 @@ module.exports = (nextConfig = {}) => ({
               }
             }
             return false
-          },
-          ...buildExcludes
+          }
         ],
         modifyURLPrefix: {
           ...modifyURLPrefix,
