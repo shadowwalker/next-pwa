@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 5.4.6
+
+### Fix
+
+- [fixed buildExcludes options not working](https://github.com/shadowwalker/next-pwa/pull/333)
+
+### Misc
+
+- Update examples and dependencies
+
 ## 5.4.5
 
 ### Fix
