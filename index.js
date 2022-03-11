@@ -194,7 +194,7 @@ module.exports = (nextConfig = {}) => ({
         swDest: path.join(_dest, sw),
         additionalManifestEntries: dev ? [] : manifestEntries,
         exclude: [
-          ...buildExcludes
+          ...buildExcludes,
           ({ asset, compilation }) => {
             if (asset.name.match(/^(build-manifest\.json|react-loadable-manifest\.json|server\/middleware-manifest\.json|server\/middleware-runtime\.js|_middleware\.js|server\/pages\/_middleware\.js)$/)) {
               return true
