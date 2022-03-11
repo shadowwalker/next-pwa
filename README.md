@@ -53,13 +53,18 @@ Update or create `next.config.js` with
 const withPWA = require('next-pwa')
 
 module.exports = withPWA({
-  // other next config
+  pwa: {
+    dest: 'public'
+  }
 })
 ```
 
-After running `next build`, this will generate two files in your `distDir` (default is `.next` folder): `workbox-*.js` and `sw.js`, which you need to serve statically, either through static file hosting service or using custom `server.js`.
+After running `next build`, this will generate two files in your `public`: `workbox-*.js` and `sw.js`, which will automatically be served statically.
 
-> If you are using Next.js 9+, you may not need a custom server to host your service worker files. Skip to next section to see the details.
+If you are using Next.js version 9 or newer, then skip the options below and move on to Step 2.
+
+If you are using Next.js older than version 9, you'll need to pick an option below before continuing to Step 2.
+
 
 ### Option 1: Host Static Files
 
@@ -198,23 +203,6 @@ Add the following into `_document.jsx` or `_document.tsx`, in `<Head>`:
 ``` typescript
 <meta name='viewport' content='minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover' />
 ```
-
-## Usage Without Custom Server (next.js 9+)
-
-Thanks to **Next.js 9+**, we can use the `public` folder to serve static files from the root `/` URL path. It cuts the need to write custom server only to serve those files. Therefore the setup is easier and concise. We can use `next.config.js` to config `next-pwa` to generates service worker and workbox files into the `public` folder.
-### withPWA
-
-``` javascript
-const withPWA = require('next-pwa')
-
-module.exports = withPWA({
-  pwa: {
-    dest: 'public'
-  }
-})
-```
-
-**[Use this example to see it in action](https://github.com/shadowwalker/next-pwa/tree/master/examples/next-9)**
 
 ## Offline Fallbacks
 
