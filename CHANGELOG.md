@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 5.4.7
+
+### Fix
+
+1. (the real) Fix for not precache server js
+2. Fix service worker register url edge case
+
 ## 5.4.6
 
 ### Fix

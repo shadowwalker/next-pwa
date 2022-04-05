@@ -19,7 +19,7 @@ module.exports = (nextConfig = {}) => ({
       webpack,
       buildId,
       dev,
-      config: { distDir = '.next', pwa = {}, pageExtensions = ['tsx', 'ts', 'jsx', 'js', 'mdx'], experimental = {}}
+      config: { distDir = '.next', pwa = {}, pageExtensions = ['tsx', 'ts', 'jsx', 'js', 'mdx'], experimental = {} }
     } = options
 
     let basePath = options.config.basePath
@@ -49,7 +49,7 @@ module.exports = (nextConfig = {}) => ({
       reloadOnOnline = true,
       scope = basePath,
       customWorkerDir = 'worker',
-      subdomainPrefix,  // deprecated, use basePath in next.config.js instead
+      subdomainPrefix, // deprecated, use basePath in next.config.js instead
       ...workbox
     } = pwa
 
@@ -63,7 +63,9 @@ module.exports = (nextConfig = {}) => ({
     }
 
     if (subdomainPrefix) {
-      console.error('> [PWA] subdomainPrefix is deprecated, use basePath in next.config.js instead: https://nextjs.org/docs/api-reference/next.config.js/basepath')
+      console.error(
+        '> [PWA] subdomainPrefix is deprecated, use basePath in next.config.js instead: https://nextjs.org/docs/api-reference/next.config.js/basepath'
+      )
     }
 
     console.log(`> [PWA] Compile ${options.isServer ? 'server' : 'client (static)'}`)
@@ -102,14 +104,16 @@ module.exports = (nextConfig = {}) => ({
         customWorkerDir,
         destdir: _dest,
         plugins: config.plugins.filter(plugin => plugin instanceof webpack.DefinePlugin),
-        success: ({name}) => importScripts.unshift(name),
+        success: ({ name }) => importScripts.unshift(name),
         minify: !dev
       })
 
       if (register) {
         console.log(`> [PWA] Auto register service worker with: ${path.resolve(registerJs)}`)
       } else {
-        console.log(`> [PWA] Auto register service worker is disabled, please call following code in componentDidMount callback or useEffect hook`)
+        console.log(
+          `> [PWA] Auto register service worker is disabled, please call following code in componentDidMount callback or useEffect hook`
+        )
         console.log(`> [PWA]   window.workbox.register()`)
       }
 
@@ -131,7 +135,8 @@ module.exports = (nextConfig = {}) => ({
       // precache files in public folder
       let manifestEntries = additionalManifestEntries
       if (!Array.isArray(manifestEntries)) {
-        manifestEntries = globby.sync(
+        manifestEntries = globby
+          .sync(
             [
               '**/*',
               '!workbox-*.js',
@@ -173,7 +178,7 @@ module.exports = (nextConfig = {}) => ({
           fallbacks,
           basedir: options.dir,
           destdir: _dest,
-          success: ({name, precaches}) => {
+          success: ({ name, precaches }) => {
             importScripts.unshift(name)
             precaches.forEach(route => {
               if (!manifestEntries.find(entry => entry.url.startsWith(route))) {
@@ -196,7 +201,10 @@ module.exports = (nextConfig = {}) => ({
         exclude: [
           ...buildExcludes,
           ({ asset, compilation }) => {
-            if (asset.name.match(/^(build-manifest\.json|react-loadable-manifest\.json|server\/middleware-manifest\.json|server\/middleware-runtime\.js|_middleware\.js|server\/pages\/_middleware\.js)$/)) {
+            if (
+              asset.name.startsWith('server/') ||
+              asset.name.match(/^(build-manifest\.json|react-loadable-manifest\.json)$/)
+            ) {
               return true
             }
             if (dev && !asset.name.startsWith('static/runtime/')) {
@@ -266,14 +274,16 @@ module.exports = (nextConfig = {}) => ({
             handler: 'NetworkFirst',
             options: {
               cacheName: 'start-url',
-              plugins: [{
-                cacheWillUpdate: async ({request, response, event, state}) => {
-                  if (response && response.type === 'opaqueredirect') {
-                    return new Response(response.body, {status: 200, statusText: 'OK', headers: response.headers});
+              plugins: [
+                {
+                  cacheWillUpdate: async ({ request, response, event, state }) => {
+                    if (response && response.type === 'opaqueredirect') {
+                      return new Response(response.body, { status: 200, statusText: 'OK', headers: response.headers })
+                    }
+                    return response
                   }
-                  return response;
                 }
-              }]
+              ]
             }
           })
         }
@@ -284,7 +294,7 @@ module.exports = (nextConfig = {}) => ({
             if (Array.isArray(c.options.plugins) && c.options.plugins.find(p => 'handlerDidError' in p)) return
             if (!c.options.plugins) c.options.plugins = []
             c.options.plugins.push({
-              handlerDidError: async ({request}) => self.fallback(request)
+              handlerDidError: async ({ request }) => self.fallback(request)
             })
           })
         }

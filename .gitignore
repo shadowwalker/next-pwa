@@ -16,3 +16,4 @@ yarn-error.log
 
 examples/**/yarn.lock
 examples/**/package-lock.json
+examples/**/pnpm-lock.yaml
