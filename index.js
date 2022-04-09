@@ -43,7 +43,6 @@ module.exports = (nextConfig = {}) => ({
       publicExcludes = ['!noprecache/**/*'],
       buildExcludes = [],
       manifestTransforms = [],
-      modifyURLPrefix = {},
       fallbacks = {},
       cacheOnFrontEndNav = false,
       reloadOnOnline = true,
@@ -194,7 +193,6 @@ module.exports = (nextConfig = {}) => ({
         })
       }
 
-      const prefix = config.output.publicPath ? `${config.output.publicPath}static/` : 'static/'
       const workboxCommon = {
         swDest: path.join(_dest, sw),
         additionalManifestEntries: dev ? [] : manifestEntries,
@@ -221,18 +219,21 @@ module.exports = (nextConfig = {}) => ({
             return false
           }
         ],
-        modifyURLPrefix: {
-          ...modifyURLPrefix,
-          [prefix]: path.posix.join(basePath, '/_next/static/')
-        },
         manifestTransforms: [
           ...manifestTransforms,
           async (manifestEntries, compilation) => {
             const manifest = manifestEntries.map(m => {
               m.url = m.url.replace('/_next//static/image', '/_next/static/image')
               m.url = m.url.replace('/_next//static/media', '/_next/static/media')
+              if (m.revision === null) {
+                let key = m.url
+                if (key.startsWith(config.output.publicPath)) {
+                  key = m.url.substring(config.output.publicPath.length)
+                }
+                const assset = compilation.assetsInfo.get(key)
+                m.revision = assset ? assset.contenthash || buildId : buildId
+              }
               m.url = m.url.replace(/\[/g, '%5B').replace(/\]/g, '%5D')
-              m.revision = buildId
               return m
             })
             return { manifest, warnings: [] }

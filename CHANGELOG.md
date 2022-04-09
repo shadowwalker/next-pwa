@@ -1,5 +1,20 @@
 # CHANGELOG
 
+## 5.5.0
+
+### Fix
+
+1. Update precache manifest revision to `contenthash` from webpack, [suggested by @ammar-oker](https://github.com/shadowwalker/next-pwa/issues/336)
+
+### Misc
+
+- Update dependencies
+
+### Fix
+
+1. (the real) Fix for not precache server js
+2. Fix service worker register url edge case
+
 ## 5.4.7
 
 ### Fix
