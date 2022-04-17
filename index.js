@@ -42,6 +42,7 @@ module.exports = (nextConfig = {}) => ({
       importScripts = [],
       publicExcludes = ['!noprecache/**/*'],
       buildExcludes = [],
+      modifyURLPrefix = {},
       manifestTransforms = [],
       fallbacks = {},
       cacheOnFrontEndNav = false,
@@ -219,6 +220,10 @@ module.exports = (nextConfig = {}) => ({
             return false
           }
         ],
+        modifyURLPrefix: {
+          ...modifyURLPrefix,
+          '/_next/../public/': '/'
+        },
         manifestTransforms: [
           ...manifestTransforms,
           async (manifestEntries, compilation) => {

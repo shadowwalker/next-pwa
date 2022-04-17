@@ -1,0 +1,36 @@
+name: Build Examples
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        example:
+          [
+            minimal,
+            next-9,
+            lifecycle,
+            cookie,
+            cache-on-front-end-nav,
+            custom-worker,
+            customer-ts-worker,
+            next-image,
+            offline-fallback,
+            offline-fallback-v2,
+            web-push
+          ]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: npm ci
+      - run: npm link
+      - run: npm install && npm link next-pwa && npm build
+        working-directory: examples/${{ matrix.example }}

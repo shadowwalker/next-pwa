@@ -1,5 +1,7 @@
 # CHANGELOG
 
+**NOTE: for newer changelog, go to [release page](https://github.com/shadowwalker/next-pwa/releases) instead.**
+
 ## 5.5.0
 
 ### Fix
