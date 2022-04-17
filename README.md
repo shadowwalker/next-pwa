@@ -262,11 +262,16 @@ module.exports = withPWA({
   - default: `[]`
   - example: `[/chunks\/images\/.*$/]` - Don't precache files under `.next/static/chunks/images` (Highly recommend this to work with  `next-optimized-images` plugin)
   - doc: Array of (string, RegExp, or function()). One or more specifiers used to exclude assets from the precache manifest. This is interpreted following the same rules as Webpack's standard exclude option.
+- cacheStartUrl - whether to cache start url
+  - default: `true`
+  - [discussion of use case to not cache start url at all](https://github.com/shadowwalker/next-pwa/pull/296#issuecomment-1094167025)
 - dynamicStartUrl - if your start url returns different HTML document under different state (such as logged in vs. not logged in), this should be set to true.
   - default: `true`
+  - effective when `cacheStartUrl` set to `true`
   - recommend: set to **false** if your start url always returns same HTML document, then start url will be precached, this will help to speed up first load.
 - dynamicStartUrlRedirect - if your start url redirect to another route such as `/login`, it's recommended to setup this redirected url for the best user experience.
   - default: `undefined`
+  - effective when `dynamicStartUrlRedirect` set to `true`
 - fallbacks - config precached routes to fallback when both cache and network not available to serve resources.
   - **if you just need a offline fallback page, simply create a `/_offline` page such as `pages/_offline.js` and you are all set, no configuration necessary**
   - default: `object`
