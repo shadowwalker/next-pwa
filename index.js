@@ -34,6 +34,7 @@ module.exports = (nextConfig = {}) => ({
       sw = 'sw.js',
       dynamicStartUrl = true,
       dynamicStartUrlRedirect,
+      cacheStartUrl = true,
       skipWaiting = true,
       clientsClaim = true,
       cleanupOutdatedCaches = true,
@@ -159,16 +160,18 @@ module.exports = (nextConfig = {}) => ({
           }))
       }
 
-      if (!dynamicStartUrl) {
-        manifestEntries.push({
-          url: basePath,
-          revision: buildId
-        })
-      } else if (typeof dynamicStartUrlRedirect === 'string' && dynamicStartUrlRedirect.length > 0) {
-        manifestEntries.push({
-          url: dynamicStartUrlRedirect,
-          revision: buildId
-        })
+      if (cacheStartUrl) {
+        if (!dynamicStartUrl) {
+          manifestEntries.push({
+            url: basePath,
+            revision: buildId
+          })
+        } else if (typeof dynamicStartUrlRedirect === 'string' && dynamicStartUrlRedirect.length > 0) {
+          manifestEntries.push({
+            url: dynamicStartUrlRedirect,
+            revision: buildId
+          })
+        }
       }
 
       let _fallbacks = fallbacks
