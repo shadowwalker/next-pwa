@@ -18,7 +18,7 @@ jobs:
             cookie,
             cache-on-front-end-nav,
             custom-worker,
-            customer-ts-worker,
+            custom-ts-worker,
             next-image,
             offline-fallback,
             offline-fallback-v2,
@@ -32,5 +32,9 @@ jobs:
           node-version: 16
       - run: npm ci
       - run: npm link
-      - run: npm install && npm link next-pwa && npm build
+      - run: npm install
+        working-directory: examples/${{ matrix.example }}
+      - run: npm link next-pwa
+        working-directory: examples/${{ matrix.example }}
+      - run: npm run build
         working-directory: examples/${{ matrix.example }}
