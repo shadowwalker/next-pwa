@@ -86,16 +86,18 @@ module.exports = (nextConfig = {}) => ({
         __PWA_RELOAD_ON_ONLINE__: `${Boolean(reloadOnOnline)}`
       })
     )
-
+    
     const registerJs = path.join(__dirname, 'register.js')
-    const entry = config.entry
-    config.entry = () =>
-      entry().then(entries => {
-        if (entries['main.js'] && !entries['main.js'].includes(registerJs)) {
-          entries['main.js'].unshift(registerJs)
-        }
-        return entries
-      })
+    if (register) {
+      const entry = config.entry
+      config.entry = () =>
+        entry().then(entries => {
+          if (entries['main.js'] && !entries['main.js'].includes(registerJs)) {
+            entries['main.js'].unshift(registerJs)
+          }
+          return entries
+        })
+    }
 
     if (!options.isServer) {
       const _dest = path.join(options.dir, dest)
