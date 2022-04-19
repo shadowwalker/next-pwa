@@ -86,7 +86,7 @@ module.exports = (nextConfig = {}) => ({
         __PWA_RELOAD_ON_ONLINE__: `${Boolean(reloadOnOnline)}`
       })
     )
-    
+
     const registerJs = path.join(__dirname, 'register.js')
     if (register) {
       const entry = config.entry
