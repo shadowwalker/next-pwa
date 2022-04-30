@@ -99,15 +99,18 @@ module.exports = (nextConfig = {}) => ({
 
     if (!options.isServer) {
       const _dest = path.join(options.dir, dest)
-      buildCustomWorker({
+      const customWorkerScriptName = buildCustomWorker({
         id: buildId,
         basedir: options.dir,
         customWorkerDir,
         destdir: _dest,
         plugins: config.plugins.filter(plugin => plugin instanceof webpack.DefinePlugin),
-        success: ({ name }) => importScripts.unshift(name),
         minify: !dev
       })
+
+      if (customWorkerScriptName !== null) {
+        importScripts.unshift(customWorkerScriptName)
+      }
 
       if (register) {
         console.log(`> [PWA] Auto register service worker with: ${path.resolve(registerJs)}`)
