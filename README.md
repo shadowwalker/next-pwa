@@ -1,6 +1,6 @@
 # Zero Config [PWA](https://developers.google.com/web/progressive-web-apps/) Plugin for [Next.js](https://nextjs.org/)
 
-This plugin is powered by [workbox](https://developers.google.com/web/tools/workbox/) and other good stuff.
+This plugin is powered by [workbox](https://developer.chrome.com/docs/workbox/) and other good stuff.
 
 ![size](https://img.shields.io/bundlephobia/minzip/next-pwa.svg) ![dependencies](https://img.shields.io/librariesio/release/npm/next-pwa) ![downloads](https://img.shields.io/npm/dw/next-pwa.svg) ![license](https://img.shields.io/npm/l/next-pwa.svg)
 
