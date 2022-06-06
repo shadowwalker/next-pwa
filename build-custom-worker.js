@@ -25,7 +25,11 @@ const buildCustomWorker = ({ id, basedir, customWorkerDir, destdir, plugins, min
   if (customWorkerEntries.length === 0) return null
 
   if (customWorkerEntries.length > 1) {
-    console.warn(`> [PWA] WARNING: More than one custom worker found (${customWorkerEntries.join(",")}), not building a custom worker`)
+    console.warn(
+      `> [PWA] WARNING: More than one custom worker found (${customWorkerEntries.join(
+        ','
+      )}), not building a custom worker`
+    )
     return null
   }
 

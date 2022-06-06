@@ -9,9 +9,9 @@ module.exports = [
       cacheName: 'google-fonts-webfonts',
       expiration: {
         maxEntries: 4,
-        maxAgeSeconds: 365 * 24 * 60 * 60, // 365 days
-      },
-    },
+        maxAgeSeconds: 365 * 24 * 60 * 60 // 365 days
+      }
+    }
   },
   {
     urlPattern: /^https:\/\/fonts\.(?:googleapis)\.com\/.*/i,
@@ -20,9 +20,9 @@ module.exports = [
       cacheName: 'google-fonts-stylesheets',
       expiration: {
         maxEntries: 4,
-        maxAgeSeconds: 7 * 24 * 60 * 60, // 7 days
-      },
-    },
+        maxAgeSeconds: 7 * 24 * 60 * 60 // 7 days
+      }
+    }
   },
   {
     urlPattern: /\.(?:eot|otf|ttc|ttf|woff|woff2|font.css)$/i,
@@ -48,14 +48,14 @@ module.exports = [
   },
   {
     urlPattern: /\/_next\/image\?url=.+$/i,
-    handler: "StaleWhileRevalidate",
+    handler: 'StaleWhileRevalidate',
     options: {
-      cacheName: "next-image",
+      cacheName: 'next-image',
       expiration: {
         maxEntries: 64,
-        maxAgeSeconds: 24 * 60 * 60, // 24 hours
-      },
-    },
+        maxAgeSeconds: 24 * 60 * 60 // 24 hours
+      }
+    }
   },
   {
     urlPattern: /\.(?:mp3|wav|ogg)$/i,
@@ -105,14 +105,14 @@ module.exports = [
   },
   {
     urlPattern: /\/_next\/data\/.+\/.+\.json$/i,
-    handler: "StaleWhileRevalidate",
+    handler: 'StaleWhileRevalidate',
     options: {
-      cacheName: "next-data",
+      cacheName: 'next-data',
       expiration: {
         maxEntries: 32,
-        maxAgeSeconds: 24 * 60 * 60, // 24 hours
+        maxAgeSeconds: 24 * 60 * 60 // 24 hours
       }
-    },
+    }
   },
   {
     urlPattern: /\.(?:json|xml|csv)$/i,
@@ -126,7 +126,7 @@ module.exports = [
     }
   },
   {
-    urlPattern: ({url}) => {
+    urlPattern: ({ url }) => {
       const isSameOrigin = self.origin === url.origin
       if (!isSameOrigin) return false
       const pathname = url.pathname
@@ -149,7 +149,7 @@ module.exports = [
     }
   },
   {
-    urlPattern: ({url}) => {
+    urlPattern: ({ url }) => {
       const isSameOrigin = self.origin === url.origin
       if (!isSameOrigin) return false
       const pathname = url.pathname
@@ -167,7 +167,7 @@ module.exports = [
     }
   },
   {
-    urlPattern: ({url}) => {
+    urlPattern: ({ url }) => {
       const isSameOrigin = self.origin === url.origin
       return !isSameOrigin
     },
