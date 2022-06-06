@@ -15,14 +15,14 @@ const buildCustomWorker = ({ id, basedir, customWorkerDir, destdir, plugins, min
     workerDir = path.join(basedir, 'src', customWorkerDir)
   }
 
-  if (!workerDir) return null
+  if (!workerDir) return
 
   const name = `worker-${id}.js`
   const customWorkerEntries = ['ts', 'js']
     .map(ext => path.join(workerDir, `index.${ext}`))
     .filter(entry => fs.existsSync(entry))
 
-  if (customWorkerEntries.length === 0) return null
+  if (customWorkerEntries.length === 0) return
 
   if (customWorkerEntries.length > 1) {
     console.warn(
@@ -30,7 +30,7 @@ const buildCustomWorker = ({ id, basedir, customWorkerDir, destdir, plugins, min
         ','
       )}), not building a custom worker`
     )
-    return null
+    return
   }
 
   const customWorkerEntry = customWorkerEntries[0]

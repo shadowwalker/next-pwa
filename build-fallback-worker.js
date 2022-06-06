@@ -54,9 +54,9 @@ const getFallbackEnvs = ({ fallbacks, basedir, id, pageExtensions }) => {
   return envs
 }
 
-const buildFallbackWorker = ({ id, fallbacks, basedir, destdir, success, minify, pageExtensions }) => {
+const buildFallbackWorker = ({ id, fallbacks, basedir, destdir, minify, pageExtensions }) => {
   const envs = getFallbackEnvs({ fallbacks, basedir, id, pageExtensions })
-  if (!envs) return false
+  if (!envs) return
 
   const name = `fallback-${id}.js`
   const fallbackJs = path.join(__dirname, `fallback.js`)
@@ -137,12 +137,10 @@ const buildFallbackWorker = ({ id, fallbacks, basedir, destdir, success, minify,
       console.error(`> [PWA] Failed to build fallback worker`)
       console.error(status.toString({ colors: true }))
       process.exit(-1)
-    } else {
-      success({ name, precaches: Object.values(envs).filter(v => !!v) })
     }
   })
 
-  return fallbacks
+  return { fallbacks, name, precaches: Object.values(envs).filter(v => !!v) }
 }
 
 module.exports = buildFallbackWorker

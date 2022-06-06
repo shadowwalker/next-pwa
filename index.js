@@ -108,7 +108,7 @@ module.exports = (nextConfig = {}) => ({
         minify: !dev
       })
 
-      if (customWorkerScriptName !== null) {
+      if (!!customWorkerScriptName) {
         importScripts.unshift(customWorkerScriptName)
       }
 
@@ -179,25 +179,29 @@ module.exports = (nextConfig = {}) => ({
 
       let _fallbacks = fallbacks
       if (_fallbacks) {
-        _fallbacks = buildFallbackWorker({
+        const res = buildFallbackWorker({
           id: buildId,
           fallbacks,
           basedir: options.dir,
           destdir: _dest,
-          success: ({ name, precaches }) => {
-            importScripts.unshift(name)
-            precaches.forEach(route => {
-              if (!manifestEntries.find(entry => entry.url.startsWith(route))) {
-                manifestEntries.push({
-                  url: route,
-                  revision: buildId
-                })
-              }
-            })
-          },
           minify: !dev,
           pageExtensions
         })
+
+        if (res) {
+          _fallbacks = res.fallbacks
+          importScripts.unshift(res.name)
+          res.precaches.forEach(route => {
+            if (!manifestEntries.find(entry => entry.url.startsWith(route))) {
+              manifestEntries.push({
+                url: route,
+                revision: buildId
+              })
+            }
+          })
+        } else {
+          _fallbacks = undefined
+        }
       }
 
       const workboxCommon = {
