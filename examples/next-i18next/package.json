@@ -13,10 +13,10 @@
     "cross-env": "^7.0.3",
     "express": "^4.18.1",
     "fastify-compress": "^4.1.0",
-    "next": "^12.1.6",
-    "next-i18next": "^11.0.0",
+    "next": "^12.2.3",
+    "next-i18next": "^11.3.0",
     "next-pwa": "latest",
-    "react": "^18.1.0",
-    "react-dom": "^18.1.0"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   }
 }
