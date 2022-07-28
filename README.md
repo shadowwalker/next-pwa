@@ -1,4 +1,4 @@
-# Zero Config [PWA](https://developers.google.com/web/progressive-web-apps/) Plugin for [Next.js](https://nextjs.org/)
+# Zero Config [PWA](https://web.dev/learn/pwa/) Plugin for [Next.js](https://nextjs.org/)
 
 This plugin is powered by [workbox](https://developer.chrome.com/docs/workbox/) and other good stuff.
 
