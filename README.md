@@ -52,10 +52,8 @@ Update or create `next.config.js` with
 ``` javascript
 const withPWA = require('next-pwa')
 
-module.exports = withPWA({
-  pwa: {
-    dest: 'public'
-  }
+module.exports = withPWA(nextConfig, {
+  dest: 'public'
 })
 ```
 
@@ -223,15 +221,13 @@ There are options you can use to customize the behavior of this plugin by adding
 ```javascript
 const withPWA = require('next-pwa')
 
-module.exports = withPWA({
-  pwa: {
-    dest: 'public',
-    // disable: process.env.NODE_ENV === 'development',
-    // register: true,
-    // scope: '/app',
-    // sw: 'service-worker.js',
-    //...
-  }
+module.exports = withPWA(nextConfig, {
+  dest: 'public',
+  // disable: process.env.NODE_ENV === 'development',
+  // register: true,
+  // scope: '/app',
+  // sw: 'service-worker.js',
+  //...
 })
 ```
 

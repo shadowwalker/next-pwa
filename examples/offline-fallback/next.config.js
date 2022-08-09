@@ -1,8 +1,8 @@
 const withPWA = require('next-pwa')
 
-module.exports = withPWA({
-  pwa: {
-    dest: 'public',
-    swSrc: 'service-worker.js'
-  }
+const nextConfig = {};
+
+module.exports = withPWA(nextConfig, {
+  dest: 'public',
+  swSrc: 'service-worker.js'
 })

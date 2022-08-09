@@ -22,11 +22,9 @@ You can customize the directory of your custom worker file by setting the `custo
 ``` javascript
 const withPWA = require('next-pwa')
 
-module.exports = withPWA({
-  pwa: {
-    customWorkerDir: 'serviceworker'
-    ...
-  }
+module.exports = withPWA(nextConfig, {
+  customWorkerDir: 'serviceworker'
+  ...
 })
 ```
 
@@ -40,11 +38,9 @@ Basically you need to create a file such as `worker.js` in `public` folder, then
 ``` javascript
 const withPWA = require('next-pwa')
 
-module.exports = withPWA({
-  pwa: {
-    dest: 'public',
-    importScripts: ['/worker.js']
-  }
+module.exports = withPWA(nextConfig, {
+  dest: 'public',
+  importScripts: ['/worker.js']
 })
 ```
 
