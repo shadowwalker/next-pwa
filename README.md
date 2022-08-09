@@ -319,7 +319,7 @@ Here is the [document on how to write runtime caching configurations](https://de
 
 ## Reference
 
-1. [Google Workbox](https://developer.chrome.com/docs/workbox/guides/get-started)
+1. [Google Workbox](https://developer.chrome.com/docs/workbox/what-is-workbox/)
 2. [ServiceWorker, MessageChannel, & postMessage](https://ponyfoo.com/articles/serviceworker-messagechannel-postmessage) by [Nicolás Bevacqua](https://ponyfoo.com/contributors/ponyfoo)
 3. [The Service Worker Lifecycle](https://developers.google.com/web/fundamentals/primers/service-workers/lifecycle)
 4. [6 Tips to make your iOS PWA feel like a native app](https://www.netguru.com/codestories/pwa-ios)
