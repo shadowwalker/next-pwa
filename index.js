@@ -20,11 +20,11 @@ module.exports = (nextConfig = {}) => {
         webpack,
         buildId,
         dev,
+        isServer,
+        dir,
         config: { distDir = '.next', pageExtensions = ['tsx', 'ts', 'jsx', 'js', 'mdx'], experimental = {} },
       } = options
-
-      let basePath = options.config.basePath
-      if (!basePath) basePath = '/'
+      const basePath = options.config.basePath || '/'
 
       // For workbox configurations:
       // https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-webpack-plugin.GenerateSW
@@ -55,12 +55,14 @@ module.exports = (nextConfig = {}) => {
         ...workbox
       } = pwa
 
+      let { runtimeCaching = defaultCache } = pwa
+
       if (typeof nextConfig.webpack === 'function') {
         config = nextConfig.webpack(config, options)
       }
 
       if (disable) {
-        options.isServer && console.log('> [PWA] PWA support is disabled')
+        isServer && console.log('> [PWA] PWA support is disabled')
         return config
       }
 
@@ -70,9 +72,8 @@ module.exports = (nextConfig = {}) => {
         )
       }
 
-      console.log(`> [PWA] Compile ${options.isServer ? 'server' : 'client (static)'}`)
+      console.log(`> [PWA] Compile ${isServer ? 'server' : 'client (static)'}`)
 
-      let { runtimeCaching = defaultCache } = pwa
       const _scope = path.posix.join(scope, '/')
 
       // inject register script to main.js
@@ -84,7 +85,7 @@ module.exports = (nextConfig = {}) => {
           __PWA_ENABLE_REGISTER__: `${Boolean(register)}`,
           __PWA_START_URL__: dynamicStartUrl ? `'${basePath}'` : undefined,
           __PWA_CACHE_ON_FRONT_END_NAV__: `${Boolean(cacheOnFrontEndNav)}`,
-          __PWA_RELOAD_ON_ONLINE__: `${Boolean(reloadOnOnline)}`
+          __PWA_RELOAD_ON_ONLINE__: `${Boolean(reloadOnOnline)}`,
         })
       )
 
@@ -98,15 +99,15 @@ module.exports = (nextConfig = {}) => {
           return entries
         })
 
-      if (!options.isServer) {
-        const _dest = path.join(options.dir, dest)
+      if (!isServer) {
+        const _dest = path.join(dir, dest)
         const customWorkerScriptName = buildCustomWorker({
           id: buildId,
-          basedir: options.dir,
+          basedir: dir,
           customWorkerDir,
           destdir: _dest,
           plugins: config.plugins.filter(plugin => plugin instanceof webpack.DefinePlugin),
-          minify: !dev
+          minify: !dev,
         })
 
         if (!!customWorkerScriptName) {
@@ -132,8 +133,8 @@ module.exports = (nextConfig = {}) => {
               path.join(_dest, 'workbox-*.js'),
               path.join(_dest, 'workbox-*.js.map'),
               path.join(_dest, sw),
-              path.join(_dest, `${sw}.map`)
-            ]
+              path.join(_dest, `${sw}.map`),
+            ],
           })
         )
 
@@ -258,7 +259,7 @@ module.exports = (nextConfig = {}) => {
         }
 
         if (workbox.swSrc) {
-          const swSrc = path.join(options.dir, workbox.swSrc)
+          const swSrc = path.join(dir, workbox.swSrc)
           console.log(`> [PWA] Inject manifest in ${swSrc}`)
           config.plugins.push(
             new WorkboxPlugin.InjectManifest({
