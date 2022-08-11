@@ -25,7 +25,7 @@ module.exports = (nextConfig = {}) => {
         config: { distDir = '.next', pageExtensions = ['tsx', 'ts', 'jsx', 'js', 'mdx'], experimental = {} },
       } = options
       const basePath = options.config.basePath || '/'
-      const { pwa } = nextConfig
+      const { pwa = {} } = nextConfig
 
       // For workbox configurations:
       // https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-webpack-plugin.GenerateSW
