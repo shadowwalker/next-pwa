@@ -20,7 +20,7 @@ module.exports = (nextConfig = {}) => {
         webpack,
         buildId,
         dev,
-        config: { distDir = '.next', pwa = {}, pageExtensions = ['tsx', 'ts', 'jsx', 'js', 'mdx'], experimental = {} }
+        config: { distDir = '.next', pageExtensions = ['tsx', 'ts', 'jsx', 'js', 'mdx'], experimental = {} },
       } = options
 
       let basePath = options.config.basePath
