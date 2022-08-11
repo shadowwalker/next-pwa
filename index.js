@@ -154,15 +154,15 @@ module.exports = (nextConfig = {}) => {
                 '!fallback-*.js.map',
                 `!${sw.replace(/^\/+/, '')}`,
                 `!${sw.replace(/^\/+/, '')}.map`,
-                ...publicExcludes
+                ...publicExcludes,
               ],
               {
-                cwd: 'public'
+                cwd: 'public',
               }
             )
             .map(f => ({
               url: path.posix.join(basePath, `/${f}`),
-              revision: getRevision(`public/${f}`)
+              revision: getRevision(`public/${f}`),
             }))
         }
 
@@ -170,12 +170,12 @@ module.exports = (nextConfig = {}) => {
           if (!dynamicStartUrl) {
             manifestEntries.push({
               url: basePath,
-              revision: buildId
+              revision: buildId,
             })
           } else if (typeof dynamicStartUrlRedirect === 'string' && dynamicStartUrlRedirect.length > 0) {
             manifestEntries.push({
               url: dynamicStartUrlRedirect,
-              revision: buildId
+              revision: buildId,
             })
           }
         }
@@ -185,10 +185,10 @@ module.exports = (nextConfig = {}) => {
           const res = buildFallbackWorker({
             id: buildId,
             fallbacks,
-            basedir: options.dir,
+            basedir: dir,
             destdir: _dest,
             minify: !dev,
-            pageExtensions
+            pageExtensions,
           })
 
           if (res) {
@@ -198,7 +198,7 @@ module.exports = (nextConfig = {}) => {
               if (!manifestEntries.find(entry => entry.url.startsWith(route))) {
                 manifestEntries.push({
                   url: route,
-                  revision: buildId
+                  revision: buildId,
                 })
               }
             })
@@ -231,11 +231,11 @@ module.exports = (nextConfig = {}) => {
                 }
               }
               return false
-            }
+            },
           ],
           modifyURLPrefix: {
             ...modifyURLPrefix,
-            '/_next/../public/': '/'
+            '/_next/../public/': '/',
           },
           manifestTransforms: [
             ...manifestTransforms,
@@ -255,8 +255,8 @@ module.exports = (nextConfig = {}) => {
                 return m
               })
               return { manifest, warnings: [] }
-            }
-          ]
+            },
+          ],
         }
 
         if (workbox.swSrc) {
@@ -266,7 +266,7 @@ module.exports = (nextConfig = {}) => {
             new WorkboxPlugin.InjectManifest({
               ...workboxCommon,
               ...workbox,
-              swSrc
+              swSrc,
             })
           )
         } else {
@@ -281,9 +281,9 @@ module.exports = (nextConfig = {}) => {
                 urlPattern: /.*/i,
                 handler: 'NetworkOnly',
                 options: {
-                  cacheName: 'dev'
-                }
-              }
+                  cacheName: 'dev',
+                },
+              },
             ]
           }
 
@@ -300,10 +300,10 @@ module.exports = (nextConfig = {}) => {
                         return new Response(response.body, { status: 200, statusText: 'OK', headers: response.headers })
                       }
                       return response
-                    }
-                  }
-                ]
-              }
+                    },
+                  },
+                ],
+              },
             })
           }
 
@@ -313,7 +313,7 @@ module.exports = (nextConfig = {}) => {
               if (Array.isArray(c.options.plugins) && c.options.plugins.find(p => 'handlerDidError' in p)) return
               if (!c.options.plugins) c.options.plugins = []
               c.options.plugins.push({
-                handlerDidError: async ({ request }) => self.fallback(request)
+                handlerDidError: async ({ request }) => self.fallback(request),
               })
             })
           }
@@ -327,14 +327,14 @@ module.exports = (nextConfig = {}) => {
               ignoreURLParametersMatching,
               importScripts,
               ...workbox,
-              runtimeCaching
+              runtimeCaching,
             })
           )
         }
       }
 
       return config
-    }
+    },
   }
   // Next 12.2.3+ logs errors if the `pwa` field is returned since it is not recognized
   delete pwaNextConfig.pwa
