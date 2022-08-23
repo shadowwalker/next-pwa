@@ -3,7 +3,7 @@ import Document, { Html, Head, Main, NextScript } from 'next/document'
 const APP_NAME = 'next-pwa example'
 const APP_DESCRIPTION = 'This is an example of using next-pwa plugin'
 
-export default class extends Document {
+class _Document extends Document {
   static async getInitialProps(ctx) {
     return await Document.getInitialProps(ctx)
   }
@@ -22,12 +22,11 @@ export default class extends Document {
           <meta name='theme-color' content='#FFFFFF' />
           {/* TIP: set viewport head meta tag in _app.js, otherwise it will show a warning */}
           {/* <meta name='viewport' content='minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, viewport-fit=cover' /> */}
-          
+
           <link rel='apple-touch-icon' sizes='180x180' href='/icons/apple-touch-icon.png' />
           <link rel='manifest' href='/manifest.json' />
           <link rel='shortcut icon' href='/favicon.ico' />
-          <style>{
-            `
+          <style>{`
             html, body, #__next {
               height: 100%;
             }
@@ -37,8 +36,7 @@ export default class extends Document {
             h1 {
               text-align: center;
             }
-            `
-          }</style>
+            `}</style>
         </Head>
         <body>
           <Main />
@@ -48,3 +46,5 @@ export default class extends Document {
     )
   }
 }
+
+export default _Document

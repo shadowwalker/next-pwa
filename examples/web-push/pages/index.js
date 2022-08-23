@@ -14,7 +14,7 @@ const base64ToUint8Array = base64 => {
   return outputArray
 }
 
-export default () => {
+const Index = () => {
   const [isSubscribed, setIsSubscribed] = useState(false)
   const [subscription, setSubscription] = useState(null)
   const [registration, setRegistration] = useState(null)
@@ -92,3 +92,5 @@ export default () => {
     </>
   )
 }
+
+export default Index

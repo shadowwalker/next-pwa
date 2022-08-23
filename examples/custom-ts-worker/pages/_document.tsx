@@ -1,11 +1,11 @@
-import Document, { DocumentContext, Head, Html, Main, NextScript } from 'next/document';
+import Document, { DocumentContext, Head, Html, Main, NextScript } from 'next/document'
 
-const APP_NAME = 'next-pwa example';
-const APP_DESCRIPTION = 'This is an example of using next-pwa plugin';
+const APP_NAME = 'next-pwa example'
+const APP_DESCRIPTION = 'This is an example of using next-pwa plugin'
 
-export default class extends Document {
+class _Document extends Document {
   static async getInitialProps(ctx: DocumentContext) {
-    return await Document.getInitialProps(ctx);
+    return await Document.getInitialProps(ctx)
   }
 
   render() {
@@ -26,8 +26,7 @@ export default class extends Document {
           <link rel='apple-touch-icon' sizes='180x180' href='/icons/apple-touch-icon.png' />
           <link rel='manifest' href='/manifest.json' />
           <link rel='shortcut icon' href='/favicon.ico' />
-          <style>{
-            `
+          <style>{`
             html, body, #__next {
               height: 100%;
             }
@@ -37,14 +36,15 @@ export default class extends Document {
             h1 {
               text-align: center;
             }
-            `
-          }</style>
+            `}</style>
         </Head>
         <body>
-        <Main />
-        <NextScript />
+          <Main />
+          <NextScript />
         </body>
       </Html>
-    );
+    )
   }
 }
+
+export default _Document

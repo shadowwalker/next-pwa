@@ -1,6 +1,6 @@
 import Head from 'next/head'
 
-export default () => (
+const Fallback = () => (
   <>
     <Head>
       <title>next-pwa example</title>
@@ -9,3 +9,5 @@ export default () => (
     <h2>When offline, any route will fallback to this page</h2>
   </>
 )
+
+export default Fallback

@@ -6,12 +6,15 @@ webPush.setVapidDetails(
   process.env.WEB_PUSH_PRIVATE_KEY
 )
 
-export default (req, res) => {
+const Notification = (req, res) => {
   if (req.method == 'POST') {
     const { subscription } = req.body
 
     webPush
-      .sendNotification(subscription, JSON.stringify({title: 'Hello Web Push', message: 'Your web push notification is here!'}))
+      .sendNotification(
+        subscription,
+        JSON.stringify({ title: 'Hello Web Push', message: 'Your web push notification is here!' })
+      )
       .then(response => {
         res.writeHead(response.statusCode, response.headers).end(response.body)
       })
@@ -29,3 +32,5 @@ export default (req, res) => {
     res.end()
   }
 }
+
+export default Notification

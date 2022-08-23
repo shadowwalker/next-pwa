@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import Cookies from 'js-cookie'
 import nextCookies from 'next-cookies'
 
-export default ({ user }) => {
+const Index = ({ user }) => {
   const router = useRouter()
 
   const handleLogoutClick = () => {
@@ -50,3 +50,5 @@ export const getServerSideProps = context => {
     }
   }
 }
+
+export default Index

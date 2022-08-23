@@ -1,6 +1,6 @@
 import Head from 'next/head'
 
-export default () => (
+const Index = () => (
   <>
     <Head>
       <title>next-pwa example</title>
@@ -8,3 +8,5 @@ export default () => (
     <h1>Next.js + PWA = AWESOME!</h1>
   </>
 )
+
+export default Index

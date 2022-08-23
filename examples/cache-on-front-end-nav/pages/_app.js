@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 
-const App = ({ Component, pageProps }) => {
+const _App = ({ Component, pageProps }) => {
   const [isOnline, setIsOnline] = useState(true)
   useEffect(() => {
     if (typeof window !== 'undefined' && 'ononline' in window && 'onoffline' in window) {
@@ -35,4 +35,4 @@ const App = ({ Component, pageProps }) => {
   return <Component {...pageProps} />
 }
 
-export default App
+export default _App

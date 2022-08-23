@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import Head from 'next/head'
 
-export default () => {
+const Index = () => {
   // This hook only run once in browser after the component is rendered for the first time.
   // It has same effect as the old componentDidMount lifecycle callback.
   useEffect(() => {
@@ -85,3 +85,5 @@ export default () => {
     </>
   )
 }
+
+export default Index
