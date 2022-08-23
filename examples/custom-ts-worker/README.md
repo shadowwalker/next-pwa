@@ -10,39 +10,37 @@ Simply create a `worker/index.ts` and start implementing your service worker. `n
 
 In this way, you get benefit of code splitting and size minimization automatically. Yes! `require` modules works! Yes! you can share codes between web app and the service worker!
 
-> - In dev mode, `worker/index.ts` is not watch, so it will not hot reload.
+> - In dev mode, `worker/index.ts` is not watched, so it will not hot reload.
 
 ### Custom Worker Directory
 
 You can customize the directory of your custom worker file by setting the `customWorkerDir` relative to the `basedir` in the `pwa` section of your `next.config.js`:
 
-
-``` javascript
-const withPWA = require('next-pwa')
+```javascript
+const withPWA = require('next-pwa')({
+  customWorkerDir: 'serviceworker'
+  // ...
+})
 
 module.exports = withPWA({
-  pwa: {
-    customWorkerDir: 'serviceworker'
-    ...
-  }
+  // next.js config
 })
 ```
 
 In this example, `next-pwa` would look for `serviceworker/index.ts`.
 
-
 ## Old Method (Still Works)
 
 Basically you need to create a file such as `worker.js` in `public` folder, then add an option `importScripts` to `pwa` object in `next.config.js`:
 
-``` javascript
-const withPWA = require('next-pwa')
+```javascript
+const withPWA = require('next-pwa')({
+  dest: 'public',
+  importScripts: ['/worker.js']
+})
 
 module.exports = withPWA({
-  pwa: {
-    dest: 'public',
-    importScripts: ['/worker.js']
-  }
+  // next.js config
 })
 ```
 
@@ -52,7 +50,7 @@ Then service worker generated will automatically import your code and run it bef
 
 [![Open in Gitpod](https://img.shields.io/badge/Open%20In-Gitpod.io-%231966D2?style=for-the-badge&logo=gitpod)](https://gitpod.io/#https://github.com/shadowwalker/next-pwa/)
 
-``` bash
+```bash
 cd examples/custom-ts-server
 yarn install
 yarn build
@@ -66,6 +64,3 @@ yarn start
 **/public/sw.js
 **/public/worker-*.js
 ```
-
-
-
