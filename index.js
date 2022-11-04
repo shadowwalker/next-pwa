@@ -96,6 +96,9 @@ module.exports =
             if (entries['main.js'] && !entries['main.js'].includes(registerJs)) {
               entries['main.js'].unshift(registerJs)
             }
+            if (entries['main-app'] && !entries['main-app'].includes(registerJs)) {
+              entries['main-app'].unshift(registerJs)
+            }
             return entries
           })
 
