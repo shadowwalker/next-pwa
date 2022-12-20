@@ -53,7 +53,7 @@ module.exports =
           scope = basePath,
           customWorkerDir = 'worker',
           subdomainPrefix, // deprecated, use basePath in next.config.js instead
-          customWorkerWebpack = false,
+          customWorkerWebpack = undefined,
           ...workbox
         } = pluginOptions
 
