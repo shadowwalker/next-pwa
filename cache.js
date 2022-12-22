@@ -111,7 +111,24 @@ module.exports = [
       expiration: {
         maxEntries: 32,
         maxAgeSeconds: 24 * 60 * 60 // 24 hours
-      }
+      },
+      plugins: [
+        {
+          cacheWillUpdate: async ({ request, response }) => {
+            if (request.headers.get('x-middleware-prefetch') || response.headers.get('x-middleware-skip')) return null
+            if (response.status === 200) {
+              return response
+            }
+            return null
+          }
+        },
+        {
+          cachedResponseWillBeUsed: async ({ cacheName, request, matchOptions, cachedResponse, event }) => {
+            if (cachedResponse && cachedResponse.headers.get('x-middleware-skip')) return null
+            return cachedResponse
+          }
+        },
+      ],
     }
   },
   {
