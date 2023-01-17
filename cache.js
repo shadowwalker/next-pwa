@@ -104,7 +104,17 @@ module.exports = [
     }
   },
   {
-    urlPattern: /\/_next\/data\/.+\/.+\.json$/i,
+    urlPattern: ({ url }) => {
+			if (self.origin !== url.origin) {
+				return false;
+			}
+
+			if (url.pathname.startsWith('/_next/data/') && url.pathname.indexOf('.json') !== -1) {
+				return true;
+			}
+
+			return false;
+		},
     handler: 'StaleWhileRevalidate',
     options: {
       cacheName: 'next-data',
