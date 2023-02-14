@@ -308,8 +308,11 @@ Here is the [document on how to write runtime caching configurations](https://de
 
 ```
 **/public/workbox-*.js
+**/public/workbox-*.js.map
 **/public/sw.js
+**/public/sw.js.map
 **/public/worker-*.js
+**/public/worker-*.js.map
 ```
 
 ## Tips
