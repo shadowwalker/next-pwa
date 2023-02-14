@@ -304,6 +304,14 @@ There is a great chance you may want to customize your own runtime caching rules
 
 Here is the [document on how to write runtime caching configurations](https://developer.chrome.com/docs/workbox/reference/workbox-build/#type-RuntimeCaching), including background sync and broadcast update features and more!
 
+### Recommend `.gitignore`
+
+```
+**/public/workbox-*.js
+**/public/sw.js
+**/public/worker-*.js
+```
+
 ## Tips
 
 1. [Common UX pattern to ask user to reload when new service worker is installed](https://github.com/shadowwalker/next-pwa/blob/master/examples/lifecycle/pages/index.js#L26-L38)
