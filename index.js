@@ -131,6 +131,7 @@ module.exports =
             new CleanWebpackPlugin({
               cleanOnceBeforeBuildPatterns: [
                 path.join(_dest, 'workbox-*.js'),
+                path.join(_dest, 'worker-*.js.LICENSE.txt'),
                 path.join(_dest, 'workbox-*.js.map'),
                 path.join(_dest, sw),
                 path.join(_dest, `${sw}.map`)
