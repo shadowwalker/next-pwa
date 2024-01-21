@@ -6,7 +6,7 @@ const webpack = require('webpack')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 
-const buildCustomWorker = ({ id, basedir, customWorkerDir, destdir, plugins, minify }) => {
+const buildCustomWorker = ({ id, basedir, customWorkerDir, destdir, plugins, minify, webpack: customWebpack }) => {
   let workerDir = undefined
 
   if (fs.existsSync(path.join(basedir, customWorkerDir))) {
@@ -36,7 +36,7 @@ const buildCustomWorker = ({ id, basedir, customWorkerDir, destdir, plugins, min
   const customWorkerEntry = customWorkerEntries[0]
   console.log(`> [PWA] Custom worker found: ${customWorkerEntry}`)
   console.log(`> [PWA] Build custom worker: ${path.join(destdir, name)}`)
-  webpack({
+  const baseConfig = {
     mode: 'none',
     target: 'webworker',
     entry: {
@@ -106,7 +106,15 @@ const buildCustomWorker = ({ id, basedir, customWorkerDir, destdir, plugins, min
           minimizer: [new TerserPlugin()]
         }
       : undefined
-  }).run((error, status) => {
+  };
+
+  let config = baseConfig;
+  if (typeof customWebpack === 'function') {
+    console.log('> [PWA] Using provided webpack config to build custom worker')
+    config = customWebpack(baseConfig);
+  }
+
+  webpack(config).run((error, status) => {
     if (error || status.hasErrors()) {
       console.error(`> [PWA] Failed to build custom worker`)
       console.error(status.toString({ colors: true }))
