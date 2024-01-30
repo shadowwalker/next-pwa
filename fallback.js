@@ -19,7 +19,7 @@ self.fallback = async request => {
       if (process.env.__PWA_FALLBACK_FONT__)
         return caches.match(process.env.__PWA_FALLBACK_FONT__, { ignoreSearch: true })
     case '':
-      if (process.env.__PWA_FALLBACK_DATA__ && request.url.match(/\/_next\/data\/.+\/.+\.json$/i))
+      if (process.env.__PWA_FALLBACK_DATA__ && request.url.startsWith('/_next/data/') && request.url.indexOf('.json') !== -1)
         return caches.match(process.env.__PWA_FALLBACK_DATA__, { ignoreSearch: true })
     default:
       return Response.error()
