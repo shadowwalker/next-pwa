@@ -206,7 +206,7 @@ Add the following into `_document.jsx` or `_app.tsx`, in `<Head>`:
 
 ## Offline Fallbacks
 
-Offline fallbacks are useful when the fetch failed from both cache and network, a precached resource is served instead of present an error from browser.
+Offline fallbacks are useful when fetching from both the cache and the network fails; a precached resource is served instead of presenting an error from the browser.
 
 To get started simply add a `/_offline` page such as `pages/_offline.js` or `pages/_offline.jsx` or `pages/_offline.ts` or `pages/_offline.tsx`. Then you are all set! When the user is offline, all pages which are not cached will fallback to '/\_offline'.
 
