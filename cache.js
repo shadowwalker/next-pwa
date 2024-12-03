@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 // Workbox RuntimeCaching config: https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-build#.RuntimeCachingEntry
 module.exports = [
@@ -127,15 +127,15 @@ module.exports = [
   },
   {
     urlPattern: ({ url }) => {
-      const isSameOrigin = self.origin === url.origin
-      if (!isSameOrigin) return false
-      const pathname = url.pathname
-      // Exclude /api/auth/callback/* to fix OAuth workflow in Safari without impact other environment
-      // Above route is default for next-auth, you may need to change it if your OAuth workflow has a different callback route
+      const isSameOrigin = self.origin === url.origin;
+      if (!isSameOrigin) return false;
+      const pathname = url.pathname;
+      // Exclude /api/auth/callback/* to fix OAuth workflow in Safari without impacting other environments
+      // Above route is the default for next-auth, you may need to change it if your OAuth workflow has a different callback route
       // Issue: https://github.com/shadowwalker/next-pwa/issues/131#issuecomment-821894809
-      if (pathname.startsWith('/api/auth/')) return false
-      if (pathname.startsWith('/api/')) return true
-      return false
+      if (pathname.startsWith('/api/auth/')) return false;
+      if (pathname.startsWith('/api/')) return true;
+      return false;
     },
     handler: 'NetworkFirst',
     method: 'GET',
@@ -145,16 +145,16 @@ module.exports = [
         maxEntries: 16,
         maxAgeSeconds: 24 * 60 * 60 // 24 hours
       },
-      networkTimeoutSeconds: 10 // fall back to cache if api does not response within 10 seconds
+      networkTimeoutSeconds: 10 // fall back to cache if the API does not respond within 10 seconds
     }
   },
   {
     urlPattern: ({ url }) => {
-      const isSameOrigin = self.origin === url.origin
-      if (!isSameOrigin) return false
-      const pathname = url.pathname
-      if (pathname.startsWith('/api/')) return false
-      return true
+      const isSameOrigin = self.origin === url.origin;
+      if (!isSameOrigin) return false;
+      const pathname = url.pathname;
+      if (pathname.startsWith('/api/')) return false;
+      return true;
     },
     handler: 'NetworkFirst',
     options: {
@@ -168,8 +168,8 @@ module.exports = [
   },
   {
     urlPattern: ({ url }) => {
-      const isSameOrigin = self.origin === url.origin
-      return !isSameOrigin
+      const isSameOrigin = self.origin === url.origin;
+      return !isSameOrigin;
     },
     handler: 'NetworkFirst',
     options: {
@@ -181,4 +181,4 @@ module.exports = [
       networkTimeoutSeconds: 10
     }
   }
-]
+];

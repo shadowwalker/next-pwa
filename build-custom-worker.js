@@ -1,41 +1,41 @@
-'use strict'
+'use strict';
 
-const path = require('path')
-const fs = require('fs')
-const webpack = require('webpack')
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-const TerserPlugin = require('terser-webpack-plugin')
+import path from 'path';
+import fs from 'fs';
+import webpack from 'webpack';
+import { CleanWebpackPlugin } from 'clean-webpack-plugin';
+import TerserPlugin from 'terser-webpack-plugin';
 
 const buildCustomWorker = ({ id, basedir, customWorkerDir, destdir, plugins, minify }) => {
-  let workerDir = undefined
+  let workerDir = undefined;
 
   if (fs.existsSync(path.join(basedir, customWorkerDir))) {
-    workerDir = path.join(basedir, customWorkerDir)
+    workerDir = path.join(basedir, customWorkerDir);
   } else if (fs.existsSync(path.join(basedir, 'src', customWorkerDir))) {
-    workerDir = path.join(basedir, 'src', customWorkerDir)
+    workerDir = path.join(basedir, 'src', customWorkerDir);
   }
 
-  if (!workerDir) return
+  if (!workerDir) return;
 
-  const name = `worker-${id}.js`
+  const name = `worker-${id}.js`;
   const customWorkerEntries = ['ts', 'js']
     .map(ext => path.join(workerDir, `index.${ext}`))
-    .filter(entry => fs.existsSync(entry))
+    .filter(entry => fs.existsSync(entry));
 
-  if (customWorkerEntries.length === 0) return
+  if (customWorkerEntries.length === 0) return;
 
   if (customWorkerEntries.length > 1) {
     console.warn(
       `> [PWA] WARNING: More than one custom worker found (${customWorkerEntries.join(
         ','
       )}), not building a custom worker`
-    )
-    return
+    );
+    return;
   }
 
-  const customWorkerEntry = customWorkerEntries[0]
-  console.log(`> [PWA] Custom worker found: ${customWorkerEntry}`)
-  console.log(`> [PWA] Build custom worker: ${path.join(destdir, name)}`)
+  const customWorkerEntry = customWorkerEntries[0];
+  console.log(`> [PWA] Custom worker found: ${customWorkerEntry}`);
+  console.log(`> [PWA] Build custom worker: ${path.join(destdir, name)}`);
   webpack({
     mode: 'none',
     target: 'webworker',
@@ -108,13 +108,13 @@ const buildCustomWorker = ({ id, basedir, customWorkerDir, destdir, plugins, min
       : undefined
   }).run((error, status) => {
     if (error || status.hasErrors()) {
-      console.error(`> [PWA] Failed to build custom worker`)
-      console.error(status.toString({ colors: true }))
-      process.exit(-1)
+      console.error(`> [PWA] Failed to build custom worker`);
+      console.error(status.toString({ colors: true }));
+      process.exit(-1);
     }
-  })
+  });
 
-  return name
-}
+  return name;
+};
 
-module.exports = buildCustomWorker
+export default buildCustomWorker;
