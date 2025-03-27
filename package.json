@@ -1,12 +1,24 @@
 {
-  "name": "next-pwa",
-  "version": "5.6.0",
+  "name": "next-pwa-new",
+  "version": "6.0.5",
   "description": "Next.js with PWA, powered by workbox.",
   "main": "index.js",
-  "repository": "https://github.com/shadowwalker/next-pwa",
-  "author": "ShadowWalker <w@weiw.io>",
+  "repository": "https://github.com/C-Jeril/next-pwa-new",
+  "author": "AlexJesus <psychology@kuakua.app>",
   "license": "MIT",
   "private": false,
+  "type": "module",
+  "scripts": {
+    "test": "node --experimental-vm-modules ./node_modules/.bin/jest"
+  },
+  "files": [
+    "index.js",
+    "cache.js",
+    "register.js",
+    "build-custom-worker.js",
+    "build-fallback-worker.js",
+    "webpack-worker-config.js"
+  ],
   "keywords": [
     "nextjs",
     "pwa",
@@ -15,20 +27,26 @@
     "service-worker"
   ],
   "dependencies": {
-    "babel-loader": "^8.2.5",
+    "babel-loader": "^10.0.0",
     "clean-webpack-plugin": "^4.0.0",
-    "globby": "^11.0.4",
-    "terser-webpack-plugin": "^5.3.3",
-    "workbox-webpack-plugin": "^6.5.4",
-    "workbox-window": "^6.5.4"
+    "globby": "^14.1.0",
+    "terser-webpack-plugin": "^5.3.14",
+    "workbox-cacheable-response": "^7.3.0",
+    "workbox-window": "^7.3.0"
   },
   "devDependencies": {
-    "webpack": "^5.74.0"
+    "webpack": "^5.98.0",
+    "workbox-webpack-plugin": "^7.3.0"
   },
   "peerDependencies": {
-    "next": ">=9.0.0"
+    "next": ">=14.0.0"
   },
   "resolutions": {
     "@typescript-eslint/eslint-plugin": "5.18.0"
+  },
+  "pnpm": {
+    "ignoredBuiltDependencies": [
+      "sharp"
+    ]
   }
 }

@@ -2,6 +2,23 @@
 
 **NOTE: for newer changelog, go to [release page](https://github.com/shadowwalker/next-pwa/releases) instead.**
 
+## 6.0.0
+
+### Fix
+
+1. dependency upgrades
+2. Update require to import
+
+## 5.6.0
+
+Summary
+BREAKING CHANGE
+Start from version 5.6.0. This plugin function signature has been changed to follow the recommended pattern from next.js. Mainly extracting pwa config from mixing into rest of the next.js config. This is also less intrusive. See following commit for details.
+
+## 5.5.6
+
+Version 5.5.5 included a broken change which prevent pwa config to be effective. This release will fix that.
+
 ## 5.5.0
 
 ### Fix

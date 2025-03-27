@@ -1,7 +1,9 @@
+// cache.js
 'use strict'
+import { CacheableResponsePlugin } from 'workbox-cacheable-response';
 
 // Workbox RuntimeCaching config: https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-build#.RuntimeCachingEntry
-module.exports = [
+export default [
   {
     urlPattern: /^https:\/\/fonts\.(?:gstatic)\.com\/.*/i,
     handler: 'CacheFirst',
@@ -81,17 +83,20 @@ module.exports = [
       }
     }
   },
-  {
-    urlPattern: /\.(?:js)$/i,
-    handler: 'StaleWhileRevalidate',
-    options: {
-      cacheName: 'static-js-assets',
-      expiration: {
-        maxEntries: 32,
-        maxAgeSeconds: 24 * 60 * 60 // 24 hours
-      }
-    }
-  },
+{
+  urlPattern: /\.(?:js)$/i,
+  handler: 'StaleWhileRevalidate',
+  options: {
+    cacheName: 'static-js-assets',
+    expiration: {
+      maxEntries: 32,
+      maxAgeSeconds: 24 * 60 * 60
+    },
+    plugins: [
+      new CacheableResponsePlugin({ statuses: [0, 200] })
+    ]
+  }
+},
   {
     urlPattern: /\.(?:css|less)$/i,
     handler: 'StaleWhileRevalidate',
