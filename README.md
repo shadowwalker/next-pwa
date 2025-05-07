@@ -252,7 +252,7 @@ module.exports = withPWA({
   - default: `/sw.js`
   - set to another file name if you want to customize the output file name
 - runtimeCaching - caching strategies (array or callback function)
-  - default: see the **Runtime Caching** section for the default configuration
+  - default: see the [**Runtime Caching**](#runtime-caching) section for the default configuration
   - accepts an array of cache entry objects, [please follow the structure here](https://developer.chrome.com/docs/workbox/reference/workbox-build/#type-RuntimeCaching)
   - Note: the order of the array matters. The first rule that matches is effective. Therefore, please **ALWAYS** put rules with larger scope behind the rules with a smaller and specific scope.
 - publicExcludes - an array of glob pattern strings to exclude files in the `public` folder from being precached.
