@@ -12,7 +12,6 @@ yarn-error.log
 **/public/sw.js.map
 **/public/workbox-*.js.map
 **/public/worker-*.js.map
-**/public/fallback-*.js
 
 examples/**/yarn.lock
 examples/**/package-lock.json
