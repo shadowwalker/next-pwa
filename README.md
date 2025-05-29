@@ -218,7 +218,7 @@ You can also setup `precacheFallback.fallbackURL` in your [runtimeCaching config
 
 ## Configuration
 
-There are options you can use to customize the behavior of this plugin by adding `pwa` object in the next config in `next.config.js`:
+Ensure that your plugin options are passed in first. The second function call is only for next.js arguments. `pwa` is no longer accepted as a valid argument within your `next` config.
 
 ```javascript
 const withPWA = require('next-pwa')({
