@@ -107,10 +107,11 @@ const buildCustomWorker = ({ id, basedir, customWorkerDir, destdir, plugins, min
         }
       : undefined
   }).run((error, status) => {
-    if (error || status.hasErrors()) {
+    if (error || (status && status.hasErrors())) {
       console.error(`> [PWA] Failed to build custom worker`)
-      console.error(status.toString({ colors: true }))
-      process.exit(-1)
+      if (status) console.error(status.toString({ colors: true }))
+      if (error) console.error(error)
+      throw new Error('[PWA] Failed to build custom worker')
     }
   })
 

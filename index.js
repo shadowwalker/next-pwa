@@ -14,14 +14,29 @@ const getRevision = file => crypto.createHash('md5').update(fs.readFileSync(file
 
 module.exports =
   (pluginOptions = {}) =>
-  (nextConfig = {}) =>
-    Object.assign({}, nextConfig, {
+  (nextConfig = {}) => {
+    // Next.js 16+ defaults to Turbopack. workbox-webpack-plugin has no
+    // Turbopack equivalent — skip registering the webpack hook so the
+    // consumer's Turbopack build doesn't fail with the "webpack config
+    // without turbopack config" error. PWA assets are not generated in
+    // this mode; the consumer must run with `--webpack` for PWA support.
+    if (process.env.TURBOPACK) {
+      if (!pluginOptions.disable) {
+        console.warn(
+          '> [PWA] Turbopack is active; next-pwa is disabled for this build. ' +
+            'Run next with --webpack to generate the service worker.'
+        )
+      }
+      return nextConfig
+    }
+
+    return Object.assign({}, nextConfig, {
       webpack(config, options) {
         const {
           webpack,
           buildId,
           dev,
-          config: { distDir = '.next', pageExtensions = ['tsx', 'ts', 'jsx', 'js', 'mdx'], experimental = {} }
+          config: { distDir = '.next', pageExtensions = ['tsx', 'ts', 'jsx', 'js', 'mdx'] }
         } = options
 
         let basePath = options.config.basePath
@@ -49,10 +64,10 @@ module.exports =
           manifestTransforms = [],
           fallbacks = {},
           cacheOnFrontEndNav = false,
-          reloadOnOnline = true,
+          reloadOnOnline = false,
+          trustStartUrlRedirects = false,
           scope = basePath,
           customWorkerDir = 'worker',
-          subdomainPrefix, // deprecated, use basePath in next.config.js instead
           ...workbox
         } = pluginOptions
 
@@ -63,12 +78,6 @@ module.exports =
         if (disable) {
           options.isServer && console.log('> [PWA] PWA support is disabled')
           return config
-        }
-
-        if (subdomainPrefix) {
-          console.error(
-            '> [PWA] subdomainPrefix is deprecated, use basePath in next.config.js instead: https://nextjs.org/docs/api-reference/next.config.js/basepath'
-          )
         }
 
         console.log(`> [PWA] Compile ${options.isServer ? 'server' : 'client (static)'}`)
@@ -85,7 +94,8 @@ module.exports =
             __PWA_ENABLE_REGISTER__: `${Boolean(register)}`,
             __PWA_START_URL__: dynamicStartUrl ? `'${basePath}'` : undefined,
             __PWA_CACHE_ON_FRONT_END_NAV__: `${Boolean(cacheOnFrontEndNav)}`,
-            __PWA_RELOAD_ON_ONLINE__: `${Boolean(reloadOnOnline)}`
+            __PWA_RELOAD_ON_ONLINE__: `${Boolean(reloadOnOnline)}`,
+            __PWA_TRUST_START_URL_REDIRECTS__: `${Boolean(trustStartUrlRedirects)}`
           })
         )
 
@@ -93,8 +103,13 @@ module.exports =
         const entry = config.entry
         config.entry = () =>
           entry().then(entries => {
-            if (entries['main.js'] && !entries['main.js'].includes(registerJs)) {
-              entries['main.js'].unshift(registerJs)
+            // Pages Router uses `main.js`; App Router uses `main-app` for
+            // the client entry. Inject register.js into whichever is present
+            // so the service worker registers on both routing systems.
+            for (const key of ['main.js', 'main-app']) {
+              if (entries[key] && !entries[key].includes(registerJs)) {
+                entries[key].unshift(registerJs)
+              }
             }
             return entries
           })
@@ -222,14 +237,6 @@ module.exports =
                 if (dev && !asset.name.startsWith('static/runtime/')) {
                   return true
                 }
-                if (experimental.modern /* modern */) {
-                  if (asset.name.endsWith('.module.js')) {
-                    return false
-                  }
-                  if (asset.name.endsWith('.js')) {
-                    return true
-                  }
-                }
                 return false
               }
             ],
@@ -288,14 +295,17 @@ module.exports =
             }
 
             if (dynamicStartUrl) {
-              runtimeCaching.unshift({
-                urlPattern: basePath,
-                handler: 'NetworkFirst',
-                options: {
-                  cacheName: 'start-url',
-                  plugins: [
+              // Opaque redirects come back with status 0; workbox won't cache
+              // them. Rewriting to 200 OK is only safe when the consumer
+              // guarantees the redirect target is trusted. The callback is
+              // serialized by workbox-webpack-plugin into sw.js, so we decide
+              // at build time whether to include the rewrite plugin at all —
+              // referencing a build-time variable from inside the callback
+              // would leak as a free reference in the generated worker.
+              const startUrlPlugins = trustStartUrlRedirects
+                ? [
                     {
-                      cacheWillUpdate: async ({ request, response, event, state }) => {
+                      cacheWillUpdate: async ({ response }) => {
                         if (response && response.type === 'opaqueredirect') {
                           return new Response(response.body, {
                             status: 200,
@@ -307,6 +317,13 @@ module.exports =
                       }
                     }
                   ]
+                : []
+              runtimeCaching.unshift({
+                urlPattern: basePath,
+                handler: 'NetworkFirst',
+                options: {
+                  cacheName: 'start-url',
+                  plugins: startUrlPlugins
                 }
               })
             }
@@ -340,3 +357,4 @@ module.exports =
         return config
       }
     })
+  }

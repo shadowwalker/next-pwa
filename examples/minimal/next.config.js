@@ -1,9 +1,5 @@
-const withPWA = require('next-pwa')({
-  // pwa output folder
-  // dest: '.next/pwa'
-  //
-  // Other configurations:
-  // ...
+const withPWA = require('@brainwires/next-pwa')({
+  dest: 'public'
 })
 
 module.exports = withPWA()

@@ -1,4 +1,4 @@
-const withPWA = require('next-pwa')({
+const withPWA = require('@brainwires/next-pwa')({
   dest: 'public',
   fallbacks: {
     image: '/static/images/fallback.png'
@@ -11,6 +11,6 @@ const withPWA = require('next-pwa')({
 
 module.exports = withPWA({
   images: {
-    domains: ['source.unsplash.com']
+    remotePatterns: [{ protocol: 'https', hostname: 'source.unsplash.com' }]
   }
 })

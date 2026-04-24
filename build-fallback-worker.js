@@ -133,10 +133,11 @@ const buildFallbackWorker = ({ id, fallbacks, basedir, destdir, minify, pageExte
         }
       : undefined
   }).run((error, status) => {
-    if (error || status.hasErrors()) {
+    if (error || (status && status.hasErrors())) {
       console.error(`> [PWA] Failed to build fallback worker`)
-      console.error(status.toString({ colors: true }))
-      process.exit(-1)
+      if (status) console.error(status.toString({ colors: true }))
+      if (error) console.error(error)
+      throw new Error('[PWA] Failed to build fallback worker')
     }
   })
 

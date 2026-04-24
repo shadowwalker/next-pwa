@@ -13,7 +13,7 @@ This plugin is powered by [workbox](https://developer.chrome.com/docs/workbox/) 
 - 💯 Maximize lighthouse score
 - 🎈 Easy to understand examples
 - 📴 Completely offline support with fallbacks [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/offline-fallback-v2) 🆕
-- 📦 Use [workbox](https://developer.chrome.com/docs/workbox/) and [workbox-window](https://developer.chrome.com/docs/workbox/modules/workbox-window) v6
+- 📦 Use [workbox](https://developer.chrome.com/docs/workbox/) and [workbox-window](https://developer.chrome.com/docs/workbox/modules/workbox-window) v7
 - 🍪 Work with cookies out of the box
 - 🔉 Default range requests for audios and videos
 - ☕ No custom server needed for Next.js 9+ [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/next-9)
@@ -25,11 +25,20 @@ This plugin is powered by [workbox](https://developer.chrome.com/docs/workbox/) 
 - 🛠 Configurable by the same [workbox configuration options](https://developer.chrome.com/docs/workbox/modules/workbox-webpack-plugin) for [GenerateSW](https://developer.chrome.com/docs/workbox/modules/workbox-webpack-plugin/#generatesw-plugin) and [InjectManifest](https://developer.chrome.com/docs/workbox/modules/workbox-webpack-plugin/#injectmanifest-plugin)
 - 🚀 Spin up a [GitPod](https://gitpod.io/#https://github.com/shadowwalker/next-pwa/) and try out examples in rocket speed
 - ⚡ Support [blitz.js](https://blitzjs.com/) (simply add to `blitz.config.js`)
-- 🔩 (Experimental) precaching `.module.js` when `next.config.js` has `experimental.modern` set to `true`
 
-> **NOTE 1** - `next-pwa` version 2.0.0+ should only work with `next.js` 9.1+, and static files should only be served through `public` directory. This will make things simpler.
+> **Next.js 16+** - Next.js 16 defaults to Turbopack, for which workbox has no equivalent plugin. `next-pwa` detects Turbopack and no-ops with a warning; run `next build --webpack` / `next dev --webpack` to generate the service worker.
 >
-> **NOTE 2** - If you encounter error `TypeError: Cannot read property **'javascript' of undefined**` during build, [please consider upgrade to webpack5 in `next.config.js`](https://github.com/shadowwalker/next-pwa/issues/198#issuecomment-817205700).
+> **App Router** - `next-pwa` injects the SW register script into both the Pages Router (`main.js`) and App Router (`main-app`) client entries.
+>
+> **Static assets** - Serve static assets from the `public` directory so they are included in the precache manifest.
+
+## Migrating from 5.x → 7.0.0
+
+- **Peer dep is now `next >= 14.0.0`.** If you're on Next 12/13, stay on 5.x or upgrade Next first.
+- **`subdomainPrefix` has been removed.** It was a deprecation warning since 4.x. Use `basePath` in `next.config.js` instead.
+- **`reloadOnOnline` now defaults to `false`.** If you were relying on the old auto-reload-on-reconnect behavior, add `reloadOnOnline: true` to your `next-pwa` options.
+- **`trustStartUrlRedirects` must be set to `true` if your start URL redirects.** Previously `next-pwa` silently rewrote opaque/redirected responses to `200 OK` and cached them under the start-URL key. This is only safe when the redirect stays within a trusted origin, so it's now an explicit opt-in. If you use `dynamicStartUrlRedirect`, or if any middleware redirects your start URL (e.g. `/` → `/login`), add `trustStartUrlRedirects: true`.
+- **Turbopack builds are a no-op.** If you're on Next 16+ and want the service worker generated, pass `--webpack` to `next build` / `next dev`. The plugin will print a warning when it detects Turbopack and skip registration; your build won't fail.
 
 ---
 
@@ -40,7 +49,7 @@ This plugin is powered by [workbox](https://developer.chrome.com/docs/workbox/) 
 > If you are new to `next.js` or `react.js` at all, you may want to first checkout [learn next.js](https://nextjs.org/learn/basics/create-nextjs-app) or [next.js document](https://nextjs.org/docs/getting-started). Then start from [a simple example](https://github.com/shadowwalker/next-pwa/tree/master/examples/next-9) or [progressive-web-app example in next.js repository](https://github.com/vercel/next.js/tree/canary/examples/progressive-web-app).
 
 ```bash
-yarn add next-pwa
+yarn add @brainwires/next-pwa
 ```
 
 ## Basic Usage
@@ -50,7 +59,7 @@ yarn add next-pwa
 Update or create `next.config.js` with
 
 ```javascript
-const withPWA = require('next-pwa')({
+const withPWA = require('@brainwires/next-pwa')({
   dest: 'public'
 })
 
@@ -221,7 +230,7 @@ You can also setup `precacheFallback.fallbackURL` in your [runtimeCaching config
 There are options you can use to customize the behavior of this plugin by adding `pwa` object in the next config in `next.config.js`:
 
 ```javascript
-const withPWA = require('next-pwa')({
+const withPWA = require('@brainwires/next-pwa')({
   dest: 'public'
   // disable: process.env.NODE_ENV === 'development',
   // register: true,
@@ -283,12 +292,10 @@ module.exports = withPWA({
 - cacheOnFrontEndNav - enable additional route cache when navigate between pages with `next/link` on front end. Checkout this [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/cache-on-front-end-nav) for some context about why this is implemented.
   - default: `false`
   - note: this improve user experience on special use cases but it also adds some overhead because additional network call, I suggest you consider this as a trade off.
-- ~~subdomainPrefix: string - url prefix to allow hosting static files on a subdomain~~
-  - ~~default: `""` - i.e. default with no prefix~~
-  - ~~example: `/subdomain` if the app is hosted on `example.com/subdomain`~~
-  - deprecated, use [basePath](https://nextjs.org/docs/api-reference/next.config.js/basepath) instead
-- reloadOnOnline - changes the behaviour of the app when the device detects that it has gone back "online" and has a network connection. Indicate if the app should call `location.reload()` to refresh the app.
-  - default: `true`
+- reloadOnOnline - if `true`, the app calls `location.reload()` when the device regains connectivity. Interrupts form input and media playback; opt in only if you want that behavior.
+  - default: `false` (changed in 7.0.0, previously `true`)
+- trustStartUrlRedirects - if `true`, redirected responses fetched for the start URL are rewritten to `200 OK` and cached under the canonical start-URL key. Only safe when the start URL redirects within a trusted origin (e.g. `/` → `/login` on the same host). Required when using `dynamicStartUrlRedirect` or any middleware that redirects the start URL.
+  - default: `false` (new in 7.0.0; previously always on)
 - customWorkerDir - customize the directory where `next-pwa` looks for a custom worker implementation to add to the service worker generated by workbox. For more information, check out the [custom worker example](https://github.com/shadowwalker/next-pwa/tree/master/examples/custom-ts-worker).
   - default: `worker`
 

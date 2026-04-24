@@ -5,20 +5,20 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "dev": "next",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start"
   },
   "dependencies": {
-    "js-cookie": "^3.0.1",
-    "next": "^12.2.5",
+    "js-cookie": "^3.0.5",
+    "next": "^15.5.15",
     "next-cookies": "^2.0.3",
-    "next-pwa": "latest",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "@brainwires/next-pwa": "^7.0.0",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5"
   },
   "devDependencies": {
-    "eslint": "^8.22.0",
-    "eslint-config-next": "12.2.5"
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^15.5.15"
   }
 }

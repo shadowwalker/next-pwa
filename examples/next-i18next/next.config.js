@@ -1,3 +1,9 @@
-const withPWA = require('next-pwa')()
+const { i18n } = require('./next-i18next.config')
 
-module.exports = withPWA()
+const withPWA = require('@brainwires/next-pwa')({
+  dest: 'public'
+})
+
+module.exports = withPWA({
+  i18n
+})

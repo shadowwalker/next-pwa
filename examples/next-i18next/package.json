@@ -1,26 +1,22 @@
 {
   "name": "next-pwa-example",
   "version": "1.0.0",
-  "main": "index.js",
   "license": "MIT",
   "private": true,
   "scripts": {
-    "dev": "node ./index.js",
+    "dev": "next dev",
     "build": "next build",
-    "start": "cross-env NODE_ENV=production node ./index.js"
+    "start": "next start"
   },
   "dependencies": {
-    "cross-env": "^7.0.3",
-    "express": "^4.18.1",
-    "fastify-compress": "^4.1.0",
-    "next": "^12.2.5",
-    "next-i18next": "^12.0.0",
-    "next-pwa": "latest",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "next": "^15.5.15",
+    "next-i18next": "^15.4.3",
+    "@brainwires/next-pwa": "^7.0.0",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5"
   },
   "devDependencies": {
-    "eslint": "^8.22.0",
-    "eslint-config-next": "12.2.5"
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^15.5.15"
   }
 }

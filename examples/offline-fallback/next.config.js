@@ -1,10 +1,10 @@
-const withPWA = require('next-pwa')({
+const withPWA = require('@brainwires/next-pwa')({
   dest: 'public',
   swSrc: 'service-worker.js'
 })
 
 module.exports = withPWA({
   images: {
-    domains: ['source.unsplash.com']
+    remotePatterns: [{ protocol: 'https', hostname: 'source.unsplash.com' }]
   }
 })

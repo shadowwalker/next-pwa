@@ -6,6 +6,7 @@ examples/
 .gitignore
 .gitattributes
 .github/
-CHANGELOG.md
-LICENSE
+.gitpod.yml
+.claude/
+dist/
 docs/

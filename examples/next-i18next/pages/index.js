@@ -1,17 +1,23 @@
 import Head from 'next/head'
-import { i18n, Link, withTranslation } from '../i18n'
+import { useTranslation } from 'next-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
-const Index = ({t}) => (
-  <>
-    <Head>
-      <title>next-pwa example</title>
-    </Head>
-    <h1>Next.js + PWA = {t('awesome').toLocaleUpperCase()}!</h1>
-  </>
-)
+const Index = () => {
+  const { t } = useTranslation('common')
+  return (
+    <>
+      <Head>
+        <title>next-pwa example</title>
+      </Head>
+      <h1>Next.js + PWA = {t('awesome').toLocaleUpperCase()}!</h1>
+    </>
+  )
+}
 
-Index.getInitialProps = async () => ({
-  namespacesRequired: ['common'],
+export const getStaticProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ['common']))
+  }
 })
 
-export default withTranslation('common')(Index)
+export default Index
