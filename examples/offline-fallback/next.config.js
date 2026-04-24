@@ -1,4 +1,4 @@
-const withPWA = require('next-pwa')({
+const withPWA = require('@brainwires/next-pwa')({
   dest: 'public',
   swSrc: 'service-worker.js'
 })

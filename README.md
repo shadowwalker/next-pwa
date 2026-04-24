@@ -49,7 +49,7 @@ This plugin is powered by [workbox](https://developer.chrome.com/docs/workbox/) 
 > If you are new to `next.js` or `react.js` at all, you may want to first checkout [learn next.js](https://nextjs.org/learn/basics/create-nextjs-app) or [next.js document](https://nextjs.org/docs/getting-started). Then start from [a simple example](https://github.com/shadowwalker/next-pwa/tree/master/examples/next-9) or [progressive-web-app example in next.js repository](https://github.com/vercel/next.js/tree/canary/examples/progressive-web-app).
 
 ```bash
-yarn add next-pwa
+yarn add @brainwires/next-pwa
 ```
 
 ## Basic Usage
@@ -59,7 +59,7 @@ yarn add next-pwa
 Update or create `next.config.js` with
 
 ```javascript
-const withPWA = require('next-pwa')({
+const withPWA = require('@brainwires/next-pwa')({
   dest: 'public'
 })
 
@@ -230,7 +230,7 @@ You can also setup `precacheFallback.fallbackURL` in your [runtimeCaching config
 There are options you can use to customize the behavior of this plugin by adding `pwa` object in the next config in `next.config.js`:
 
 ```javascript
-const withPWA = require('next-pwa')({
+const withPWA = require('@brainwires/next-pwa')({
   dest: 'public'
   // disable: process.env.NODE_ENV === 'development',
   // register: true,

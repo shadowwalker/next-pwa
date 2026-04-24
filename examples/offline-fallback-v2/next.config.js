@@ -1,4 +1,4 @@
-const withPWA = require('next-pwa')({
+const withPWA = require('@brainwires/next-pwa')({
   dest: 'public',
   fallbacks: {
     image: '/static/images/fallback.png'

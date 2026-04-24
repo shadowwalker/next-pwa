@@ -1,5 +1,5 @@
 {
-  "name": "next-pwa",
+  "name": "@brainwires/next-pwa",
   "version": "7.0.0",
   "description": "Next.js with PWA, powered by workbox.",
   "main": "index.js",

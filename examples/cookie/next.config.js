@@ -1,4 +1,4 @@
-const withPWA = require('next-pwa')({
+const withPWA = require('@brainwires/next-pwa')({
   dest: 'public',
   dynamicStartUrl: true, // same as default
   dynamicStartUrlRedirect: '/login', // redirect target for the start URL
