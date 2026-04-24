@@ -295,19 +295,18 @@ module.exports =
             }
 
             if (dynamicStartUrl) {
-              runtimeCaching.unshift({
-                urlPattern: basePath,
-                handler: 'NetworkFirst',
-                options: {
-                  cacheName: 'start-url',
-                  plugins: [
+              // Opaque redirects come back with status 0; workbox won't cache
+              // them. Rewriting to 200 OK is only safe when the consumer
+              // guarantees the redirect target is trusted. The callback is
+              // serialized by workbox-webpack-plugin into sw.js, so we decide
+              // at build time whether to include the rewrite plugin at all —
+              // referencing a build-time variable from inside the callback
+              // would leak as a free reference in the generated worker.
+              const startUrlPlugins = trustStartUrlRedirects
+                ? [
                     {
-                      cacheWillUpdate: async ({ request, response, event, state }) => {
-                        // Opaque redirects come back with status 0; workbox won't cache them.
-                        // Rewriting to 200 OK is only safe when the consumer guarantees the
-                        // redirect target is same-origin (or otherwise trusted). Gated via
-                        // `trustStartUrlRedirects`.
-                        if (trustStartUrlRedirects && response && response.type === 'opaqueredirect') {
+                      cacheWillUpdate: async ({ response }) => {
+                        if (response && response.type === 'opaqueredirect') {
                           return new Response(response.body, {
                             status: 200,
                             statusText: 'OK',
@@ -318,6 +317,13 @@ module.exports =
                       }
                     }
                   ]
+                : []
+              runtimeCaching.unshift({
+                urlPattern: basePath,
+                handler: 'NetworkFirst',
+                options: {
+                  cacheName: 'start-url',
+                  plugins: startUrlPlugins
                 }
               })
             }
