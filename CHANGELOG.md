@@ -1,6 +1,36 @@
 # CHANGELOG
 
-**NOTE: for newer changelog, go to [release page](https://github.com/shadowwalker/next-pwa/releases) instead.**
+## 7.0.0 — Brainwires fork
+
+First release of the `Brainwires/next-pwa` fork. Version jumps past the stale `@josh.guyette/next-pwa` 6.x line.
+
+### Breaking changes
+
+- **Next.js 14+ required.** Peer range tightened from `>=9.0.0` to `>=14.0.0`; Vercel no longer ships security fixes for Next 12/13.
+- **`subdomainPrefix` option removed.** Has been a deprecation warning for years; use `basePath` in `next.config.js` instead.
+- **`reloadOnOnline` default flipped from `true` to `false`.** Auto-reloading on reconnect interrupted form input and media playback. Opt back in with `reloadOnOnline: true` if you need the old behavior.
+- **Redirect rewrites now gated behind `trustStartUrlRedirects` (default `false`).** `next-pwa` previously rewrote opaque/redirected responses to `200 OK` and cached them under the start-URL key unconditionally. This is safe only when the start URL is guaranteed to redirect within a trusted origin. Consumers that rely on `dynamicStartUrlRedirect` (or any middleware that redirects the start URL) must now set `trustStartUrlRedirects: true` explicitly.
+
+### Fixes
+
+- `fallback.js`: switch statement no longer falls through — a document request with no configured document fallback no longer leaks the image/audio/video/font/data fallback.
+- `build-custom-worker.js` / `build-fallback-worker.js`: worker build errors now throw instead of calling `process.exit(-1)`, so they surface through Next.js rather than terminating the user's dev server / CI process.
+- App Router: `register.js` is now injected into the `main-app` client entry in addition to `main.js`. App Router apps will actually register the service worker.
+- Next.js 16: library detects `process.env.TURBOPACK` and no-ops with a warning, preventing the "webpack config without turbopack config" build failure. PWA still requires `next build --webpack` / `next dev --webpack`.
+
+### Maintenance
+
+- `24 → 0` npm audit vulnerabilities. `serialize-javascript` pinned via `overrides`.
+- Deleted the vestigial `webpack.config.js` bundle step (bundle was never referenced — `main` is `index.js`).
+- Removed dead `experimental.modern` code path (Next 12 removed the feature 4 years ago).
+- Updated workbox to v7.4.
+- Fork repository URL, author credit, README.
+
+---
+
+## Pre-fork history (from `shadowwalker/next-pwa`)
+
+**NOTE: for the original project's changelog, see its [release page](https://github.com/shadowwalker/next-pwa/releases).**
 
 ## 5.5.0
 

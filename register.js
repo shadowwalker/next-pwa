@@ -14,13 +14,16 @@ if (typeof window !== 'undefined' && 'serviceWorker' in navigator && typeof cach
   if (__PWA_START_URL__) {
     window.workbox.addEventListener('installed', async ({ isUpdate }) => {
       if (!isUpdate) {
-        const cache = await caches.open('start-url')
         const response = await fetch(__PWA_START_URL__)
-        let _response = response
-        if (response.redirected) {
-          _response = new Response(response.body, { status: 200, statusText: 'OK', headers: response.headers })
+        if (response.redirected && !__PWA_TRUST_START_URL_REDIRECTS__) {
+          // Don't precache a redirected response under the canonical start-url
+          // key unless the consumer has opted in via `trustStartUrlRedirects`.
+          return
         }
-
+        const cache = await caches.open('start-url')
+        const _response = response.redirected
+          ? new Response(response.body, { status: 200, statusText: 'OK', headers: response.headers })
+          : response
         await cache.put(__PWA_START_URL__, _response)
       }
     })
@@ -51,7 +54,7 @@ if (typeof window !== 'undefined' && 'serviceWorker' in navigator && typeof cach
         )
       } else if (__PWA_START_URL__ && url === __PWA_START_URL__) {
         return fetch(__PWA_START_URL__).then(function (response) {
-          if (!response.redirected) {
+          if (!response.redirected || __PWA_TRUST_START_URL_REDIRECTS__) {
             return caches.open('start-url').then(cache => cache.put(__PWA_START_URL__, response))
           }
           return Promise.resolve()
