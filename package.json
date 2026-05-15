@@ -26,9 +26,12 @@
     "webpack": "^5.74.0"
   },
   "peerDependencies": {
-    "next": ">=9.0.0"
+    "next": ">=14.0.0"
   },
   "resolutions": {
     "@typescript-eslint/eslint-plugin": "5.18.0"
+  },
+  "engines": {
+    "node": ">=18.17.0"
   }
 }
